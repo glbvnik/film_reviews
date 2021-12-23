@@ -22,7 +22,7 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { selectApp } from '../../../redux/reducers/app'
 import { selectAuth } from '../../../redux/reducers/auth'
-import { login, register, resetErrors } from '../../../redux/reducers/auth/action_creators'
+import { login, register, resetErrors } from '../../../redux/reducers/auth/action-creators'
 import { theme } from '../../../theme'
 import { styles } from './sx'
 

@@ -13,7 +13,7 @@ import {
     setUser,
     setValidationErrors,
 } from '../../reducers/auth'
-import { login, logout, refresh, register, resetErrors } from '../../reducers/auth/action_creators'
+import { login, logout, refresh, register, resetErrors } from '../../reducers/auth/action-creators'
 
 function* handleResetErrors(): Generator<StrictEffect, void, AuthState> {
     const { validationErrors, loginError } = yield select(selectAuth)

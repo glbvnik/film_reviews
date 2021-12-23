@@ -25,23 +25,23 @@ export const UserApi = {
         return status
     },
     async login(inputs: LoginInputs, cancelToken: CancelToken) {
-        const userData = await $api.post<IUser>('/user-management/login', inputs, {
+        const { data } = await $api.post<IUser>('/user-management/login', inputs, {
             cancelToken,
         })
 
-        return userData.data
+        return data
     },
     async logout() {
         await $api.post('/user-management/logout')
     },
     async refresh() {
-        const userData = await $api.get<IUser>('/user-management/refresh')
+        const { data } = await $api.get<IUser>('/user-management/refresh')
 
-        return userData.data
+        return data
     },
     async fetchUsers() {
-        const users = await $api.get<IUser[]>('/user-management/users')
+        const { data } = await $api.get<IUser[]>('/user-management/users')
 
-        return users.data
+        return data
     },
 }
