@@ -1,4 +1,7 @@
-import { IValidationError, IValidationErrors } from './../models/validationError'
+import {
+    IValidationError,
+    IValidationErrors,
+} from './../models/validationError'
 
 export const mapToError = (errors: IValidationError[]) => {
     const errorMap: IValidationErrors = {}

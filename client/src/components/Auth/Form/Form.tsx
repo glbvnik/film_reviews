@@ -22,12 +22,17 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { selectApp } from '../../../redux/reducers/app'
 import { selectAuth } from '../../../redux/reducers/auth'
-import { login, register, resetErrors } from '../../../redux/reducers/auth/action-creators'
+import {
+    login,
+    register,
+    resetErrors,
+} from '../../../redux/reducers/auth/action-creators'
 import { theme } from '../../../theme'
 import { styles } from './sx'
 
 const Form: FC = () => {
-    const { user, validationErrors, loginError, isRegistered } = useAppSelector(selectAuth)
+    const { user, validationErrors, loginError, isRegistered } =
+        useAppSelector(selectAuth)
     const { isLoading } = useAppSelector(selectApp)
 
     const dispatch = useAppDispatch()
@@ -51,12 +56,16 @@ const Form: FC = () => {
             if (isRegister) {
                 dispatch(register(values))
             } else {
-                dispatch(login({ email: values.email, password: values.password }))
+                dispatch(
+                    login({ email: values.email, password: values.password })
+                )
             }
         },
     })
 
-    const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const handleInputChange = (
+        e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
         handleChange(e)
 
         if (validationErrors || loginError) {
@@ -114,9 +123,9 @@ const Form: FC = () => {
                 square
                 component={Paper}
                 elevation={10}
-                display='flex'
-                alignItems='center'
-                justifyContent='center'
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
                 xs={12}
                 sm={8}
                 md={5}
@@ -125,19 +134,23 @@ const Form: FC = () => {
                     <Avatar sx={{ bgcolor: 'secondary.main', m: 1 }}>
                         {renderIcon()}
                     </Avatar>
-                    <Typography component='h2' variant='h5' textAlign='center'>
+                    <Typography component="h2" variant="h5" textAlign="center">
                         {renderTypography()}
                     </Typography>
-                    {loginError && <Alert severity='error' sx={styles.alert}>{loginError}</Alert>}
-                    {isRegistered ?
-                        <Typography component='p' textAlign='center' mt={2}>
-                            We have sent you an email with activation link. Please click on the link to activate your
-                            account.
+                    {loginError && (
+                        <Alert severity="error" sx={styles.alert}>
+                            {loginError}
+                        </Alert>
+                    )}
+                    {isRegistered ? (
+                        <Typography component="p" textAlign="center" mt={2}>
+                            We have sent you an email with activation link.
+                            Please click on the link to activate your account.
                         </Typography>
-                        :
+                    ) : (
                         <Box
                             noValidate
-                            component='form'
+                            component="form"
                             onSubmit={handleSubmit}
                             sx={{ mt: 1 }}
                         >
@@ -145,11 +158,11 @@ const Form: FC = () => {
                                 autoFocus
                                 fullWidth
                                 required
-                                id='email'
-                                name='email'
-                                label='Email'
-                                autoComplete='email'
-                                margin='normal'
+                                id="email"
+                                name="email"
+                                label="Email"
+                                autoComplete="email"
+                                margin="normal"
                                 value={values.email}
                                 onChange={handleInputChange}
                                 error={!!validationErrors?.email}
@@ -158,12 +171,12 @@ const Form: FC = () => {
                             <TextField
                                 fullWidth
                                 required
-                                id='password'
-                                name='password'
-                                type='password'
-                                label='Password'
-                                autoComplete='current-password'
-                                margin='normal'
+                                id="password"
+                                name="password"
+                                type="password"
+                                label="Password"
+                                autoComplete="current-password"
+                                margin="normal"
                                 value={values.password}
                                 onChange={handleInputChange}
                                 error={!!validationErrors?.password}
@@ -174,10 +187,10 @@ const Form: FC = () => {
                                     <TextField
                                         fullWidth
                                         required
-                                        id='firstName'
-                                        name='firstName'
-                                        label='First name'
-                                        margin='normal'
+                                        id="firstName"
+                                        name="firstName"
+                                        label="First name"
+                                        margin="normal"
                                         value={values.firstName}
                                         onChange={handleInputChange}
                                         error={!!validationErrors?.firstName}
@@ -186,10 +199,10 @@ const Form: FC = () => {
                                     <TextField
                                         fullWidth
                                         required
-                                        id='lastName'
-                                        name='lastName'
-                                        label='Last name'
-                                        margin='normal'
+                                        id="lastName"
+                                        name="lastName"
+                                        label="Last name"
+                                        margin="normal"
                                         value={values.lastName}
                                         onChange={handleInputChange}
                                         error={!!validationErrors?.lastName}
@@ -199,34 +212,44 @@ const Form: FC = () => {
                             )}
                             <Button
                                 fullWidth
-                                size='large'
-                                type='submit'
-                                variant='contained'
+                                size="large"
+                                type="submit"
+                                variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
                             >
                                 {isRegister ? 'Register' : 'Login'}
                             </Button>
-                            <Grid container justifyContent='center'>
+                            <Grid container justifyContent="center">
                                 <Grid
                                     item
                                     xs={12}
                                     sm
-                                    sx={isSm ? undefined : { textAlign: 'center', mb: 1 }}
+                                    sx={
+                                        isSm
+                                            ? undefined
+                                            : { textAlign: 'center', mb: 1 }
+                                    }
                                 >
-                                    {url === '/login' && <MuiLink variant='body2'>
-                                        Forgot password?
-                                    </MuiLink>}
+                                    {url === '/login' && (
+                                        <MuiLink variant="body2">
+                                            Forgot password?
+                                        </MuiLink>
+                                    )}
                                 </Grid>
                                 <Grid item>
-                                    <Link href={isRegister ? '/login' : '/register'}>
-                                        <MuiLink variant='body2'>
+                                    <Link
+                                        href={
+                                            isRegister ? '/login' : '/register'
+                                        }
+                                    >
+                                        <MuiLink variant="body2">
                                             {isRegister ? 'Login' : 'Register'}
                                         </MuiLink>
                                     </Link>
                                 </Grid>
                             </Grid>
                         </Box>
-                    }
+                    )}
                 </Box>
             </Grid>
         </Grid>

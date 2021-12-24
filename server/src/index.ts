@@ -19,7 +19,7 @@ const start = async () => {
         await sequelize.sync()
 
         app.listen(process.env.PORT, () =>
-            console.log(`Server is working on port ${process.env.PORT}`),
+            console.log(`Server is working on port ${process.env.PORT}`)
         )
     } catch (e) {
         console.log(e)

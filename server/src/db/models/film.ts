@@ -46,8 +46,8 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
         {
             sequelize,
             modelName: 'Film',
-        },
+        }
     )
 
     return Film
-};
+}

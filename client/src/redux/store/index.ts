@@ -21,9 +21,9 @@ const makeStore = () => {
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().concat(sagaMiddleware),
-    });
+    })
 
-    (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga)
+    ;(store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga)
 
     return store
 }

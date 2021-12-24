@@ -30,7 +30,10 @@ export const UserService = {
             activationLink: activationLink,
         }
 
-        const candidate = await User.findOne({ where: { email }, attributes: ['id'] })
+        const candidate = await User.findOne({
+            where: { email },
+            attributes: ['id'],
+        })
 
         if (candidate) {
             candidate.set(user)
@@ -42,12 +45,12 @@ export const UserService = {
 
         await MailService.sendActivationMail(
             email,
-            `${process.env.API_URL}/api/user-management/activate/${activationLink}`,
+            `${process.env.API_URL}/api/user-management/activate/${activationLink}`
         )
     },
     async login(
         inputs: Omit<IUserInput, 'firstName' | 'lastName'>,
-        agent: string,
+        agent: string
     ) {
         const { email, password } = inputs
 
@@ -83,7 +86,7 @@ export const UserService = {
         if (tokenFromDb) {
             await Token.update(
                 { refreshToken: tokens.refreshToken },
-                { where: { userId: userDto.id, agent } },
+                { where: { userId: userDto.id, agent } }
             )
         } else {
             await Token.create({
@@ -137,7 +140,9 @@ export const UserService = {
             throw ApiError.badRequest('No refresh token')
         }
 
-        const userData = TokenService.validateRefreshToken(refreshToken) as UserDto
+        const userData = TokenService.validateRefreshToken(
+            refreshToken
+        ) as UserDto
 
         const tokenFromDb = await Token.findOne({ where: { refreshToken } })
 
@@ -163,7 +168,7 @@ export const UserService = {
 
         await Token.update(
             { refreshToken: tokens.refreshToken },
-            { where: { userId: userDto.id, agent } },
+            { where: { userId: userDto.id, agent } }
         )
 
         return {

@@ -27,7 +27,7 @@ const authSlice = createSlice({
         }),
         setValidationErrors: (
             state,
-            { payload }: PayloadAction<IValidationErrors | null>,
+            { payload }: PayloadAction<IValidationErrors | null>
         ) => ({
             ...state,
             validationErrors: payload,

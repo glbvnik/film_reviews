@@ -29,8 +29,8 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
         {
             sequelize,
             modelName: 'Token',
-        },
+        }
     )
 
     return Token
-};
+}

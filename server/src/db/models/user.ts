@@ -30,7 +30,9 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 allowNull: false,
             },
             role: {
-                type: dataTypes.ARRAY(dataTypes.ENUM(...Object.values(UserRoles))),
+                type: dataTypes.ARRAY(
+                    dataTypes.ENUM(...Object.values(UserRoles))
+                ),
             },
             isActivated: {
                 type: dataTypes.BOOLEAN,
@@ -47,7 +49,7 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
         {
             sequelize,
             modelName: 'User',
-        },
+        }
     )
 
     return User

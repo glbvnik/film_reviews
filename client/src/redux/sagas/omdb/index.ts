@@ -7,7 +7,13 @@ import { setIsLoading } from '../../reducers/app'
 import { setOmdb } from '../../reducers/omdb'
 import { fetchOmdbFilms } from '../../reducers/omdb/action-creators'
 
-function* handleFetchOmdbFilms({ payload }: PayloadAction<IOmdbInputs>): Generator<StrictEffect, void, [IOmdbFilm[], string]> {
+function* handleFetchOmdbFilms({
+    payload,
+}: PayloadAction<IOmdbInputs>): Generator<
+    StrictEffect,
+    void,
+    [IOmdbFilm[], string]
+> {
     const { title, page, type } = payload
 
     yield put(setIsLoading(true))

@@ -3,7 +3,7 @@ import { IOmdbFilm } from '../../../models/omdb'
 import { RootState } from '../../store'
 
 interface OmdbState {
-    films: IOmdbFilm[] | null,
+    films: IOmdbFilm[] | null
     totalResults: number
 }
 
@@ -16,7 +16,10 @@ const omdbSlice = createSlice({
     name: 'omdb',
     initialState,
     reducers: {
-        setOmdb: (state, { payload }: PayloadAction<[IOmdbFilm[], string]>) => ({
+        setOmdb: (
+            state,
+            { payload }: PayloadAction<[IOmdbFilm[], string]>
+        ) => ({
             ...state,
             films: payload[0],
             totalResults: +payload[1],

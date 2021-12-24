@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 const Layout: FC = ({ children }) => {
     return (
-        <div id='layout'>
+        <div id="layout">
             <CssBaseline />
             {children}
         </div>

@@ -22,12 +22,11 @@ $api.interceptors.response.use(
                 await UserApi.refresh()
 
                 return $api.request(originalRequest)
-            } catch (e) {
-            }
+            } catch (e) {}
         }
 
         throw error
-    },
+    }
 )
 
 export default $api

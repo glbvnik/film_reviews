@@ -1,9 +1,19 @@
-import { Box, Button, ButtonGroup, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material'
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup,
+} from '@mui/material'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useFormik } from 'formik'
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { clearOmdb } from '../../redux/reducers/omdb'
 import { fetchOmdbFilms } from '../../redux/reducers/omdb/action-creators'
+import { useStyles } from '../../styles/classes'
+import { theme } from '../../theme'
 
 const CreateReview: FC = () => {
     const dispatch = useAppDispatch()
@@ -19,6 +29,10 @@ const CreateReview: FC = () => {
         },
     })
 
+    const isSm = useMediaQuery(theme.breakpoints.up('sm'))
+
+    const classes = useStyles()
+
     const handleReset = () => {
         resetForm()
 
@@ -26,29 +40,44 @@ const CreateReview: FC = () => {
     }
 
     return (
-        <Box noValidate component='form' onSubmit={handleSubmit} onReset={handleReset}>
+        <Box
+            noValidate
+            className={classes.maxWidth}
+            alignSelf="center"
+            width="100%"
+            component="form"
+            onSubmit={handleSubmit}
+            onReset={handleReset}
+        >
             <ToggleButtonGroup
                 exclusive
                 fullWidth
-                color='primary'
+                color="primary"
                 value={type}
                 onChange={(e, value) => setType(value)}
             >
-                <ToggleButton value='movie'>Movie</ToggleButton>
-                <ToggleButton value='series'>Series</ToggleButton>
+                <ToggleButton value="movie">Movie</ToggleButton>
+                <ToggleButton value="series">Series</ToggleButton>
             </ToggleButtonGroup>
-            <TextField
-                fullWidth
-                id='title'
-                name='title'
-                size='medium'
-                placeholder={type === 'movie' ? 'Film title...' : 'Series title...'} value={values.title}
-                onChange={handleChange}
-            />
-            <ButtonGroup fullWidth variant='contained' size='large'>
-                <Button type='submit'>Search</Button>
-                <Button type='reset' color='secondary'>Reset</Button>
-            </ButtonGroup>
+            <Box display="flex" flexDirection={isSm ? 'row' : 'column'}>
+                <TextField
+                    id="title"
+                    name="title"
+                    size="medium"
+                    placeholder={
+                        type === 'movie' ? 'Film title...' : 'Series title...'
+                    }
+                    value={values.title}
+                    onChange={handleChange}
+                    sx={{ flexGrow: 1 }}
+                />
+                <ButtonGroup variant="contained" size="large" fullWidth={!isSm}>
+                    <Button type="submit">Search</Button>
+                    <Button type="reset" color="secondary">
+                        Reset
+                    </Button>
+                </ButtonGroup>
+            </Box>
         </Box>
     )
 }

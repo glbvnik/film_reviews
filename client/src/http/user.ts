@@ -12,22 +12,23 @@ export interface RegisterInputs {
 export type LoginInputs = Omit<RegisterInputs, 'firstName' | 'lastName'>
 
 export const UserApi = {
-    async register(
-        inputs: RegisterInputs,
-        cancelToken: CancelToken,
-    ) {
+    async register(inputs: RegisterInputs, cancelToken: CancelToken) {
         const { status } = await $api.post<IUser>(
             '/user-management/register',
             inputs,
-            { cancelToken },
+            { cancelToken }
         )
 
         return status
     },
     async login(inputs: LoginInputs, cancelToken: CancelToken) {
-        const { data } = await $api.post<IUser>('/user-management/login', inputs, {
-            cancelToken,
-        })
+        const { data } = await $api.post<IUser>(
+            '/user-management/login',
+            inputs,
+            {
+                cancelToken,
+            }
+        )
 
         return data
     },

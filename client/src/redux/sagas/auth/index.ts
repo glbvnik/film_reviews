@@ -1,4 +1,14 @@
-import { all, call, cancel, fork, put, select, StrictEffect, take, takeEvery } from '@redux-saga/core/effects'
+import {
+    all,
+    call,
+    cancel,
+    fork,
+    put,
+    select,
+    StrictEffect,
+    take,
+    takeEvery,
+} from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import axios, { CancelToken } from 'axios'
 import { LoginInputs, RegisterInputs, UserApi } from '../../../http/user'
@@ -13,7 +23,13 @@ import {
     setUser,
     setValidationErrors,
 } from '../../reducers/auth'
-import { login, logout, refresh, register, resetErrors } from '../../reducers/auth/action-creators'
+import {
+    login,
+    logout,
+    refresh,
+    register,
+    resetErrors,
+} from '../../reducers/auth/action-creators'
 
 function* handleResetErrors(): Generator<StrictEffect, void, AuthState> {
     const { validationErrors, loginError } = yield select(selectAuth)
@@ -63,7 +79,7 @@ function* refreshHandler(): Generator<StrictEffect, void, IUser> {
 
 function* handleAuth(
     { payload }: PayloadAction<RegisterInputs | LoginInputs>,
-    cancelToken: CancelToken,
+    cancelToken: CancelToken
 ): Generator<StrictEffect, void, number | IUser> {
     try {
         yield put(setIsLoading(true))
@@ -75,7 +91,11 @@ function* handleAuth(
                 yield put(setIsRegistered(true))
             }
         } else {
-            const userData = (yield call(UserApi.login, payload, cancelToken)) as IUser
+            const userData = (yield call(
+                UserApi.login,
+                payload,
+                cancelToken
+            )) as IUser
 
             yield put(setUser(userData))
 
@@ -84,7 +104,9 @@ function* handleAuth(
     } catch (e) {
         if (axios.isAxiosError(e)) {
             if ('firstName' in payload) {
-                yield put(setValidationErrors(mapToError(e.response!.data.errors)))
+                yield put(
+                    setValidationErrors(mapToError(e.response!.data.errors))
+                )
             } else {
                 yield put(setLoginError(e.response!.data.message))
             }

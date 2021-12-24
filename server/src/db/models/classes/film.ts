@@ -2,7 +2,7 @@ import { Model } from 'sequelize'
 import { IFilm } from './../../../types/film'
 import { Review } from './review'
 
-type FilmAttributes = Omit<IFilm, 'createdAt' | 'updatedAt'>;
+type FilmAttributes = Omit<IFilm, 'createdAt' | 'updatedAt'>
 
 export class Film extends Model<FilmAttributes> implements FilmAttributes {
     imdbId!: string

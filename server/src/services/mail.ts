@@ -17,7 +17,7 @@ export const MailService = {
             to,
             subject: `Account activation ${process.env.CLIENT_URL!.replace(
                 'http://',
-                '',
+                ''
             )}`,
             html: `
         <h2>Please click on the link below to activate your account</h2>

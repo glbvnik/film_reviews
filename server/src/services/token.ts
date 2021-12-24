@@ -40,15 +40,13 @@ export const TokenService = {
             const userData = verify(token, process.env.JWT_ACCESS_SECRET!)
 
             return userData
-        } catch (e) {
-        }
+        } catch (e) {}
     },
     validateRefreshToken(token: string) {
         try {
             const userData = verify(token, process.env.JWT_REFRESH_SECRET!)
 
             return userData
-        } catch (e) {
-        }
+        } catch (e) {}
     },
 }

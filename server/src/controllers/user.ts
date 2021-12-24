@@ -10,7 +10,9 @@ export const UserController = {
             const errors = validationResult(req)
 
             if (!errors.isEmpty()) {
-                return next(ApiError.badRequest('Validation error', errors.array()))
+                return next(
+                    ApiError.badRequest('Validation error', errors.array())
+                )
             }
 
             await UserService.register(req.body)
@@ -24,7 +26,7 @@ export const UserController = {
         try {
             const userData = await UserService.login(
                 req.body,
-                req.headers['user-agent']!,
+                req.headers['user-agent']!
             )
 
             TokenService.setCookie(userData.tokens, res)
@@ -51,7 +53,10 @@ export const UserController = {
         try {
             const activationLink = req.params.link
 
-            const userData = await UserService.activate(activationLink, req.headers['user-agent']!)
+            const userData = await UserService.activate(
+                activationLink,
+                req.headers['user-agent']!
+            )
 
             TokenService.setCookie(userData.tokens, res)
 
@@ -66,7 +71,7 @@ export const UserController = {
 
             const userData = await UserService.refresh(
                 refreshToken,
-                req.headers['user-agent']!,
+                req.headers['user-agent']!
             )
 
             TokenService.setCookie(userData.tokens, res)

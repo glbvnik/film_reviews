@@ -13,19 +13,19 @@ userRouter.post(
     body('password')
         .isLength({ min: 8, max: 50 })
         .withMessage(
-            'Password should contain at least 8 and at most 32 characters',
+            'Password should contain at least 8 and at most 32 characters'
         ),
     body('firstName')
         .isLength({ min: 1, max: 50 })
         .withMessage(
-            'First name should contain at least 1 and at most 32 characters',
+            'First name should contain at least 1 and at most 32 characters'
         ),
     body('lastName')
         .isLength({ min: 1, max: 50 })
         .withMessage(
-            'Last name should contain at least 1 and at most 32 characters',
+            'Last name should contain at least 1 and at most 32 characters'
         ),
-    UserController.register,
+    UserController.register
 )
 userRouter.post('/login', UserController.login)
 userRouter.post('/logout', UserController.logout)
@@ -34,5 +34,5 @@ userRouter.get('/refresh', UserController.refresh)
 userRouter.get(
     '/users',
     authMiddleware(UserRoles.ADMIN),
-    UserController.getUsers,
+    UserController.getUsers
 )

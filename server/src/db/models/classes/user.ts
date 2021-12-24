@@ -3,7 +3,7 @@ import { IUser, UserRoles } from '../../../types/user'
 import { Review } from './review'
 import { Token } from './token'
 
-type UserAttributes = Omit<IUser, 'createdAt' | 'updatedAt'>;
+type UserAttributes = Omit<IUser, 'createdAt' | 'updatedAt'>
 
 export class User extends Model<UserAttributes> implements UserAttributes {
     id!: string

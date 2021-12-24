@@ -4,7 +4,7 @@ export default class ApiError extends Error {
     constructor(
         public status: number,
         message: string,
-        public errors?: ValidationError[],
+        public errors?: ValidationError[]
     ) {
         super(message)
     }
@@ -20,7 +20,7 @@ export default class ApiError extends Error {
     static forbidden() {
         return new ApiError(
             403,
-            'You do not have permission to access this service',
+            'You do not have permission to access this service'
         )
     }
 
