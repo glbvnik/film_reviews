@@ -7,4 +7,8 @@ export const useStyles = makeStyles({
             maxWidth: '1400px',
         },
     },
+    omdbBookImage: {
+        borderTopLeftRadius: '4px',
+        borderBottomLeftRadius: '4px',
+    },
 })

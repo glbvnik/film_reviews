@@ -12,10 +12,9 @@ import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { clearOmdb } from '../../redux/reducers/omdb'
 import { fetchOmdbFilms } from '../../redux/reducers/omdb/action-creators'
-import { useStyles } from '../../styles/classes'
 import { theme } from '../../theme'
 
-const CreateReview: FC = () => {
+const CreateReviewForm: FC = () => {
     const dispatch = useAppDispatch()
 
     const [type, setType] = useState<'movie' | 'series'>('movie')
@@ -31,8 +30,6 @@ const CreateReview: FC = () => {
 
     const isSm = useMediaQuery(theme.breakpoints.up('sm'))
 
-    const classes = useStyles()
-
     const handleReset = () => {
         resetForm()
 
@@ -42,7 +39,6 @@ const CreateReview: FC = () => {
     return (
         <Box
             noValidate
-            className={classes.maxWidth}
             alignSelf="center"
             width="100%"
             component="form"
@@ -82,4 +78,4 @@ const CreateReview: FC = () => {
     )
 }
 
-export default CreateReview
+export default CreateReviewForm
