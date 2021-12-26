@@ -2,33 +2,55 @@ import { fork, put, StrictEffect, takeEvery } from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { all, call } from 'redux-saga/effects'
 import { OmdbApi } from '../../../http/omdb'
-import { IOmdbFilm, IOmdbInputs } from '../../../models/omdb'
+import {
+    IOmdbFilm,
+    IOmdbFullFilm,
+    IOmdbFullFilmInputs,
+    IOmdbInputs,
+} from '../../../models/omdb'
 import { setIsLoading } from '../../reducers/app'
-import { setOmdb } from '../../reducers/omdb'
-import { fetchOmdbFilms } from '../../reducers/omdb/action-creators'
+import { setOmdb, setOmdbCurrentFilm } from '../../reducers/omdb'
+import {
+    getOmdbFilms,
+    getOmdbFullFilm,
+} from '../../reducers/omdb/action-creators'
 
-function* handleFetchOmdbFilms({
+function* handleFetch({
     payload,
-}: PayloadAction<IOmdbInputs>): Generator<
+}: PayloadAction<IOmdbInputs | IOmdbFullFilmInputs>): Generator<
     StrictEffect,
     void,
-    [IOmdbFilm[], string]
+    [IOmdbFilm[], string] | IOmdbFullFilm
 > {
-    const { title, page, type } = payload
-
     yield put(setIsLoading(true))
 
     try {
-        const result = yield call(OmdbApi.getFilmsByTitle, title, page, type)
+        if ('imdbId' in payload) {
+            const result = yield call(
+                OmdbApi.fetchFullFilm,
+                ...(Object.values(payload) as [string, string])
+            )
 
-        yield put(setOmdb(result))
+            yield put(setOmdbCurrentFilm(result as IOmdbFullFilm))
+        } else {
+            const film = yield call(
+                OmdbApi.fetchFilmsByTitle,
+                ...(Object.values(payload) as [
+                    string,
+                    number,
+                    'movie' | 'series'
+                ])
+            )
+
+            yield put(setOmdb(film as [IOmdbFilm[], string]))
+        }
     } finally {
-        yield put(setIsLoading(true))
+        yield put(setIsLoading(false))
     }
 }
 
 function* omdbWatcher() {
-    yield takeEvery(fetchOmdbFilms, handleFetchOmdbFilms)
+    yield takeEvery([getOmdbFilms, getOmdbFullFilm], handleFetch)
 }
 
 export default function* omdbSaga() {

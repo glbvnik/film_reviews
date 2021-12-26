@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IOmdbFilm } from '../../../models/omdb'
+import { IOmdbFilm, IOmdbFullFilm } from '../../../models/omdb'
 import { RootState } from '../../store'
 
 interface OmdbState {
     films: IOmdbFilm[] | null
     totalResults: number
+    currentFilm: IOmdbFullFilm | null
 }
 
 const initialState: OmdbState = {
     films: null,
     totalResults: 0,
+    currentFilm: null,
 }
 
 const omdbSlice = createSlice({
@@ -28,10 +30,22 @@ const omdbSlice = createSlice({
             ...state,
             ...initialState,
         }),
+        setOmdbCurrentFilm: (
+            state,
+            { payload }: PayloadAction<IOmdbFullFilm>
+        ) => ({
+            ...state,
+            currentFilm: payload,
+        }),
+        clearOmdbCurrentFilm: (state) => ({
+            ...state,
+            currentFilm: null,
+        }),
     },
 })
 
-export const { setOmdb, clearOmdb } = omdbSlice.actions
+export const { setOmdb, clearOmdb, setOmdbCurrentFilm, clearOmdbCurrentFilm } =
+    omdbSlice.actions
 
 export const selectOmdb = ({ omdb }: RootState) => omdb
 

@@ -3,10 +3,12 @@ import { RootState } from './../../store/index'
 
 interface AppState {
     isLoading: boolean
+    isDialog: boolean
 }
 
 const initialState: AppState = {
     isLoading: false,
+    isDialog: false,
 }
 
 export const appSlice = createSlice({
@@ -17,10 +19,14 @@ export const appSlice = createSlice({
             ...state,
             isLoading: payload,
         }),
+        setIsDialog: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isDialog: payload,
+        }),
     },
 })
 
-export const { setIsLoading } = appSlice.actions
+export const { setIsLoading, setIsDialog } = appSlice.actions
 
 export const selectApp = ({ app }: RootState) => app
 

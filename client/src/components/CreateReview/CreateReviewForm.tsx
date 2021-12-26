@@ -11,7 +11,7 @@ import { useFormik } from 'formik'
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { clearOmdb } from '../../redux/reducers/omdb'
-import { fetchOmdbFilms } from '../../redux/reducers/omdb/action-creators'
+import { getOmdbFilms } from '../../redux/reducers/omdb/action-creators'
 import { theme } from '../../theme'
 
 const CreateReviewForm: FC = () => {
@@ -24,7 +24,7 @@ const CreateReviewForm: FC = () => {
             title: '',
         },
         onSubmit: (values) => {
-            dispatch(fetchOmdbFilms({ title: values.title, page: 1, type }))
+            dispatch(getOmdbFilms({ title: values.title, page: 1, type }))
         },
     })
 
