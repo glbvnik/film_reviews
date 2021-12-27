@@ -9,11 +9,13 @@ import {
     Typography,
 } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import React from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { selectApp, setIsDialog } from '../../../redux/reducers/app'
 import { clearOmdbCurrentFilm, selectOmdb } from '../../../redux/reducers/omdb'
+import { theme } from '../../../theme'
 import OmdbDialogContent from './OmdbDialogContent'
 
 const Transition = React.forwardRef(
@@ -31,6 +33,8 @@ const OmdbDialog = () => {
 
     const dispatch = useAppDispatch()
 
+    const isSm = useMediaQuery(theme.breakpoints.up('sm'))
+
     const handleClose = () => {
         dispatch(setIsDialog(false))
         dispatch(clearOmdbCurrentFilm())
@@ -38,7 +42,7 @@ const OmdbDialog = () => {
 
     return (
         <Dialog
-            fullScreen
+            fullScreen={!isSm}
             open={isDialog}
             onClose={handleClose}
             TransitionComponent={Transition}

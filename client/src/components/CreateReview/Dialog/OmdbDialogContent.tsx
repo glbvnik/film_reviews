@@ -23,6 +23,8 @@ const OmdbDialogContent: FC<OmdbDialogContentProps> = ({
                           alignItems: 'center',
                           justifyContent: 'center',
                           flex: 1,
+                          minHeight: 350,
+                          minWidth: 350,
                       }
                     : undefined
             }
