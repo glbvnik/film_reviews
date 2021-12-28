@@ -8,13 +8,16 @@ import {
 } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useFormik } from 'formik'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { clearOmdb } from '../../redux/reducers/omdb'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { clearOmdb, selectOmdb } from '../../redux/reducers/omdb'
 import { getOmdbFilms } from '../../redux/reducers/omdb/action-creators'
 import { theme } from '../../theme'
 
 const CreateReviewForm: FC = () => {
+    const { totalResults, page } = useAppSelector(selectOmdb)
+
     const dispatch = useAppDispatch()
 
     const [type, setType] = useState<'movie' | 'series'>('movie')
@@ -24,7 +27,7 @@ const CreateReviewForm: FC = () => {
             title: '',
         },
         onSubmit: (values) => {
-            dispatch(getOmdbFilms({ title: values.title, page: 1, type }))
+            dispatch(getOmdbFilms({ title: values.title, page, type }))
         },
     })
 
@@ -35,6 +38,18 @@ const CreateReviewForm: FC = () => {
 
         dispatch(clearOmdb())
     }
+
+    const handleToggle = (value: 'movie' | 'series') => {
+        dispatch(clearOmdb())
+
+        setType(value)
+    }
+
+    useEffect(() => {
+        if (totalResults) {
+            handleSubmit()
+        }
+    }, [page])
 
     return (
         <Box
@@ -50,7 +65,7 @@ const CreateReviewForm: FC = () => {
                 fullWidth
                 color="primary"
                 value={type}
-                onChange={(e, value) => setType(value)}
+                onChange={(_, value) => handleToggle(value)}
             >
                 <ToggleButton value="movie">Movie</ToggleButton>
                 <ToggleButton value="series">Series</ToggleButton>

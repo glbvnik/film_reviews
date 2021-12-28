@@ -27,7 +27,7 @@ const OmdbFilmItem: FC<OmdbFilmItemProps> = ({ film }) => {
             disablePadding
             component={Paper}
             onClick={handleClick}
-            sx={{ mb: 1 }}
+            sx={{ cursor: 'pointer', mb: 1 }}
         >
             {checkHttpUrl(film.Poster) ? (
                 <Image
