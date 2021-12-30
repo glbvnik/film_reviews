@@ -1,55 +1,30 @@
-import {
-    Box,
-    Button,
-    ButtonGroup,
-    TextField,
-    ToggleButton,
-    ToggleButtonGroup,
-} from '@mui/material'
-import useMediaQuery from '@mui/material/useMediaQuery'
+import DoneIcon from '@mui/icons-material/Done'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import { useFormik } from 'formik'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { clearOmdb, selectOmdb } from '../../redux/reducers/omdb'
-import { getOmdbFilms } from '../../redux/reducers/omdb/action-creators'
-import { theme } from '../../theme'
+import { selectOmdb } from '../../redux/reducers/omdb'
+import { createReview } from '../../redux/reducers/review/action-creators'
 
 const CreateReviewForm: FC = () => {
-    const { totalResults, page } = useAppSelector(selectOmdb)
+    const { currentFilm } = useAppSelector(selectOmdb)
 
     const dispatch = useAppDispatch()
 
-    const [type, setType] = useState<'movie' | 'series'>('movie')
-
-    const { handleSubmit, handleChange, resetForm, values } = useFormik({
+    const { handleSubmit, handleChange, setFieldValue, values } = useFormik({
         initialValues: {
-            title: '',
+            image: null,
+            text: '',
         },
         onSubmit: (values) => {
-            dispatch(getOmdbFilms({ title: values.title, page, type }))
+            dispatch(createReview({ review: values, film: currentFilm! }))
         },
     })
 
-    const isSm = useMediaQuery(theme.breakpoints.up('sm'))
-
-    const handleReset = () => {
-        resetForm()
-
-        dispatch(clearOmdb())
+    if (!currentFilm) {
+        return <></>
     }
-
-    const handleToggle = (value: 'movie' | 'series') => {
-        dispatch(clearOmdb())
-
-        setType(value)
-    }
-
-    useEffect(() => {
-        if (totalResults) {
-            handleSubmit()
-        }
-    }, [page])
 
     return (
         <Box
@@ -58,37 +33,49 @@ const CreateReviewForm: FC = () => {
             width="100%"
             component="form"
             onSubmit={handleSubmit}
-            onReset={handleReset}
         >
-            <ToggleButtonGroup
-                exclusive
-                fullWidth
-                color="primary"
-                value={type}
-                onChange={(_, value) => handleToggle(value)}
+            <Typography variant="h3" mb={2}>
+                {currentFilm.Title}
+            </Typography>
+            <Typography variant="h4" mb={1}>
+                Image
+            </Typography>
+            {values.image && (
+                <Typography variant="h6" mb={1}>
+                    {(values.image as File).name}
+                </Typography>
+            )}
+            <Button
+                component="label"
+                variant="contained"
+                endIcon={values.image && <DoneIcon color="success" />}
             >
-                <ToggleButton value="movie">Movie</ToggleButton>
-                <ToggleButton value="series">Series</ToggleButton>
-            </ToggleButtonGroup>
-            <Box display="flex" flexDirection={isSm ? 'row' : 'column'}>
-                <TextField
-                    id="title"
-                    name="title"
-                    size="medium"
-                    placeholder={
-                        type === 'movie' ? 'Film title...' : 'Series title...'
+                Upload Image
+                <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                        setFieldValue('image', e.currentTarget.files![0])
                     }
-                    value={values.title}
-                    onChange={handleChange}
-                    sx={{ flexGrow: 1 }}
                 />
-                <ButtonGroup variant="contained" size="large" fullWidth={!isSm}>
-                    <Button type="submit">Search</Button>
-                    <Button type="reset" color="secondary">
-                        Reset
-                    </Button>
-                </ButtonGroup>
-            </Box>
+            </Button>
+            <Typography variant="h4" mt={2} mb={1}>
+                Review
+            </Typography>
+            <TextField
+                multiline
+                id="text"
+                name="text"
+                placeholder="Type your review..."
+                rows={20}
+                value={values.text}
+                onChange={handleChange}
+                sx={{ width: '100%', mb: 2 }}
+            />
+            <Button type="submit" variant="contained" sx={{ mb: 2 }}>
+                Create review
+            </Button>
         </Box>
     )
 }

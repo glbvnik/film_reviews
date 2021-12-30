@@ -29,7 +29,7 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 type: dataTypes.STRING(50),
                 allowNull: false,
             },
-            role: {
+            roles: {
                 type: dataTypes.ARRAY(
                     dataTypes.ENUM(...Object.values(UserRoles))
                 ),

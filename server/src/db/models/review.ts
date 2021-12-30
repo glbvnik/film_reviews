@@ -16,7 +16,7 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 allowNull: false,
             },
             image: {
-                type: dataTypes.UUID,
+                type: dataTypes.STRING(42),
                 unique: true,
                 allowNull: false,
             },

@@ -1,5 +1,6 @@
 import { List, Pagination } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
@@ -12,6 +13,8 @@ const OmdbFilmsList = () => {
 
     const dispatch = useAppDispatch()
 
+    const router = useRouter()
+
     const isSm = useMediaQuery(theme.breakpoints.up('sm'))
 
     const handleChange = (value: number) => {
@@ -21,7 +24,11 @@ const OmdbFilmsList = () => {
     }
 
     useEffect(() => {
-        return () => handleChange(1)
+        return () => {
+            if (router.asPath !== '/films-for-review') {
+                dispatch(setOmdbPage(1))
+            }
+        }
     }, [])
 
     return (

@@ -5,13 +5,13 @@ export class UserDto {
     email: string
     firstName: string
     lastName: string
-    role: UserRoles[]
+    roles: UserRoles[]
 
     constructor(model: Omit<IUser, 'createdAt' | 'updatedAt'>) {
         this.id = model.id
         this.email = model.email
         this.firstName = model.firstName
         this.lastName = model.lastName
-        this.role = model.role
+        this.roles = model.roles
     }
 }

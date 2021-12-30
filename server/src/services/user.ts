@@ -25,7 +25,7 @@ export const UserService = {
             password: hashPassword,
             firstName,
             lastName,
-            role: [UserRoles.USER],
+            roles: [UserRoles.USER],
             isActivated: false,
             activationLink: activationLink,
         }
@@ -62,7 +62,7 @@ export const UserService = {
                 'password',
                 'firstName',
                 'lastName',
-                'role',
+                'roles',
                 'isActivated',
             ],
         })
@@ -158,7 +158,7 @@ export const UserService = {
                 'password',
                 'firstName',
                 'lastName',
-                'role',
+                'roles',
             ],
         })
 

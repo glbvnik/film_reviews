@@ -13,7 +13,7 @@ export class User extends Model<UserAttributes> implements UserAttributes {
     lastName!: string
     isActivated!: boolean
     activationLink!: string
-    role!: UserRoles[]
+    roles!: UserRoles[]
 
     static associate() {
         User.hasMany(Token, {

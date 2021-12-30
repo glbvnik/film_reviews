@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
@@ -32,6 +33,8 @@ const OmdbDialog = () => {
     const { currentFilm } = useAppSelector(selectOmdb)
 
     const dispatch = useAppDispatch()
+
+    const router = useRouter()
 
     const isSm = useMediaQuery(theme.breakpoints.up('sm'))
 
@@ -72,7 +75,7 @@ const OmdbDialog = () => {
                     <Button
                         color="inherit"
                         disabled={!currentFilm}
-                        onClick={handleClose}
+                        onClick={() => router.push('/create-review')}
                     >
                         Create review
                     </Button>

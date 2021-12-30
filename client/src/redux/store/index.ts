@@ -20,7 +20,9 @@ const makeStore = () => {
             omdb,
         },
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(sagaMiddleware),
+            getDefaultMiddleware({ serializableCheck: false }).concat(
+                sagaMiddleware
+            ),
     })
 
     ;(store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga)

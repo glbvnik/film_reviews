@@ -1,9 +1,10 @@
 import { all, call, spawn } from 'redux-saga/effects'
 import authSaga from './auth'
 import omdbSaga from './omdb'
+import reviewSaga from './review'
 
 export default function* rootSaga() {
-    const sagas = [authSaga, omdbSaga]
+    const sagas = [authSaga, omdbSaga, reviewSaga]
 
     yield all(
         sagas.map((saga) =>

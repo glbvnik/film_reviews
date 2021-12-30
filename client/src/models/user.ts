@@ -10,5 +10,5 @@ export interface IUser {
     id: string
     email: string
     firstName: string
-    role: UserRoles[]
+    roles: UserRoles[]
 }

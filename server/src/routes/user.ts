@@ -33,6 +33,6 @@ userRouter.get('/activate/:link', UserController.activate)
 userRouter.get('/refresh', UserController.refresh)
 userRouter.get(
     '/users',
-    authMiddleware(UserRoles.ADMIN),
+    authMiddleware([UserRoles.ADMIN]),
     UserController.getUsers
 )

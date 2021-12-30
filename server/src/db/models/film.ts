@@ -16,31 +16,24 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
             },
             year: {
                 type: dataTypes.SMALLINT,
-                allowNull: false,
             },
             country: {
                 type: dataTypes.ARRAY(dataTypes.STRING(100)),
-                allowNull: false,
             },
             genres: {
                 type: dataTypes.ARRAY(dataTypes.STRING(20)),
-                allowNull: false,
             },
             runtime: {
                 type: dataTypes.SMALLINT,
-                allowNull: false,
             },
             directors: {
                 type: dataTypes.ARRAY(dataTypes.STRING(100)),
-                allowNull: false,
             },
             actors: {
                 type: dataTypes.ARRAY(dataTypes.STRING(100)),
-                allowNull: false,
             },
             imdbRating: {
                 type: dataTypes.DECIMAL(2, 1),
-                allowNull: false,
             },
         },
         {

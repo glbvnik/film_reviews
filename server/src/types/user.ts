@@ -12,7 +12,7 @@ export interface IUser {
     password: string
     firstName: string
     lastName: string
-    role: UserRoles[]
+    roles: UserRoles[]
     isActivated: boolean
     activationLink: string
     createdAt: Date
