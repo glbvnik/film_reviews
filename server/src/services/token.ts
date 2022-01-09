@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { sign, verify } from 'jsonwebtoken'
 import { UserDto } from '../dtos/user'
-import { ITokens } from './../types/token'
+import { ITokens } from '../types/token'
 
 export const TokenService = {
     generateTokens(payload: UserDto) {

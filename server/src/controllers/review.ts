@@ -8,7 +8,7 @@ export const ReviewController = {
             await ReviewService.create(
                 req.body,
                 req.file!.filename,
-                req.userId!
+                req.userUuId!
             )
 
             res.json({ message: 'Review was created' })

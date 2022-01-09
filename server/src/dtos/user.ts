@@ -1,17 +1,21 @@
-import { IUser, UserRoles } from '../types/user'
+import { RolesEnum } from '../types/role'
+import { IUser } from '../types/user'
 
 export class UserDto {
-    id: string
+    uuId: string
     email: string
     firstName: string
     lastName: string
-    roles: UserRoles[]
+    roles: RolesEnum[]
 
-    constructor(model: Omit<IUser, 'createdAt' | 'updatedAt'>) {
-        this.id = model.id
+    constructor(
+        model: Omit<IUser, 'createdAt' | 'updatedAt'>,
+        roles: RolesEnum[]
+    ) {
+        this.uuId = model.uuId
         this.email = model.email
         this.firstName = model.firstName
         this.lastName = model.lastName
-        this.roles = model.roles
+        this.roles = roles
     }
 }

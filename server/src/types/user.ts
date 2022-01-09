@@ -1,20 +1,18 @@
-export enum UserRoles {
-    ADMIN = 'ADMIN',
-    EDITOR = 'EDITOR',
-    MODERATOR = 'MODERATOR',
-    USER = 'USER',
-    WRITER = 'WRITER',
-}
-
 export interface IUser {
-    id: string
+    uuId: string
     email: string
     password: string
     firstName: string
     lastName: string
-    roles: UserRoles[]
-    isActivated: boolean
+    isActivated?: boolean
     activationLink: string
+    createdAt: Date
+    updatedAt: Date
+}
+
+export interface IUserRole {
+    UserUuId: string
+    RoleId: number
     createdAt: Date
     updatedAt: Date
 }

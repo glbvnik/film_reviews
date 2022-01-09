@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { body } from 'express-validator'
 import { UserController } from '../controllers/user'
 import { authMiddleware } from '../middlewares/auth'
-import { UserRoles } from '../types/user'
+import { RolesEnum } from '../types/role'
 import { emailValidator } from '../validators/email'
 
 export const userRouter = Router()
@@ -33,6 +33,6 @@ userRouter.get('/activate/:link', UserController.activate)
 userRouter.get('/refresh', UserController.refresh)
 userRouter.get(
     '/users',
-    authMiddleware([UserRoles.ADMIN]),
+    authMiddleware([RolesEnum.ADMIN]),
     UserController.getUsers
 )

@@ -1,4 +1,4 @@
-const enum UserRoles {
+const enum RolesEnum {
     ADMIN = 'ADMIN',
     EDITOR = 'EDITOR',
     MODERATOR = 'MODERATOR',
@@ -7,8 +7,9 @@ const enum UserRoles {
 }
 
 export interface IUser {
-    id: string
+    uuId: string
     email: string
     firstName: string
-    roles: UserRoles[]
+    lastName: string
+    roles: RolesEnum[]
 }

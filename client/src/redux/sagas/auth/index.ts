@@ -53,7 +53,7 @@ function* logoutHandler() {
 
         yield call(UserApi.logout)
 
-        yield put(setUser({} as IUser))
+        yield put(setUser(null))
     } catch (e) {
     } finally {
         yield put(setIsLoading(false))

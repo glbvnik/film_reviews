@@ -28,7 +28,7 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 type: dataTypes.STRING(10),
                 allowNull: false,
             },
-            userId: {
+            userUuId: {
                 type: dataTypes.UUID,
                 allowNull: false,
             },

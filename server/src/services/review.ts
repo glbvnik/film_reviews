@@ -6,7 +6,7 @@ export const ReviewService = {
     async create(
         inputs: { text: string; film: string },
         imageFileName: string,
-        userId: string
+        userUuId: string
     ) {
         const { text, film } = inputs
 
@@ -25,7 +25,7 @@ export const ReviewService = {
             text,
             image: imageFileName,
             filmId: parsedFilm.imdbId,
-            userId,
+            userUuId,
         })
     },
 }

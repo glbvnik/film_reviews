@@ -1,8 +1,9 @@
 import { DataTypes, Sequelize } from 'sequelize'
-import { Token } from './classes/token'
+import { RolesEnum } from '../../types/role'
+import { Role } from './classes/role'
 
 export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
-    Token.init(
+    Role.init(
         {
             id: {
                 type: dataTypes.INTEGER,
@@ -11,26 +12,17 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 unique: true,
                 allowNull: false,
             },
-            agent: {
-                type: DataTypes.STRING,
+            name: {
+                type: dataTypes.ENUM(...Object.values(RolesEnum)),
                 unique: true,
-                allowNull: false,
-            },
-            refreshToken: {
-                type: dataTypes.TEXT,
-                unique: true,
-                allowNull: false,
-            },
-            userUuId: {
-                type: dataTypes.UUID,
                 allowNull: false,
             },
         },
         {
             sequelize,
-            modelName: 'Token',
+            modelName: 'Role',
         }
     )
 
-    return Token
+    return Role
 }

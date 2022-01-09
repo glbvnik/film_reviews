@@ -1,11 +1,10 @@
 import { DataTypes, Sequelize, UUIDV4 } from 'sequelize'
-import { UserRoles } from '../../types/user'
 import { User } from './classes/user'
 
 export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
     User.init(
         {
-            id: {
+            uuId: {
                 type: dataTypes.UUID,
                 defaultValue: UUIDV4,
                 primaryKey: true,
@@ -28,11 +27,6 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
             lastName: {
                 type: dataTypes.STRING(50),
                 allowNull: false,
-            },
-            roles: {
-                type: dataTypes.ARRAY(
-                    dataTypes.ENUM(...Object.values(UserRoles))
-                ),
             },
             isActivated: {
                 type: dataTypes.BOOLEAN,

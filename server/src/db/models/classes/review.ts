@@ -16,14 +16,14 @@ export class Review
     image!: string
     rating!: number
     filmId!: string
-    userId!: string
+    userUuId!: string
 
     static associate() {
         Review.belongsTo(Film, {
             foreignKey: { name: 'filmId', allowNull: false },
         })
         Review.belongsTo(User, {
-            foreignKey: { name: 'userId', allowNull: false },
+            foreignKey: { name: 'userUuId', allowNull: false },
         })
     }
 }

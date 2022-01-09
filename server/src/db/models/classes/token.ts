@@ -13,11 +13,11 @@ export class Token
     id!: number
     agent!: string
     refreshToken!: string
-    userId!: string
+    userUuId!: string
 
     static associate() {
         Token.belongsTo(User, {
-            foreignKey: { name: 'userId', allowNull: false },
+            foreignKey: { name: 'userUuId', allowNull: false },
         })
     }
 }

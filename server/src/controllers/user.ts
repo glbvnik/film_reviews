@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import ApiError from '../errors/api'
+import { TokenService } from '../services/token'
 import { UserService } from '../services/user'
-import { TokenService } from './../services/token'
 
 export const UserController = {
     async register(req: Request, res: Response, next: NextFunction) {

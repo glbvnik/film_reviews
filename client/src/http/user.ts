@@ -13,7 +13,7 @@ export type LoginInputs = Omit<RegisterInputs, 'firstName' | 'lastName'>
 
 export const UserApi = {
     async register(inputs: RegisterInputs, cancelToken: CancelToken) {
-        const { status } = await $api.post<IUser>(
+        const { status } = await $api.post(
             '/user-management/register',
             inputs,
             { cancelToken }

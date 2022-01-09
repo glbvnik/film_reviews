@@ -1,38 +1,36 @@
 import { compare, hash } from 'bcrypt'
 import { v4 } from 'uuid'
+import { Role } from '../db/models/classes/role'
 import { Token } from '../db/models/classes/token'
 import { User } from '../db/models/classes/user'
+import { UserRole } from '../db/models/classes/userRole'
+import { UserDto } from '../dtos/user'
 import ApiError from '../errors/api'
-import { IUserInput, UserRoles } from '../types/user'
+import { RolesEnum } from '../types/role'
+import { IUserInput } from '../types/user'
 import { validateUUID } from '../utils/validateUUID'
-import { UserDto } from './../dtos/user'
 import { MailService } from './mail'
+import { RoleService } from './role'
 import { TokenService } from './token'
 
 export const UserService = {
     async register(inputs: IUserInput) {
         const { email, password, firstName, lastName } = inputs
 
-        const hashPassword = await hash(password, 12)
-
-        const userId = v4()
-
         const activationLink = v4()
 
         const user = {
-            id: userId,
+            uuId: v4(),
             email,
-            password: hashPassword,
+            password: await hash(password, 12),
             firstName,
             lastName,
-            roles: [UserRoles.USER],
-            isActivated: false,
-            activationLink: activationLink,
+            activationLink,
         }
 
         const candidate = await User.findOne({
             where: { email },
-            attributes: ['id'],
+            attributes: ['uuId'],
         })
 
         if (candidate) {
@@ -57,12 +55,11 @@ export const UserService = {
         const user = await User.findOne({
             where: { email },
             attributes: [
-                'id',
+                'uuId',
                 'email',
                 'password',
                 'firstName',
                 'lastName',
-                'roles',
                 'isActivated',
             ],
         })
@@ -77,7 +74,10 @@ export const UserService = {
             throw ApiError.badRequest('Incorrect email or password')
         }
 
-        const userDto = new UserDto(user)
+        const userDto = new UserDto(
+            user,
+            await RoleService.findUserRoles(user.uuId)
+        )
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
@@ -86,13 +86,13 @@ export const UserService = {
         if (tokenFromDb) {
             await Token.update(
                 { refreshToken: tokens.refreshToken },
-                { where: { userId: userDto.id, agent } }
+                { where: { userUuId: userDto.uuId, agent } }
             )
         } else {
             await Token.create({
                 agent,
                 refreshToken: tokens.refreshToken,
-                userId: userDto.id,
+                userUuId: userDto.uuId,
             })
         }
 
@@ -102,7 +102,7 @@ export const UserService = {
         }
     },
     async logout(refreshToken: string) {
-        Token.destroy({ where: { refreshToken } })
+        await Token.destroy({ where: { refreshToken } })
     },
     async activate(activationLink: string, agent: string) {
         if (!validateUUID(activationLink)) {
@@ -115,23 +115,31 @@ export const UserService = {
             throw ApiError.badRequest('Invalid activation link')
         }
 
-        user.isActivated = true
+        if (!user.isActivated) {
+            const userRoleId = await Role.findOne({
+                where: { name: RolesEnum.USER },
+                attributes: ['id'],
+            })
 
-        const userDto = new UserDto(user)
+            await UserRole.create({
+                UserUuId: user.uuId,
+                RoleId: userRoleId!.id,
+            })
+        }
+
+        const userDto = new UserDto(user, [RolesEnum.USER])
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
-        try {
-            await Token.create({
-                agent,
-                refreshToken: tokens.refreshToken,
-                userId: user.id,
-            })
-        } catch (e) {
-            await User.destroy({ where: { id: user.id } })
-        }
+        await Token.upsert({
+            agent,
+            refreshToken: tokens.refreshToken,
+            userUuId: user.uuId,
+        })
 
-        await user!.save()
+        user.isActivated = true
+
+        await user.save()
 
         return { tokens }
     },
@@ -151,24 +159,20 @@ export const UserService = {
         }
 
         const user = await User.findOne({
-            where: { id: userData.id },
-            attributes: [
-                'id',
-                'email',
-                'password',
-                'firstName',
-                'lastName',
-                'roles',
-            ],
+            where: { uuId: userData.uuId },
+            attributes: ['uuId', 'email', 'password', 'firstName', 'lastName'],
         })
 
-        const userDto = new UserDto(user!)
+        const userDto = new UserDto(
+            user!,
+            await RoleService.findUserRoles(user!.uuId)
+        )
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
         await Token.update(
             { refreshToken: tokens.refreshToken },
-            { where: { userId: userDto.id, agent } }
+            { where: { userUuId: userDto.uuId, agent } }
         )
 
         return {

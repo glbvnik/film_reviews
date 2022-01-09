@@ -2,7 +2,7 @@ export interface IToken {
     id: number
     agent: string
     refreshToken: string
-    userId: string
+    userUuId: string
     createdAt: Date
     updatedAt: Date
 }

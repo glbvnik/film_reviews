@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from '../../../models/user'
 import { IValidationErrors } from '../../../models/validationError'
-import { RootState } from './../../store/index'
+import { RootState } from '../../store/index'
 
 export interface AuthState {
     user: IUser | null
@@ -21,7 +21,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setUser: (state, { payload }: PayloadAction<IUser>) => ({
+        setUser: (state, { payload }: PayloadAction<IUser | null>) => ({
             ...state,
             user: payload,
         }),

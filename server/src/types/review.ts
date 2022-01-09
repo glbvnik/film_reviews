@@ -4,7 +4,7 @@ export interface IReview {
     image: string
     rating?: number
     filmId: string
-    userId: string
+    userUuId: string
     createdAt: Date
     updatedAt: Date
 }
