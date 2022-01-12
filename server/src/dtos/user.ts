@@ -7,6 +7,7 @@ export class UserDto {
     firstName: string
     lastName: string
     roles: RolesEnum[]
+    isCommentsAllowed: boolean
 
     constructor(
         model: Omit<IUser, 'createdAt' | 'updatedAt'>,
@@ -17,5 +18,6 @@ export class UserDto {
         this.firstName = model.firstName
         this.lastName = model.lastName
         this.roles = roles
+        this.isCommentsAllowed = model.isCommentsAllowed
     }
 }

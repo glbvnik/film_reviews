@@ -12,4 +12,5 @@ export interface IUser {
     firstName: string
     lastName: string
     roles: RolesEnum[]
+    isCommentsAllowed: boolean
 }

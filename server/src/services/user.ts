@@ -20,7 +20,6 @@ export const UserService = {
         const activationLink = v4()
 
         const user = {
-            uuId: v4(),
             email,
             password: await hash(password, 12),
             firstName,
@@ -34,9 +33,7 @@ export const UserService = {
         })
 
         if (candidate) {
-            candidate.set(user)
-
-            await candidate.save()
+            await candidate.update(user)
         } else {
             await User.create(user)
         }
@@ -61,6 +58,7 @@ export const UserService = {
                 'firstName',
                 'lastName',
                 'isActivated',
+                'isCommentsAllowed',
             ],
         })
 
@@ -109,7 +107,17 @@ export const UserService = {
             throw ApiError.badRequest('Invalid activation link')
         }
 
-        const user = await User.findOne({ where: { activationLink } })
+        const user = await User.findOne({
+            where: { activationLink },
+            attributes: [
+                'uuId',
+                'email',
+                'firstName',
+                'lastName',
+                'isActivated',
+                'isCommentsAllowed',
+            ],
+        })
 
         if (!user) {
             throw ApiError.badRequest('Invalid activation link')
@@ -160,7 +168,14 @@ export const UserService = {
 
         const user = await User.findOne({
             where: { uuId: userData.uuId },
-            attributes: ['uuId', 'email', 'password', 'firstName', 'lastName'],
+            attributes: [
+                'uuId',
+                'email',
+                'firstName',
+                'lastName',
+                'isActivated',
+                'isCommentsAllowed',
+            ],
         })
 
         const userDto = new UserDto(

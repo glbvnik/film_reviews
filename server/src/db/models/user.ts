@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize, UUIDV4 } from 'sequelize'
+import { DataTypes, Sequelize } from 'sequelize'
 import { User } from './classes/user'
 
 export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
@@ -6,7 +6,7 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
         {
             uuId: {
                 type: dataTypes.UUID,
-                defaultValue: UUIDV4,
+                defaultValue: dataTypes.UUIDV4,
                 primaryKey: true,
                 unique: true,
                 allowNull: false,
@@ -35,8 +35,16 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
             },
             activationLink: {
                 type: dataTypes.UUID,
-                defaultValue: UUIDV4,
                 unique: true,
+                allowNull: false,
+            },
+            passwordResetLink: {
+                type: dataTypes.UUID,
+                unique: true,
+            },
+            isCommentsAllowed: {
+                type: dataTypes.BOOLEAN,
+                defaultValue: true,
                 allowNull: false,
             },
         },

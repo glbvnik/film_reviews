@@ -4,8 +4,10 @@ export interface IUser {
     password: string
     firstName: string
     lastName: string
-    isActivated?: boolean
+    isActivated: boolean
     activationLink: string
+    passwordResetLink: string | null
+    isCommentsAllowed: boolean
     createdAt: Date
     updatedAt: Date
 }

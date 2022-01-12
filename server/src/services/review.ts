@@ -1,14 +1,15 @@
 import { Film } from '../db/models/classes/film'
 import { Review } from '../db/models/classes/review'
 import { IFilm } from '../types/film'
+import { IReviewInputs } from '../types/review'
 
 export const ReviewService = {
     async create(
-        inputs: { text: string; film: string },
+        inputs: { review: string; film: string },
         imageFileName: string,
         userUuId: string
     ) {
-        const { text, film } = inputs
+        const { review, film } = inputs
 
         const parsedFilm: IFilm = JSON.parse(film)
 
@@ -22,7 +23,7 @@ export const ReviewService = {
         }
 
         await Review.create({
-            text,
+            ...(JSON.parse(review) as IReviewInputs),
             image: imageFileName,
             filmImdbId: parsedFilm.imdbId,
             userUuId,

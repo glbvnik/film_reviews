@@ -4,12 +4,12 @@ import { all, call } from 'redux-saga/effects'
 import { ReviewApi } from '../../../http/review'
 import { IOmdbFullFilm } from '../../../models/omdb'
 import { IReviewInputs } from '../../../models/review'
-import { setIsLoading } from '../../reducers/app'
+import { setAsyncAction, setIsLoading } from '../../reducers/app'
 import { createReview } from '../../reducers/review/action-creators'
 
 function* handleCreateReview({
-                                 payload,
-                             }: PayloadAction<{
+    payload,
+}: PayloadAction<{
     review: IReviewInputs
     film: IOmdbFullFilm
 }>) {
@@ -17,10 +17,20 @@ function* handleCreateReview({
         const { review, film } = payload
 
         if (!review.image) {
+            yield put(
+                setAsyncAction({
+                    errorMessage: 'Please, provide a review image',
+                })
+            )
             throw 'No image'
         }
 
         if (!review.text) {
+            yield put(
+                setAsyncAction({
+                    errorMessage: 'Please, provide a review text',
+                })
+            )
             throw 'No text'
         }
 
@@ -47,10 +57,23 @@ function* handleCreateReview({
         const formData = new FormData()
 
         formData.append('image', review.image)
-        formData.append('text', textForServer)
+        formData.append(
+            'review',
+            JSON.stringify({
+                text: textForServer,
+                isPublished: review.isPublished,
+            })
+        )
         formData.append('film', JSON.stringify(filmForServer))
 
         yield call(ReviewApi.create, formData)
+
+        yield put(
+            setAsyncAction({
+                isSuccess: true,
+                errorMessage: '',
+            })
+        )
     } catch (e) {
         console.log('Error:', e)
     }

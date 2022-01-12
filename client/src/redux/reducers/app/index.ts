@@ -1,14 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from './../../store/index'
+import { RootState } from '../../store/index'
+
+interface IAsyncAction {
+    isSuccess?: boolean
+    errorMessage?: string
+}
 
 interface AppState {
     isLoading: boolean
     isDialog: boolean
+    asyncAction: IAsyncAction
 }
 
 const initialState: AppState = {
     isLoading: false,
     isDialog: false,
+    asyncAction: {
+        isSuccess: false,
+        errorMessage: '',
+    },
 }
 
 export const appSlice = createSlice({
@@ -23,10 +33,14 @@ export const appSlice = createSlice({
             ...state,
             isDialog: payload,
         }),
+        setAsyncAction: (state, { payload }: PayloadAction<IAsyncAction>) => ({
+            ...state,
+            asyncAction: { ...state.asyncAction, ...payload },
+        }),
     },
 })
 
-export const { setIsLoading, setIsDialog } = appSlice.actions
+export const { setIsLoading, setIsDialog, setAsyncAction } = appSlice.actions
 
 export const selectApp = ({ app }: RootState) => app
 

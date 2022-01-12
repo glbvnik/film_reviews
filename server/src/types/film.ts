@@ -1,13 +1,13 @@
 export interface IFilm {
     imdbId: string
     name: string
-    year: number
-    country: string[]
-    genres: string[]
-    runtime: number
-    directors: string[]
-    actors: string[]
-    imdbRating: number
+    year: number | null
+    country: string[] | null
+    genres: string[] | null
+    runtime: number | null
+    directors: string[] | null
+    actors: string[] | null
+    imdbRating: number | null
     createdAt: Date
     updatedAt: Date
 }
