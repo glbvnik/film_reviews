@@ -3,7 +3,7 @@ export interface IReview {
     text: string
     image: string
     rating?: number
-    filmId: string
+    filmImdbId: string
     userUuId: string
     createdAt: Date
     updatedAt: Date

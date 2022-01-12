@@ -24,7 +24,7 @@ export const ReviewService = {
         await Review.create({
             text,
             image: imageFileName,
-            filmId: parsedFilm.imdbId,
+            filmImdbId: parsedFilm.imdbId,
             userUuId,
         })
     },

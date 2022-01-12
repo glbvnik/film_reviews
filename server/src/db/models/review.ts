@@ -24,7 +24,7 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 type: dataTypes.DECIMAL(1, 1),
                 defaultValue: null,
             },
-            filmId: {
+            filmImdbId: {
                 type: dataTypes.STRING(10),
                 allowNull: false,
             },
