@@ -11,13 +11,20 @@ import {
 } from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import axios, { CancelToken } from 'axios'
-import { LoginInputs, RegisterInputs, UserApi } from '../../../http/user'
+import {
+    LoginInputs,
+    RegisterInputs,
+    ResetPasswordPayload,
+    UserApi,
+} from '../../../http/user'
 import { IUser } from '../../../models/user'
 import { mapToError } from '../../../utils/mapToError'
 import { setIsLoading } from '../../reducers/app'
 import {
     AuthState,
     selectAuth,
+    setIsPasswordReset,
+    setIsPasswordResetLinkSet,
     setIsRegistered,
     setLoginError,
     setUser,
@@ -29,6 +36,8 @@ import {
     refresh,
     register,
     resetErrors,
+    resetPassword,
+    setPasswordResetLink,
 } from '../../reducers/auth/action-creators'
 
 function* handleResetErrors(): Generator<StrictEffect, void, AuthState> {
@@ -78,19 +87,22 @@ function* refreshHandler(): Generator<StrictEffect, void, IUser> {
 }
 
 function* handleAuth(
-    { payload }: PayloadAction<RegisterInputs | LoginInputs>,
+    {
+        payload,
+        type,
+    }: PayloadAction<
+        RegisterInputs | LoginInputs | string | ResetPasswordPayload
+    >,
     cancelToken: CancelToken
 ): Generator<StrictEffect, void, number | IUser> {
     try {
         yield put(setIsLoading(true))
 
-        if ('firstName' in payload) {
-            const status = yield call(UserApi.register, payload, cancelToken)
+        if (typeof payload !== 'string' && 'firstName' in payload) {
+            yield call(UserApi.register, payload, cancelToken)
 
-            if (status === 200) {
-                yield put(setIsRegistered(true))
-            }
-        } else {
+            yield put(setIsRegistered(true))
+        } else if (typeof payload !== 'string' && 'email' in payload) {
             const userData = (yield call(
                 UserApi.login,
                 payload,
@@ -100,10 +112,18 @@ function* handleAuth(
             yield put(setUser(userData))
 
             yield fork(logoutHandler)
+        } else if (typeof payload === 'string') {
+            yield call(UserApi.setPasswordResetLink, payload, cancelToken)
+
+            yield put(setIsPasswordResetLinkSet(true))
+        } else {
+            yield call(UserApi.resetPassword, payload, cancelToken)
+
+            yield put(setIsPasswordReset(true))
         }
     } catch (e) {
         if (axios.isAxiosError(e)) {
-            if ('firstName' in payload) {
+            if (e.response!.data.errors) {
                 yield put(
                     setValidationErrors(mapToError(e.response!.data.errors))
                 )
@@ -121,7 +141,12 @@ function* authWatcher(): Generator<StrictEffect, void, any> {
     let abortController = axios.CancelToken.source()
 
     while (true) {
-        const payload = yield take([register, login])
+        const action = yield take([
+            register,
+            login,
+            setPasswordResetLink,
+            resetPassword,
+        ])
 
         if (task) {
             abortController.cancel()
@@ -131,7 +156,7 @@ function* authWatcher(): Generator<StrictEffect, void, any> {
             abortController = axios.CancelToken.source()
         }
 
-        task = yield fork(handleAuth, payload, abortController.token)
+        task = yield fork(handleAuth, action, abortController.token)
     }
 }
 

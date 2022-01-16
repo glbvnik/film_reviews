@@ -29,8 +29,25 @@ userRouter.post(
 )
 userRouter.post('/login', UserController.login)
 userRouter.post('/logout', UserController.logout)
-userRouter.get('/activate/:link', UserController.activate)
+userRouter.get('/activate/:activationLink', UserController.activate)
 userRouter.get('/refresh', UserController.refresh)
+userRouter.patch(
+    '/reset-password',
+    body('email')
+        .custom(emailValidator(false))
+        .isEmail()
+        .withMessage('Invalid email'),
+    UserController.setPasswordResetLink
+)
+userRouter.patch(
+    '/reset-password/:passwordResetLink',
+    body('password')
+        .isLength({ min: 8, max: 50 })
+        .withMessage(
+            'Password should contain at least 8 and at most 32 characters'
+        ),
+    UserController.resetPassword
+)
 userRouter.get(
     '/users',
     authMiddleware([RolesEnum.ADMIN]),

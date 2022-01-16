@@ -195,6 +195,32 @@ export const UserService = {
             user: userDto,
         }
     },
+    async setPasswordResetLink(email: string) {
+        const passwordResetLink = v4()
+
+        await User.update({ passwordResetLink }, { where: { email } })
+
+        await MailService.sendPasswordResetLink(
+            email,
+            `${process.env.CLIENT_URL}/forgot-password/${passwordResetLink}`
+        )
+    },
+    async resetPassword(passwordResetLink: string, password: string) {
+        if (!validateUUID(passwordResetLink)) {
+            throw ApiError.badRequest('Invalid password reset link')
+        }
+
+        const user = await User.update(
+            { password: await hash(password, 12), passwordResetLink: null },
+            {
+                where: { passwordResetLink },
+            }
+        )
+
+        if (!user[0]) {
+            throw ApiError.badRequest('Invalid password reset link')
+        }
+    },
     async getUsers() {
         const users = await User.findAll()
 

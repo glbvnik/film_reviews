@@ -10,6 +10,7 @@ export const styles = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: '100%',
         '@media (min-width: 375px)': {
             mx: 3,
         },

@@ -11,15 +11,14 @@ export interface RegisterInputs {
 
 export type LoginInputs = Omit<RegisterInputs, 'firstName' | 'lastName'>
 
+export interface ResetPasswordPayload {
+    passwordResetLink: string
+    password: string
+}
+
 export const UserApi = {
     async register(inputs: RegisterInputs, cancelToken: CancelToken) {
-        const { status } = await $api.post(
-            '/user-management/register',
-            inputs,
-            { cancelToken }
-        )
-
-        return status
+        await $api.post('/user-management/register', inputs, { cancelToken })
     },
     async login(inputs: LoginInputs, cancelToken: CancelToken) {
         const { data } = await $api.post<IUser>(
@@ -39,6 +38,25 @@ export const UserApi = {
         const { data } = await $api.get<IUser>('/user-management/refresh')
 
         return data
+    },
+    async setPasswordResetLink(email: string, cancelToken: CancelToken) {
+        await $api.patch(
+            '/user-management/reset-password',
+            {
+                email,
+            },
+            { cancelToken }
+        )
+    },
+    async resetPassword(
+        { passwordResetLink, password }: ResetPasswordPayload,
+        cancelToken: CancelToken
+    ) {
+        await $api.patch(
+            `/user-management/reset-password/${passwordResetLink}`,
+            { password },
+            { cancelToken }
+        )
     },
     async fetchUsers() {
         const { data } = await $api.get<IUser[]>('/user-management/users')

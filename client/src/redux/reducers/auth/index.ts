@@ -8,6 +8,8 @@ export interface AuthState {
     validationErrors: IValidationErrors | null
     loginError: string
     isRegistered: boolean
+    isPasswordResetLinkSet: boolean
+    isPasswordReset: boolean
 }
 
 const initialState: AuthState = {
@@ -15,6 +17,8 @@ const initialState: AuthState = {
     validationErrors: null,
     loginError: '',
     isRegistered: false,
+    isPasswordResetLinkSet: false,
+    isPasswordReset: false,
 }
 
 const authSlice = createSlice({
@@ -40,11 +44,35 @@ const authSlice = createSlice({
             ...state,
             isRegistered: payload,
         }),
+        setIsPasswordResetLinkSet: (
+            state,
+            { payload }: PayloadAction<boolean>
+        ) => ({
+            ...state,
+            isPasswordResetLinkSet: payload,
+        }),
+        setIsPasswordReset: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isPasswordReset: payload,
+        }),
+        clearAuthStateBooleans: (state) => ({
+            ...state,
+            isRegistered: false,
+            isPasswordResetLinkSet: false,
+            isPasswordReset: false,
+        }),
     },
 })
 
-export const { setUser, setValidationErrors, setLoginError, setIsRegistered } =
-    authSlice.actions
+export const {
+    setUser,
+    setValidationErrors,
+    setLoginError,
+    setIsRegistered,
+    setIsPasswordResetLinkSet,
+    setIsPasswordReset,
+    clearAuthStateBooleans,
+} = authSlice.actions
 
 export const selectAuth = ({ auth }: RootState) => auth
 

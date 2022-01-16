@@ -51,7 +51,7 @@ export const UserController = {
     },
     async activate(req: Request, res: Response, next: NextFunction) {
         try {
-            const activationLink = req.params.link
+            const activationLink = req.params.activationLink
 
             const userData = await UserService.activate(
                 activationLink,
@@ -77,6 +77,49 @@ export const UserController = {
             TokenService.setCookie(userData.tokens, res)
 
             return res.json(userData.user)
+        } catch (e) {
+            next(e)
+        }
+    },
+    async setPasswordResetLink(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const errors = validationResult(req)
+
+            if (!errors.isEmpty()) {
+                return next(
+                    ApiError.badRequest('Validation error', errors.array())
+                )
+            }
+
+            await UserService.setPasswordResetLink(req.body.email)
+
+            return res.json({ message: 'Password reset link was sent' })
+        } catch (e) {
+            next(e)
+        }
+    },
+    async resetPassword(req: Request, res: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(req)
+
+            if (!errors.isEmpty()) {
+                return next(
+                    ApiError.badRequest('Validation error', errors.array())
+                )
+            }
+
+            const passwordResetLink = req.params.passwordResetLink
+
+            await UserService.resetPassword(
+                passwordResetLink,
+                req.body.password
+            )
+
+            return res.json({ message: 'Password successfully changed' })
         } catch (e) {
             next(e)
         }

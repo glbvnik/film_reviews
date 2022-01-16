@@ -20,9 +20,23 @@ export const MailService = {
                 ''
             )}`,
             html: `
-        <h2>Please click on the link below to activate your account</h2>
-        <a href='${link}'>${link}</a>
-        `,
+            <h2>Please click on the link below to activate your account</h2>
+            <a href='${link}'>${link}</a>
+            `,
+        })
+    },
+    async sendPasswordResetLink(to: string, link: string) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: `Reset password ${process.env.CLIENT_URL!.replace(
+                'http://',
+                ''
+            )}`,
+            html: `
+            <h2>Please click on the link below to activate your account</h2>
+            <a href='${link}'>${link}</a>
+            `,
         })
     },
 }
