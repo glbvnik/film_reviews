@@ -24,5 +24,12 @@ export const theme = createTheme({
                 },
             },
         },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    color: 'white',
+                },
+            },
+        },
     },
 })

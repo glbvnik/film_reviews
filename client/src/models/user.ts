@@ -1,4 +1,4 @@
-const enum RolesEnum {
+export const enum RolesEnum {
     ADMIN = 'ADMIN',
     EDITOR = 'EDITOR',
     MODERATOR = 'MODERATOR',

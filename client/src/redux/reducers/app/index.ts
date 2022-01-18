@@ -9,12 +9,14 @@ interface IAsyncAction {
 interface AppState {
     isLoading: boolean
     isDialog: boolean
+    isMobileDrawerOpen: boolean
     asyncAction: IAsyncAction
 }
 
 const initialState: AppState = {
     isLoading: false,
     isDialog: false,
+    isMobileDrawerOpen: false,
     asyncAction: {
         isSuccess: false,
         errorMessage: '',
@@ -33,6 +35,13 @@ export const appSlice = createSlice({
             ...state,
             isDialog: payload,
         }),
+        setIsMobileDrawerOpen: (
+            state,
+            { payload }: PayloadAction<boolean>
+        ) => ({
+            ...state,
+            isMobileDrawerOpen: payload,
+        }),
         setAsyncAction: (state, { payload }: PayloadAction<IAsyncAction>) => ({
             ...state,
             asyncAction: { ...state.asyncAction, ...payload },
@@ -40,7 +49,12 @@ export const appSlice = createSlice({
     },
 })
 
-export const { setIsLoading, setIsDialog, setAsyncAction } = appSlice.actions
+export const {
+    setIsLoading,
+    setIsDialog,
+    setIsMobileDrawerOpen,
+    setAsyncAction,
+} = appSlice.actions
 
 export const selectApp = ({ app }: RootState) => app
 
