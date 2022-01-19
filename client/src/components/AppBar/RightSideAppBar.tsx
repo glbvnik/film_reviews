@@ -3,7 +3,7 @@ import { IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectAuth } from '../../redux/reducers/auth'
 import { logout } from '../../redux/reducers/auth/action-creators'
@@ -19,7 +19,7 @@ enum MenuOptionsEnum {
 const RightSideAppBar: FC = () => {
     const { user } = useAppSelector(selectAuth)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { HYDRATE } from 'next-redux-wrapper'
 import { IUser } from '../../../models/user'
 import { IValidationErrors } from '../../../models/validationError'
 import { RootState } from '../../store/index'
@@ -60,6 +61,12 @@ const authSlice = createSlice({
             isRegistered: false,
             isPasswordResetLinkSet: false,
             isPasswordReset: false,
+        }),
+    },
+    extraReducers: {
+        [HYDRATE]: (state, action) => ({
+            ...state,
+            ...action.payload.auth,
         }),
     },
 })

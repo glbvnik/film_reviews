@@ -1,17 +1,16 @@
-import { Drawer } from '@mui/material'
-import Box from '@mui/material/Box'
+import { Box, Drawer } from '@mui/material'
 import React, { FC } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectApp, setIsMobileDrawerOpen } from '../../redux/reducers/app'
-import DrawerOptionsList from './DrawerOptionsList'
+import DrawerSectionsList from './DrawerSectionsList'
 
 export const drawerWidth = 175
 
 const DashboardDrawer: FC = () => {
     const { isMobileDrawerOpen } = useAppSelector(selectApp)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     return (
         <Box
@@ -35,7 +34,7 @@ const DashboardDrawer: FC = () => {
                     },
                 }}
             >
-                <DrawerOptionsList />
+                <DrawerSectionsList />
             </Drawer>
             <Drawer
                 open
@@ -49,7 +48,7 @@ const DashboardDrawer: FC = () => {
                     },
                 }}
             >
-                <DrawerOptionsList />
+                <DrawerSectionsList />
             </Drawer>
         </Box>
     )

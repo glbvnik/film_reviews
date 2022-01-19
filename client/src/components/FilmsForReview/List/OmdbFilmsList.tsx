@@ -2,14 +2,14 @@ import { List, Pagination } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { selectOmdb, setOmdbPage } from '../../../redux/reducers/omdb'
 import { theme } from '../../../theme'
 import OmdbFilmItem from './OmdbFilmItem'
 
 const OmdbFilmsList = () => {
-    const { films, totalResults, page } = useSelector(selectOmdb)
+    const { films, totalResults, page } = useAppSelector(selectOmdb)
 
     const dispatch = useAppDispatch()
 

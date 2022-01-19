@@ -9,7 +9,7 @@ export enum AUTH_ACTIONS {
     REGISTER = 'REGISTER',
     LOGIN = 'LOGIN',
     LOGOUT = 'LOGOUT',
-    REFRESH = 'REFRESH',
+    FORK_LOGOUT = 'FORK_LOGOUT',
     RESET_ERRORS = 'RESET_ERRORS',
     SET_PASSWORD_RESET_LINK = 'SET_PASSWORD_RESET_LINK',
     RESET_PASSWORD = 'RESET_PASSWORD',
@@ -21,7 +21,7 @@ export const login = createAction<LoginInputs>(AUTH_ACTIONS.LOGIN)
 
 export const logout = createAction(AUTH_ACTIONS.LOGOUT)
 
-export const refresh = createAction(AUTH_ACTIONS.REFRESH)
+export const forkLogout = createAction(AUTH_ACTIONS.FORK_LOGOUT)
 
 export const resetErrors = createAction(AUTH_ACTIONS.RESET_ERRORS)
 

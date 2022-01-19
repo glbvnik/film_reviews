@@ -3,14 +3,14 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { Box, IconButton, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectApp, setIsMobileDrawerOpen } from '../../redux/reducers/app'
 
 const LeftSideAppBar: FC = () => {
     const { isMobileDrawerOpen } = useAppSelector(selectApp)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const router = useRouter()
 

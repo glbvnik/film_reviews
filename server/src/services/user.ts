@@ -151,7 +151,7 @@ export const UserService = {
 
         return { tokens }
     },
-    async refresh(refreshToken: string, agent: string) {
+    async refresh(refreshToken: string) {
         if (!refreshToken) {
             throw ApiError.badRequest('No refresh token')
         }
@@ -185,10 +185,7 @@ export const UserService = {
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
-        await Token.update(
-            { refreshToken: tokens.refreshToken },
-            { where: { userUuId: userDto.uuId, agent } }
-        )
+        await tokenFromDb.update({ refreshToken: tokens.refreshToken })
 
         return {
             tokens,

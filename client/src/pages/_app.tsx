@@ -6,11 +6,13 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import Layout from '../components/Layout/Layout'
 import { useAppDispatch } from '../hooks/useAppDispatch'
-import { refresh } from '../redux/reducers/auth/action-creators'
+import { setUser } from '../redux/reducers/auth'
+import { forkLogout } from '../redux/reducers/auth/action-creators'
 import wrapper from '../redux/store'
 import '../styles/globals.css'
 import { theme } from '../theme'
 import { createEmotionCache } from '../utils/createEmotionCache'
+import { getCookie } from '../utils/getCookie'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -26,7 +28,16 @@ function MyApp({
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(refresh())
+        const user = getCookie('user', true)
+
+        if (user) {
+            dispatch(setUser(user))
+            dispatch(forkLogout())
+        }
+
+        window.onbeforeunload = () => {
+            document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT;'
+        }
     }, [])
 
     return (

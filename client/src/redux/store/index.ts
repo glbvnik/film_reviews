@@ -6,7 +6,7 @@ import app from './../reducers/app'
 import auth from './../reducers/auth'
 import omdb from './../reducers/omdb'
 
-interface SagaStore extends Store {
+export interface SagaStore extends Store {
     sagaTask?: Task
 }
 

@@ -69,10 +69,7 @@ export const UserController = {
         try {
             const { refreshToken } = req.cookies as { refreshToken: string }
 
-            const userData = await UserService.refresh(
-                refreshToken,
-                req.headers['user-agent']!
-            )
+            const userData = await UserService.refresh(refreshToken)
 
             TokenService.setCookie(userData.tokens, res)
 

@@ -31,9 +31,9 @@ import {
     setValidationErrors,
 } from '../../reducers/auth'
 import {
+    forkLogout,
     login,
     logout,
-    refresh,
     register,
     resetErrors,
     resetPassword,
@@ -63,27 +63,18 @@ function* logoutHandler() {
         yield call(UserApi.logout)
 
         yield put(setUser(null))
+
+        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT;'
     } catch (e) {
     } finally {
         yield put(setIsLoading(false))
     }
 }
 
-function* refreshHandler(): Generator<StrictEffect, void, IUser> {
-    yield take(refresh)
+function* logoutWatcher() {
+    yield take(forkLogout)
 
-    try {
-        yield put(setIsLoading(true))
-
-        const userData = yield call(UserApi.refresh)
-
-        yield put(setUser(userData))
-
-        yield fork(logoutHandler)
-    } catch (e) {
-    } finally {
-        yield put(setIsLoading(false))
-    }
+    yield fork(logoutHandler)
 }
 
 function* handleAuth(
@@ -163,7 +154,7 @@ function* authWatcher(): Generator<StrictEffect, void, any> {
 export default function* authSaga() {
     yield all([
         fork(authWatcher),
-        fork(refreshHandler),
+        fork(logoutWatcher),
         fork(resetErrorsWatcher),
     ])
 }

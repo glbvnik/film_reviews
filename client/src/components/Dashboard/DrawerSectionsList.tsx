@@ -1,18 +1,16 @@
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
+import { List, ListItem, ListItemText } from '@mui/material'
 import React from 'react'
 
-enum DrawerWriterOptionsEnum {
+enum DrawerWriterSectionsEnum {
     MY_REVIEWS = 'My reviews',
     CREATE_REVIEW = 'Create review',
     PUBLISH_REVIEWS = 'Publish reviews',
 }
 
-const DrawerOptionsList = () => {
+const DrawerSectionsList = () => {
     return (
         <List>
-            {Object.values(DrawerWriterOptionsEnum).map((text) => (
+            {Object.values(DrawerWriterSectionsEnum).map((text) => (
                 <ListItem button key={text}>
                     <ListItemText primary={text} />
                 </ListItem>
@@ -21,4 +19,4 @@ const DrawerOptionsList = () => {
     )
 }
 
-export default DrawerOptionsList
+export default DrawerSectionsList
