@@ -8,7 +8,7 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectApp, setIsMobileDrawerOpen } from '../../redux/reducers/app'
 
 const LeftSideAppBar: FC = () => {
-    const { isMobileDrawerOpen } = useAppSelector(selectApp)
+    const { isDrawer, isMobileDrawerOpen } = useAppSelector(selectApp)
 
     const dispatch = useAppDispatch()
 
@@ -16,7 +16,7 @@ const LeftSideAppBar: FC = () => {
 
     return (
         <>
-            {router.pathname === process.env.NEXT_PUBLIC_DASHBOARD_ROUTE && (
+            {isDrawer && (
                 <IconButton
                     color="inherit"
                     edge="start"

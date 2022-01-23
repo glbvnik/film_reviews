@@ -75,7 +75,12 @@ const OmdbDialog = () => {
                     <Button
                         color="inherit"
                         disabled={!currentFilm}
-                        onClick={() => router.push('/create-review')}
+                        onClick={() =>
+                            router.push(
+                                process.env
+                                    .NEXT_PUBLIC_REVIEWS_CREATE_REVIEW_ROUTE!
+                            )
+                        }
                     >
                         Create review
                     </Button>

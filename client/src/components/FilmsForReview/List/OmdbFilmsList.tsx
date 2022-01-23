@@ -25,7 +25,10 @@ const OmdbFilmsList = () => {
 
     useEffect(() => {
         return () => {
-            if (router.asPath !== '/films-for-review') {
+            if (
+                router.pathname !==
+                process.env.NEXT_PUBLIC_REVIEWS_FILMS_FOR_REVIEW_ROUTE
+            ) {
                 dispatch(setOmdbPage(1))
             }
         }

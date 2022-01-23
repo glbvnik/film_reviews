@@ -29,6 +29,11 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 defaultValue: true,
                 allowNull: false,
             },
+            isUnpublishedByEditor: {
+                type: dataTypes.BOOLEAN,
+                defaultValue: false,
+                allowNull: false,
+            },
             filmImdbId: {
                 type: dataTypes.STRING(10),
                 allowNull: false,

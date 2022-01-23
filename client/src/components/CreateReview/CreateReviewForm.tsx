@@ -1,5 +1,12 @@
 import DoneIcon from '@mui/icons-material/Done'
-import { Alert, Box, Button, TextField, Typography } from '@mui/material'
+import {
+    Alert,
+    Box,
+    Button,
+    Container,
+    TextField,
+    Typography,
+} from '@mui/material'
 import { useFormik } from 'formik'
 import React, { FC, useEffect } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
@@ -7,6 +14,7 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectApp, setAsyncAction } from '../../redux/reducers/app'
 import { selectOmdb } from '../../redux/reducers/omdb'
 import { createReview } from '../../redux/reducers/review/action-creators'
+import { useStyles } from '../../styles/classes'
 
 const CreateReviewForm: FC = () => {
     const { currentFilm } = useAppSelector(selectOmdb)
@@ -24,9 +32,11 @@ const CreateReviewForm: FC = () => {
         },
     })
 
+    const classes = useStyles()
+
     useEffect(() => {
         return () => {
-            setAsyncAction({ isSuccess: false, errorMessage: '' })
+            dispatch(setAsyncAction({ isSuccess: false, errorMessage: '' }))
         }
     }, [])
 
@@ -41,75 +51,85 @@ const CreateReviewForm: FC = () => {
     if (!currentFilm) {
         return <></>
     }
+
     if (asyncAction.isSuccess) {
         return <Box>Your review has been successfully published!</Box>
     }
 
     return (
-        <Box
-            noValidate
-            alignSelf="center"
-            width="100%"
-            component="form"
-            onSubmit={handleSubmit}
-        >
-            {asyncAction.errorMessage && (
-                <Alert severity="error" sx={{ mb: 1 }}>
-                    {asyncAction.errorMessage}
-                </Alert>
-            )}
-            <Typography variant="h3" mb={2}>
-                {currentFilm.Title}
-            </Typography>
-            <Typography variant="h4" mb={1}>
-                Image
-            </Typography>
-            {values.image && (
-                <Typography variant="h6" mb={1}>
-                    {(values.image as File).name}
-                </Typography>
-            )}
-            <Button
-                component="label"
-                variant="contained"
-                endIcon={values.image && <DoneIcon color="success" />}
-            >
-                Upload Image
-                <input
-                    hidden
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                        setFieldValue('image', e.currentTarget.files![0])
-                    }
-                />
-            </Button>
-            <Typography variant="h4" mt={2} mb={1}>
-                Review
-            </Typography>
-            <TextField
-                multiline
-                id="text"
-                name="text"
-                placeholder="Type your review..."
-                rows={20}
-                value={values.text}
-                onChange={handleChange}
-                sx={{ width: '100%', mb: 2 }}
-            />
-            <Box display="flex" justifyContent="space-between">
-                <Button
-                    type="submit"
-                    variant="outlined"
-                    onClick={() => setFieldValue('isPublished', false)}
-                    sx={{ mb: 2 }}
+        <Box className={classes.scrollBox}>
+            <Container>
+                <Box
+                    noValidate
+                    component="form"
+                    p="12px 12px 0 12px"
+                    onSubmit={handleSubmit}
                 >
-                    Create draft
-                </Button>
-                <Button type="submit" variant="contained" sx={{ mb: 2 }}>
-                    Create review
-                </Button>
-            </Box>
+                    {asyncAction.errorMessage && (
+                        <Alert severity="error" sx={{ mb: 1 }}>
+                            {asyncAction.errorMessage}
+                        </Alert>
+                    )}
+                    <Typography variant="h3">{currentFilm.Title}</Typography>
+                    <Typography variant="h4" mb={1}>
+                        Image
+                    </Typography>
+                    {values.image && (
+                        <Typography variant="h6" mb={1}>
+                            {(values.image as File).name}
+                        </Typography>
+                    )}
+                    <Button
+                        component="label"
+                        variant="contained"
+                        endIcon={values.image && <DoneIcon color="success" />}
+                    >
+                        Upload Image
+                        <input
+                            hidden
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                                setFieldValue(
+                                    'image',
+                                    e.currentTarget.files![0]
+                                )
+                            }
+                        />
+                    </Button>
+                    <Typography variant="h4" mt={2} mb={1}>
+                        Review
+                    </Typography>
+                    <TextField
+                        multiline
+                        id="text"
+                        name="text"
+                        placeholder="Type your review..."
+                        rows={20}
+                        value={values.text}
+                        onChange={handleChange}
+                        sx={{ width: '100%', mb: 2 }}
+                    />
+                    <Box display="flex" justifyContent="space-between">
+                        <Button
+                            color="secondary"
+                            type="submit"
+                            variant="contained"
+                            onClick={() => setFieldValue('isPublished', false)}
+                            sx={{ mb: 2 }}
+                        >
+                            Create draft
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{ mb: 2 }}
+                        >
+                            Create review
+                        </Button>
+                    </Box>
+                </Box>
+            </Container>
         </Box>
     )
 }

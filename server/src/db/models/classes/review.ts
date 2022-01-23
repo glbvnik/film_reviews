@@ -7,7 +7,10 @@ import { User } from './user'
 type ReviewAttributes = Omit<IReview, 'createdAt' | 'updatedAt'>
 
 interface ReviewCreationAttributes
-    extends Optional<ReviewAttributes, 'id' | 'rating' | 'isPublished'> {}
+    extends Optional<
+        ReviewAttributes,
+        'id' | 'rating' | 'isPublished' | 'isUnpublishedByEditor'
+    > {}
 
 export class Review
     extends Model<ReviewAttributes, ReviewCreationAttributes>
@@ -18,6 +21,7 @@ export class Review
     image!: string
     rating!: number | null
     isPublished!: boolean
+    isUnpublishedByEditor!: boolean
     filmImdbId!: string
     userUuId!: string
 

@@ -14,6 +14,26 @@ export const theme = createTheme({
         },
     },
     components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    color: 'white',
+                },
+            },
+        },
+        MuiContainer: {
+            defaultProps: {
+                disableGutters: true,
+            },
+            styleOverrides: {
+                root: {
+                    maxWidth: '1200px',
+                    '@media (min-width: 2048px)': {
+                        maxWidth: '1400px',
+                    },
+                },
+            },
+        },
         MuiLink: {
             defaultProps: {
                 underline: 'none',
@@ -21,13 +41,6 @@ export const theme = createTheme({
             styleOverrides: {
                 root: {
                     cursor: 'pointer',
-                },
-            },
-        },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    color: 'white',
                 },
             },
         },

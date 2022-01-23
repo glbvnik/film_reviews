@@ -33,9 +33,18 @@ const FilmsForReviewForm: FC = () => {
             onSubmit: (values) => {
                 dispatch(getOmdbFilms({ title: values.title, page, type }))
 
-                router.push({ query: { title: values.title } }, undefined, {
-                    shallow: true,
-                })
+                router.push(
+                    {
+                        pathname:
+                            process.env
+                                .NEXT_PUBLIC_REVIEWS_FILMS_FOR_REVIEW_ROUTE,
+                        query: { title: values.title },
+                    },
+                    undefined,
+                    {
+                        shallow: true,
+                    }
+                )
             },
         })
 

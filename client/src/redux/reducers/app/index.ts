@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../../store/index'
+import { RootState } from '../../store'
 
 interface IAsyncAction {
     isSuccess?: boolean
@@ -9,6 +9,7 @@ interface IAsyncAction {
 interface AppState {
     isLoading: boolean
     isDialog: boolean
+    isDrawer: boolean
     isMobileDrawerOpen: boolean
     asyncAction: IAsyncAction
 }
@@ -16,6 +17,7 @@ interface AppState {
 const initialState: AppState = {
     isLoading: false,
     isDialog: false,
+    isDrawer: false,
     isMobileDrawerOpen: false,
     asyncAction: {
         isSuccess: false,
@@ -35,6 +37,10 @@ export const appSlice = createSlice({
             ...state,
             isDialog: payload,
         }),
+        setIsDrawer: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isDrawer: payload,
+        }),
         setIsMobileDrawerOpen: (
             state,
             { payload }: PayloadAction<boolean>
@@ -52,6 +58,7 @@ export const appSlice = createSlice({
 export const {
     setIsLoading,
     setIsDialog,
+    setIsDrawer,
     setIsMobileDrawerOpen,
     setAsyncAction,
 } = appSlice.actions

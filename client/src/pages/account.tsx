@@ -1,22 +1,18 @@
 import { NextPage } from 'next'
 import React from 'react'
-import Dashboard from '../components/Dashboard/Dashboard'
+import Drawer from '../components/Drawer/Drawer'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { selectAuth } from '../redux/reducers/auth'
 import Custom404 from './404'
 
-interface DashboardPageProps {
-    isAccessible: boolean
-}
-
-const DashboardPage: NextPage<DashboardPageProps> = () => {
+const Account: NextPage = () => {
     const { user } = useAppSelector(selectAuth)
 
-    if (!user || user.roles.length === 1) {
+    if (!user) {
         return <Custom404 />
     }
 
-    return <Dashboard />
+    return <Drawer />
 }
 
-export default DashboardPage
+export default Account

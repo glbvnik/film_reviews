@@ -5,9 +5,9 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectApp, setIsMobileDrawerOpen } from '../../redux/reducers/app'
 import DrawerSectionsList from './DrawerSectionsList'
 
-export const drawerWidth = 175
+export const drawerWidth = 200
 
-const DashboardDrawer: FC = () => {
+const DrawerMenu: FC = () => {
     const { isMobileDrawerOpen } = useAppSelector(selectApp)
 
     const dispatch = useAppDispatch()
@@ -54,4 +54,4 @@ const DashboardDrawer: FC = () => {
     )
 }
 
-export default DashboardDrawer
+export default DrawerMenu

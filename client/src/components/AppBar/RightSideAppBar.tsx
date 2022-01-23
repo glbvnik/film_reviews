@@ -3,18 +3,14 @@ import { IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
+import { MenuOptionsEnum } from '../../constants/menuOptions'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
+import { RolesEnum } from '../../models/user'
 import { selectAuth } from '../../redux/reducers/auth'
 import { logout } from '../../redux/reducers/auth/action-creators'
 import { theme } from '../../theme'
 import AuthButtonGroup from './AuthButtonGroup'
-
-enum MenuOptionsEnum {
-    ACCOUNT = 'Account',
-    DASHBOARD = 'Dashboard',
-    LOGOUT = 'Logout',
-}
 
 const RightSideAppBar: FC = () => {
     const { user } = useAppSelector(selectAuth)
@@ -31,23 +27,33 @@ const RightSideAppBar: FC = () => {
         setAnchorEl(null)
 
         switch (option) {
+            case MenuOptionsEnum.ACCOUNT:
+                return router.push(process.env.NEXT_PUBLIC_ACCOUNT_ROUTE!)
+            case MenuOptionsEnum.ADMINISTRATION:
+                return router.push(
+                    process.env.NEXT_PUBLIC_ADMINISTRATION_ROUTE!
+                )
+            case MenuOptionsEnum.REVIEWS:
+                return router.push(process.env.NEXT_PUBLIC_REVIEWS_ROUTE!)
             case MenuOptionsEnum.LOGOUT:
                 return dispatch(logout())
-            case MenuOptionsEnum.DASHBOARD:
-                return router.push(process.env.NEXT_PUBLIC_DASHBOARD_ROUTE!)
         }
     }
 
     const getMenuOptions = () => {
-        if (user!.roles.length > 1) {
-            return [
-                MenuOptionsEnum.DASHBOARD,
-                MenuOptionsEnum.ACCOUNT,
-                MenuOptionsEnum.LOGOUT,
-            ]
+        const options = [MenuOptionsEnum.ACCOUNT, MenuOptionsEnum.LOGOUT]
+
+        if (
+            user!.roles.includes(RolesEnum.ADMIN) ||
+            user!.roles.includes(RolesEnum.MODERATOR)
+        ) {
+            options.unshift(MenuOptionsEnum.ADMINISTRATION)
+        }
+        if (user!.roles.includes(RolesEnum.WRITER)) {
+            options.unshift(MenuOptionsEnum.REVIEWS)
         }
 
-        return [MenuOptionsEnum.ACCOUNT, MenuOptionsEnum.LOGOUT]
+        return options
     }
 
     if (!user) {

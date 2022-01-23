@@ -4,6 +4,7 @@ export interface IReview {
     image: string
     rating: number | null
     isPublished: boolean
+    isUnpublishedByEditor: boolean
     filmImdbId: string
     userUuId: string
     createdAt: Date

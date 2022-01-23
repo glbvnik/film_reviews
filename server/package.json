@@ -8,7 +8,8 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "dev": "nodemon dist/index.js"
+        "dev": "nodemon dist/index.js",
+        "seed": "sequelize-cli db:seed:all"
     },
     "dependencies": {
         "bcrypt": "^5.0.1",
