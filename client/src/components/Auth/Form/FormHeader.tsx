@@ -5,7 +5,6 @@ import PasswordIcon from '@mui/icons-material/Password'
 import { Alert, Avatar, CircularProgress, Typography } from '@mui/material'
 import React, { FC } from 'react'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { selectApp } from '../../../redux/reducers/app'
 import { selectAuth } from '../../../redux/reducers/auth'
 import { styles } from './sx'
 
@@ -24,12 +23,11 @@ const FormHeader: FC<FormHeaderProps> = ({
     isResetPasswordUrl,
     isPasswordReset,
 }) => {
-    const { loginError, isRegistered, isPasswordResetLinkSet } =
+    const { loginError, isRegistered, isPasswordResetLinkSet, isAuthLoading } =
         useAppSelector(selectAuth)
-    const { isLoading } = useAppSelector(selectApp)
 
     const renderIcon = () => {
-        if (isLoading) {
+        if (isAuthLoading) {
             return <CircularProgress />
         } else if (isRegistered) {
             return <EmailIcon />

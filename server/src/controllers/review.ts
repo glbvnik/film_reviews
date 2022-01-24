@@ -14,6 +14,17 @@ export const ReviewController = {
             res.json({ message: 'Review was created' })
         } catch (e) {
             unlink(req.file!.path, (err) => console.log(err))
+
+            next(e)
+        }
+    },
+    async getReviews(req: Request, res: Response, next: NextFunction) {
+        try {
+            const response = await ReviewService.getReviews()
+
+            res.json(response)
+        } catch (e) {
+            next(e)
         }
     },
 }

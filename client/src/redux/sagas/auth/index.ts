@@ -19,21 +19,23 @@ import {
 } from '../../../http/user'
 import { IUser } from '../../../models/user'
 import { mapToError } from '../../../utils/mapToError'
-import { setIsLoading } from '../../reducers/app'
 import {
     AuthState,
     selectAuth,
+    setIsAuthLoading,
+    setIsLogoutLoading,
     setIsPasswordReset,
     setIsPasswordResetLinkSet,
+    setIsRefreshLoading,
     setIsRegistered,
     setLoginError,
     setUser,
     setValidationErrors,
 } from '../../reducers/auth'
 import {
-    forkLogout,
     login,
     logout,
+    refresh,
     register,
     resetErrors,
     resetPassword,
@@ -54,27 +56,34 @@ function* resetErrorsWatcher() {
     yield takeEvery(resetErrors, handleResetErrors)
 }
 
+function* refreshHandler(): Generator<StrictEffect, void, IUser> {
+    yield take(refresh)
+
+    try {
+        const userData = yield call(UserApi.refresh)
+
+        yield put(setUser(userData))
+
+        yield fork(logoutHandler)
+    } catch (e) {
+    } finally {
+        yield put(setIsRefreshLoading(false))
+    }
+}
+
 function* logoutHandler() {
     try {
         yield take(logout)
 
-        yield put(setIsLoading(true))
+        yield put(setIsLogoutLoading(true))
 
         yield call(UserApi.logout)
 
         yield put(setUser(null))
-
-        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT;'
     } catch (e) {
     } finally {
-        yield put(setIsLoading(false))
+        yield put(setIsLogoutLoading(false))
     }
-}
-
-function* logoutWatcher() {
-    yield take(forkLogout)
-
-    yield fork(logoutHandler)
 }
 
 function* handleAuth(
@@ -87,7 +96,7 @@ function* handleAuth(
     cancelToken: CancelToken
 ): Generator<StrictEffect, void, number | IUser> {
     try {
-        yield put(setIsLoading(true))
+        yield put(setIsAuthLoading(true))
 
         if (typeof payload !== 'string' && 'firstName' in payload) {
             yield call(UserApi.register, payload, cancelToken)
@@ -123,7 +132,7 @@ function* handleAuth(
             }
         }
     } finally {
-        yield put(setIsLoading(false))
+        yield put(setIsAuthLoading(false))
     }
 }
 
@@ -154,7 +163,7 @@ function* authWatcher(): Generator<StrictEffect, void, any> {
 export default function* authSaga() {
     yield all([
         fork(authWatcher),
-        fork(logoutWatcher),
+        fork(refreshHandler),
         fork(resetErrorsWatcher),
     ])
 }

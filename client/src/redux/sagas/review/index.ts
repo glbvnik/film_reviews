@@ -1,11 +1,23 @@
-import { fork, put, takeEvery } from '@redux-saga/core/effects'
+import { fork, put, StrictEffect, takeEvery } from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { all, call } from 'redux-saga/effects'
 import { ReviewApi } from '../../../http/review'
 import { IOmdbFullFilm } from '../../../models/omdb'
 import { IReviewInputs } from '../../../models/review'
-import { setAsyncAction, setIsLoading } from '../../reducers/app'
-import { createReview } from '../../reducers/review/action-creators'
+import { setAsyncAction } from '../../reducers/app'
+import { setIsReviewsLoading, setReviews } from '../../reducers/reviews'
+import {
+    createReview,
+    getReviews,
+} from '../../reducers/reviews/action-creators'
+
+function* handleGetReviews(): Generator<StrictEffect, void, any> {
+    try {
+        const res = yield call(ReviewApi.fetch)
+
+        yield put(setReviews(res))
+    } catch (e) {}
+}
 
 function* handleCreateReview({
     payload,
@@ -34,7 +46,7 @@ function* handleCreateReview({
             throw 'No text'
         }
 
-        yield put(setIsLoading(true))
+        yield put(setIsReviewsLoading(true))
 
         const textForServer = review.text
             .split('\n')
@@ -74,13 +86,14 @@ function* handleCreateReview({
                 errorMessage: '',
             })
         )
-    } catch (e) {
-        console.log('Error:', e)
+    } finally {
+        yield put(setIsReviewsLoading(false))
     }
 }
 
 function* reviewWatcher() {
     yield takeEvery(createReview, handleCreateReview)
+    yield takeEvery(getReviews, handleGetReviews)
 }
 
 export default function* reviewSaga() {

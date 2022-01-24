@@ -8,8 +8,11 @@ import {
     IOmdbFullFilmInputs,
     IOmdbInputs,
 } from '../../../models/omdb'
-import { setIsLoading } from '../../reducers/app'
-import { setOmdb, setOmdbCurrentFilm } from '../../reducers/omdb'
+import {
+    setIsOmdbLoading,
+    setOmdb,
+    setOmdbCurrentFilm,
+} from '../../reducers/omdb'
 import {
     getOmdbFilms,
     getOmdbFullFilm,
@@ -22,7 +25,7 @@ function* handleFetch({
     void,
     [IOmdbFilm[], string] | IOmdbFullFilm
 > {
-    yield put(setIsLoading(true))
+    yield put(setIsOmdbLoading(true))
 
     try {
         if ('imdbId' in payload) {
@@ -45,7 +48,7 @@ function* handleFetch({
             yield put(setOmdb(film as [IOmdbFilm[], string]))
         }
     } finally {
-        yield put(setIsLoading(false))
+        yield put(setIsOmdbLoading(false))
     }
 }
 

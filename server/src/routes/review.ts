@@ -12,3 +12,4 @@ reviewRouter.post(
     upload.single('image'),
     ReviewController.createReview
 )
+reviewRouter.get('/reviews', ReviewController.getReviews)

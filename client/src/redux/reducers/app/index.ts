@@ -7,7 +7,6 @@ interface IAsyncAction {
 }
 
 interface AppState {
-    isLoading: boolean
     isDialog: boolean
     isDrawer: boolean
     isMobileDrawerOpen: boolean
@@ -15,7 +14,6 @@ interface AppState {
 }
 
 const initialState: AppState = {
-    isLoading: false,
     isDialog: false,
     isDrawer: false,
     isMobileDrawerOpen: false,
@@ -29,10 +27,6 @@ export const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
-        setIsLoading: (state, { payload }: PayloadAction<boolean>) => ({
-            ...state,
-            isLoading: payload,
-        }),
         setIsDialog: (state, { payload }: PayloadAction<boolean>) => ({
             ...state,
             isDialog: payload,
@@ -56,7 +50,6 @@ export const appSlice = createSlice({
 })
 
 export const {
-    setIsLoading,
     setIsDialog,
     setIsDrawer,
     setIsMobileDrawerOpen,

@@ -2,7 +2,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import 'dotenv/config'
 import express, { json } from 'express'
-import { sequelize } from './db/models/index'
+import { sequelize } from './db/models'
 import { errorMiddleware } from './middlewares/error'
 import router from './routes'
 

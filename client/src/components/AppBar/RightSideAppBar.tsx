@@ -1,5 +1,11 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import { IconButton, Menu, MenuItem, Typography } from '@mui/material'
+import {
+    CircularProgress,
+    IconButton,
+    Menu,
+    MenuItem,
+    Typography,
+} from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
@@ -13,7 +19,8 @@ import { theme } from '../../theme'
 import AuthButtonGroup from './AuthButtonGroup'
 
 const RightSideAppBar: FC = () => {
-    const { user } = useAppSelector(selectAuth)
+    const { user, isRefreshLoading, isLogoutLoading } =
+        useAppSelector(selectAuth)
 
     const dispatch = useAppDispatch()
 
@@ -22,6 +29,8 @@ const RightSideAppBar: FC = () => {
     const router = useRouter()
 
     const isSm = useMediaQuery(theme.breakpoints.up('sm'))
+
+    const isLoading = isRefreshLoading || isLogoutLoading
 
     const handleMenuItemClick = (option: string) => {
         setAnchorEl(null)
@@ -56,48 +65,55 @@ const RightSideAppBar: FC = () => {
         return options
     }
 
-    if (!user) {
+    if (!user && !isLoading) {
         return <AuthButtonGroup />
     }
 
     return (
         <>
             <IconButton
+                disabled={isLoading}
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 sx={{ borderRadius: 0, color: 'white', fontSize: '21px' }}
             >
-                {isSm && user.firstName}
-                <AccountCircleIcon
-                    sx={{
-                        color: 'white',
-                        fontSize: '42px',
-                        ml: '4px',
-                    }}
-                />
+                {isSm && !isLoading && user!.firstName}
+                {isLoading ? (
+                    <CircularProgress color="secondary" />
+                ) : (
+                    <AccountCircleIcon
+                        sx={{
+                            color: 'white',
+                            fontSize: '42px',
+                            ml: '4px',
+                        }}
+                    />
+                )}
             </IconButton>
-            <Menu
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                open={!!anchorEl}
-                onClose={() => setAnchorEl(null)}
-                sx={{ mt: isSm ? '48px' : '42px' }}
-            >
-                {getMenuOptions().map((option) => (
-                    <MenuItem
-                        key={option}
-                        onClick={() => handleMenuItemClick(option)}
-                    >
-                        <Typography textAlign="center">{option}</Typography>
-                    </MenuItem>
-                ))}
-            </Menu>
+            {user && !isLoading && (
+                <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={!!anchorEl}
+                    onClose={() => setAnchorEl(null)}
+                    sx={{ mt: isSm ? '48px' : '42px' }}
+                >
+                    {getMenuOptions().map((option) => (
+                        <MenuItem
+                            key={option}
+                            onClick={() => handleMenuItemClick(option)}
+                        >
+                            <Typography textAlign="center">{option}</Typography>
+                        </MenuItem>
+                    ))}
+                </Menu>
+            )}
         </>
     )
 }

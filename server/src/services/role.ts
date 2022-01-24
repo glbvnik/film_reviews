@@ -19,6 +19,6 @@ export const RoleService = {
     async compareUserRoles(userUuId: string, roles: RolesEnum[]) {
         const userRoles = await this.findUserRoles(userUuId)
 
-        return roles.every((role) => userRoles.includes(role))
+        return roles.some((role) => userRoles.includes(role))
     },
 }

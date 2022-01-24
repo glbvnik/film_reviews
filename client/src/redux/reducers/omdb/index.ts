@@ -7,6 +7,7 @@ interface OmdbState {
     totalResults: number
     currentFilm: IOmdbFullFilm | null
     page: number
+    isOmdbLoading: boolean
 }
 
 const initialState: OmdbState = {
@@ -14,6 +15,7 @@ const initialState: OmdbState = {
     totalResults: 0,
     currentFilm: null,
     page: 1,
+    isOmdbLoading: false,
 }
 
 const omdbSlice = createSlice({
@@ -47,6 +49,10 @@ const omdbSlice = createSlice({
             ...state,
             page: payload,
         }),
+        setIsOmdbLoading: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isOmdbLoading: payload,
+        }),
     },
 })
 
@@ -56,6 +62,7 @@ export const {
     setOmdbCurrentFilm,
     clearOmdbCurrentFilm,
     setOmdbPage,
+    setIsOmdbLoading,
 } = omdbSlice.actions
 
 export const selectOmdb = ({ omdb }: RootState) => omdb

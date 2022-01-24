@@ -29,4 +29,13 @@ export const ReviewService = {
             userUuId,
         })
     },
+    async getReviews() {
+        const res = await Review.findAndCountAll({
+            limit: 1,
+            offset: 1,
+            order: [['createdAt', 'DESC']],
+        })
+
+        return { reviews: res.rows, count: res.count }
+    },
 }

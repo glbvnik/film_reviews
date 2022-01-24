@@ -1,31 +1,21 @@
-import { configureStore, Store } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
-import createSagaMiddleware, { Task } from 'redux-saga'
+import createSagaMiddleware from 'redux-saga'
+import rootReducer from '../reducers'
 import rootSaga from '../sagas'
-import app from './../reducers/app'
-import auth from './../reducers/auth'
-import omdb from './../reducers/omdb'
 
-export interface SagaStore extends Store {
-    sagaTask?: Task
-}
+const sagaMiddleware = createSagaMiddleware()
 
 const makeStore = () => {
-    const sagaMiddleware = createSagaMiddleware()
-
     const store = configureStore({
-        reducer: {
-            app,
-            auth,
-            omdb,
-        },
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({ serializableCheck: false }).concat(
-                sagaMiddleware
-            ),
+        reducer: rootReducer,
+        middleware: (getDefaultMiddleware) => [
+            ...getDefaultMiddleware({ thunk: false, serializableCheck: false }),
+            sagaMiddleware,
+        ],
     })
 
-    ;(store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga)
+    sagaMiddleware.run(rootSaga)
 
     return store
 }

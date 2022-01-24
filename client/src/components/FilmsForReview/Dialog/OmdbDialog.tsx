@@ -29,8 +29,8 @@ const Transition = React.forwardRef(
 )
 
 const OmdbDialog = () => {
-    const { isLoading, isDialog } = useAppSelector(selectApp)
-    const { currentFilm } = useAppSelector(selectOmdb)
+    const { isDialog } = useAppSelector(selectApp)
+    const { currentFilm, isOmdbLoading } = useAppSelector(selectOmdb)
 
     const dispatch = useAppDispatch()
 
@@ -88,7 +88,7 @@ const OmdbDialog = () => {
             </AppBar>
             <OmdbDialogContent
                 currentFilm={currentFilm}
-                isLoading={isLoading}
+                isLoading={isOmdbLoading}
             />
         </Dialog>
     )

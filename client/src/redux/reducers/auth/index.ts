@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { HYDRATE } from 'next-redux-wrapper'
 import { IUser } from '../../../models/user'
 import { IValidationErrors } from '../../../models/validationError'
-import { RootState } from '../../store/index'
+import { RootState } from '../../store'
 
 export interface AuthState {
     user: IUser | null
@@ -11,6 +10,9 @@ export interface AuthState {
     isRegistered: boolean
     isPasswordResetLinkSet: boolean
     isPasswordReset: boolean
+    isAuthLoading: boolean
+    isRefreshLoading: boolean
+    isLogoutLoading: boolean
 }
 
 const initialState: AuthState = {
@@ -20,6 +22,9 @@ const initialState: AuthState = {
     isRegistered: false,
     isPasswordResetLinkSet: false,
     isPasswordReset: false,
+    isAuthLoading: false,
+    isRefreshLoading: true,
+    isLogoutLoading: false,
 }
 
 const authSlice = createSlice({
@@ -62,11 +67,17 @@ const authSlice = createSlice({
             isPasswordResetLinkSet: false,
             isPasswordReset: false,
         }),
-    },
-    extraReducers: {
-        [HYDRATE]: (state, action) => ({
+        setIsAuthLoading: (state, { payload }: PayloadAction<boolean>) => ({
             ...state,
-            ...action.payload.auth,
+            isAuthLoading: payload,
+        }),
+        setIsRefreshLoading: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isRefreshLoading: payload,
+        }),
+        setIsLogoutLoading: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isRefreshLoading: payload,
         }),
     },
 })
@@ -79,6 +90,9 @@ export const {
     setIsPasswordResetLinkSet,
     setIsPasswordReset,
     clearAuthStateBooleans,
+    setIsAuthLoading,
+    setIsRefreshLoading,
+    setIsLogoutLoading,
 } = authSlice.actions
 
 export const selectAuth = ({ auth }: RootState) => auth

@@ -3,24 +3,29 @@ import {
     Alert,
     Box,
     Button,
+    CircularProgress,
     Container,
     TextField,
     Typography,
 } from '@mui/material'
 import { useFormik } from 'formik'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectApp, setAsyncAction } from '../../redux/reducers/app'
 import { selectOmdb } from '../../redux/reducers/omdb'
-import { createReview } from '../../redux/reducers/review/action-creators'
+import { selectReviews } from '../../redux/reducers/reviews'
+import { createReview } from '../../redux/reducers/reviews/action-creators'
 import { useStyles } from '../../styles/classes'
 
 const CreateReviewForm: FC = () => {
     const { currentFilm } = useAppSelector(selectOmdb)
+    const { isReviewsLoading } = useAppSelector(selectReviews)
     const { asyncAction } = useAppSelector(selectApp)
 
     const dispatch = useAppDispatch()
+
+    const alertRef = useRef<HTMLDivElement>(null)
 
     const { handleSubmit, handleChange, setFieldValue, values } = useFormik({
         initialValues: {
@@ -34,6 +39,14 @@ const CreateReviewForm: FC = () => {
 
     const classes = useStyles()
 
+    const handleClick = (isDraft?: boolean) => {
+        if (isDraft) {
+            setFieldValue('isPublished', false)
+        }
+
+        dispatch(setAsyncAction({ isSuccess: false, errorMessage: '' }))
+    }
+
     useEffect(() => {
         return () => {
             dispatch(setAsyncAction({ isSuccess: false, errorMessage: '' }))
@@ -44,7 +57,7 @@ const CreateReviewForm: FC = () => {
         if (asyncAction.errorMessage) {
             setFieldValue('isPublished', true)
 
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+            alertRef.current!.scrollIntoView()
         }
     }, [asyncAction.errorMessage])
 
@@ -66,7 +79,7 @@ const CreateReviewForm: FC = () => {
                     onSubmit={handleSubmit}
                 >
                     {asyncAction.errorMessage && (
-                        <Alert severity="error" sx={{ mb: 1 }}>
+                        <Alert severity="error" ref={alertRef} sx={{ mb: 1 }}>
                             {asyncAction.errorMessage}
                         </Alert>
                     )}
@@ -115,7 +128,18 @@ const CreateReviewForm: FC = () => {
                             color="secondary"
                             type="submit"
                             variant="contained"
-                            onClick={() => setFieldValue('isPublished', false)}
+                            endIcon={
+                                isReviewsLoading && (
+                                    <CircularProgress
+                                        color="secondary"
+                                        style={{
+                                            height: '20px',
+                                            width: '20px',
+                                        }}
+                                    />
+                                )
+                            }
+                            onClick={() => handleClick(true)}
                             sx={{ mb: 2 }}
                         >
                             Create draft
@@ -123,6 +147,18 @@ const CreateReviewForm: FC = () => {
                         <Button
                             type="submit"
                             variant="contained"
+                            endIcon={
+                                isReviewsLoading && (
+                                    <CircularProgress
+                                        color="secondary"
+                                        style={{
+                                            height: '20px',
+                                            width: '20px',
+                                        }}
+                                    />
+                                )
+                            }
+                            onClick={() => handleClick()}
                             sx={{ mb: 2 }}
                         >
                             Create review
