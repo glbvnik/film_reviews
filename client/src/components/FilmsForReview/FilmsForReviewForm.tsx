@@ -12,12 +12,14 @@ import { useRouter } from 'next/router'
 import React, { FC, useEffect, useState } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { clearOmdb, selectOmdb } from '../../redux/reducers/omdb'
+import { clearOmdb, omdbSelectors } from '../../redux/reducers/omdb'
 import { getOmdbFilms } from '../../redux/reducers/omdb/action-creators'
 import { theme } from '../../theme'
 
 const FilmsForReviewForm: FC = () => {
-    const { currentFilm, films, page } = useAppSelector(selectOmdb)
+    const currentFilm = useAppSelector(omdbSelectors.currentFilm)
+    const films = useAppSelector(omdbSelectors.films)
+    const page = useAppSelector(omdbSelectors.page)
 
     const dispatch = useAppDispatch()
 

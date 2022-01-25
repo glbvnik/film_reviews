@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material'
 import React, { ChangeEvent, FC } from 'react'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { selectAuth } from '../../../redux/reducers/auth'
+import { authSelectors } from '../../../redux/reducers/auth'
 
 interface FormInputsProps {
     isRegisterUrl: boolean
@@ -26,7 +26,7 @@ const FormInputs: FC<FormInputsProps> = ({
     lastName,
     handleInputChange,
 }) => {
-    const { validationErrors } = useAppSelector(selectAuth)
+    const validationErrors = useAppSelector(authSelectors.validationErrors)
 
     return (
         <>

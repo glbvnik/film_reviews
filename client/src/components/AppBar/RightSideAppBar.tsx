@@ -13,14 +13,15 @@ import { MenuOptionsEnum } from '../../constants/menuOptions'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { RolesEnum } from '../../models/user'
-import { selectAuth } from '../../redux/reducers/auth'
+import { authSelectors } from '../../redux/reducers/auth'
 import { logout } from '../../redux/reducers/auth/action-creators'
 import { theme } from '../../theme'
 import AuthButtonGroup from './AuthButtonGroup'
 
 const RightSideAppBar: FC = () => {
-    const { user, isRefreshLoading, isLogoutLoading } =
-        useAppSelector(selectAuth)
+    const user = useAppSelector(authSelectors.user)
+    const isRefreshLoading = useAppSelector(authSelectors.isRefreshLoading)
+    const isLogoutLoading = useAppSelector(authSelectors.isLogoutLoading)
 
     const dispatch = useAppDispatch()
 

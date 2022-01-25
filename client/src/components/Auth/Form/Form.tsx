@@ -6,8 +6,8 @@ import { ChangeEvent, FC, useEffect } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import {
+    authSelectors,
     clearAuthStateBooleans,
-    selectAuth,
 } from '../../../redux/reducers/auth'
 import {
     login,
@@ -22,14 +22,14 @@ import FormInputs from './FormInputs'
 import { styles } from './sx'
 
 const Form: FC = () => {
-    const {
-        user,
-        validationErrors,
-        loginError,
-        isRegistered,
-        isPasswordResetLinkSet,
-        isPasswordReset,
-    } = useAppSelector(selectAuth)
+    const user = useAppSelector(authSelectors.user)
+    const validationErrors = useAppSelector(authSelectors.validationErrors)
+    const loginError = useAppSelector(authSelectors.loginError)
+    const isRegistered = useAppSelector(authSelectors.isRegistered)
+    const isPasswordResetLinkSet = useAppSelector(
+        authSelectors.isPasswordResetLinkSet
+    )
+    const isPasswordReset = useAppSelector(authSelectors.isPasswordReset)
 
     const dispatch = useAppDispatch()
 

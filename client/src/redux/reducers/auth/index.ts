@@ -95,6 +95,18 @@ export const {
     setIsLogoutLoading,
 } = authSlice.actions
 
-export const selectAuth = ({ auth }: RootState) => auth
+export const authSelectors = {
+    auth: ({ auth }: RootState) => auth,
+    user: ({ auth }: RootState) => auth.user,
+    validationErrors: ({ auth }: RootState) => auth.validationErrors,
+    loginError: ({ auth }: RootState) => auth.loginError,
+    isRegistered: ({ auth }: RootState) => auth.isRegistered,
+    isPasswordResetLinkSet: ({ auth }: RootState) =>
+        auth.isPasswordResetLinkSet,
+    isPasswordReset: ({ auth }: RootState) => auth.isPasswordReset,
+    isAuthLoading: ({ auth }: RootState) => auth.isAuthLoading,
+    isRefreshLoading: ({ auth }: RootState) => auth.isRefreshLoading,
+    isLogoutLoading: ({ auth }: RootState) => auth.isLogoutLoading,
+}
 
 export default authSlice.reducer

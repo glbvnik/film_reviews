@@ -2,13 +2,13 @@ import { Box, Drawer } from '@mui/material'
 import React, { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { selectApp, setIsMobileDrawerOpen } from '../../redux/reducers/app'
+import { appSelectors, setIsMobileDrawerOpen } from '../../redux/reducers/app'
 import DrawerSectionsList from './DrawerSectionsList'
 
 export const drawerWidth = 200
 
 const DrawerMenu: FC = () => {
-    const { isMobileDrawerOpen } = useAppSelector(selectApp)
+    const isMobileDrawerOpen = useAppSelector(appSelectors.isMobileDrawerOpen)
 
     const dispatch = useAppDispatch()
 

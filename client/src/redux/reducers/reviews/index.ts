@@ -38,6 +38,11 @@ const reviewsSlice = createSlice({
 
 export const { setReviews, setIsReviewsLoading } = reviewsSlice.actions
 
-export const selectReviews = ({ reviews }: RootState) => reviews
+export const reviewsSelectors = {
+    allReviews: ({ reviews }: RootState) => reviews,
+    reviews: ({ reviews }: RootState) => reviews.reviews,
+    count: ({ reviews }: RootState) => reviews.count,
+    isReviewsLoading: ({ reviews }: RootState) => reviews.isReviewsLoading,
+}
 
 export default reviewsSlice.reducer

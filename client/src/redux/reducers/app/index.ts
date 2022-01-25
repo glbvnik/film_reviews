@@ -56,6 +56,12 @@ export const {
     setAsyncAction,
 } = appSlice.actions
 
-export const selectApp = ({ app }: RootState) => app
+export const appSelectors = {
+    app: ({ app }: RootState) => app,
+    isDialog: ({ app }: RootState) => app.isDialog,
+    isDrawer: ({ app }: RootState) => app.isDrawer,
+    isMobileDrawerOpen: ({ app }: RootState) => app.isMobileDrawerOpen,
+    asyncAction: ({ app }: RootState) => app.asyncAction,
+}
 
 export default appSlice.reducer

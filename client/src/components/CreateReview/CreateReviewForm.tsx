@@ -12,16 +12,16 @@ import { useFormik } from 'formik'
 import React, { FC, useEffect, useRef } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { selectApp, setAsyncAction } from '../../redux/reducers/app'
-import { selectOmdb } from '../../redux/reducers/omdb'
-import { selectReviews } from '../../redux/reducers/reviews'
+import { appSelectors, setAsyncAction } from '../../redux/reducers/app'
+import { omdbSelectors } from '../../redux/reducers/omdb'
+import { reviewsSelectors } from '../../redux/reducers/reviews'
 import { createReview } from '../../redux/reducers/reviews/action-creators'
 import { useStyles } from '../../styles/classes'
 
 const CreateReviewForm: FC = () => {
-    const { currentFilm } = useAppSelector(selectOmdb)
-    const { isReviewsLoading } = useAppSelector(selectReviews)
-    const { asyncAction } = useAppSelector(selectApp)
+    const currentFilm = useAppSelector(omdbSelectors.currentFilm)
+    const isReviewsLoading = useAppSelector(reviewsSelectors.isReviewsLoading)
+    const asyncAction = useAppSelector(appSelectors.asyncAction)
 
     const dispatch = useAppDispatch()
 

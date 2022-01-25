@@ -4,12 +4,14 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { selectOmdb, setOmdbPage } from '../../../redux/reducers/omdb'
+import { omdbSelectors, setOmdbPage } from '../../../redux/reducers/omdb'
 import { theme } from '../../../theme'
 import OmdbFilmItem from './OmdbFilmItem'
 
 const OmdbFilmsList = () => {
-    const { films, totalResults, page } = useAppSelector(selectOmdb)
+    const films = useAppSelector(omdbSelectors.films)
+    const totalResults = useAppSelector(omdbSelectors.totalResults)
+    const page = useAppSelector(omdbSelectors.page)
 
     const dispatch = useAppDispatch()
 

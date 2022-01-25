@@ -65,6 +65,13 @@ export const {
     setIsOmdbLoading,
 } = omdbSlice.actions
 
-export const selectOmdb = ({ omdb }: RootState) => omdb
+export const omdbSelectors = {
+    omdb: ({ omdb }: RootState) => omdb,
+    films: ({ omdb }: RootState) => omdb.films,
+    totalResults: ({ omdb }: RootState) => omdb.totalResults,
+    currentFilm: ({ omdb }: RootState) => omdb.currentFilm,
+    page: ({ omdb }: RootState) => omdb.page,
+    isOmdbLoading: ({ omdb }: RootState) => omdb.isOmdbLoading,
+}
 
 export default omdbSlice.reducer

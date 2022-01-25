@@ -5,10 +5,11 @@ import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { selectApp, setIsMobileDrawerOpen } from '../../redux/reducers/app'
+import { appSelectors, setIsMobileDrawerOpen } from '../../redux/reducers/app'
 
 const LeftSideAppBar: FC = () => {
-    const { isDrawer, isMobileDrawerOpen } = useAppSelector(selectApp)
+    const isDrawer = useAppSelector(appSelectors.isDrawer)
+    const isMobileDrawerOpen = useAppSelector(appSelectors.isMobileDrawerOpen)
 
     const dispatch = useAppDispatch()
 

@@ -5,11 +5,11 @@ import { drawerSections } from '../../constants/drawerSections'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { setIsMobileDrawerOpen } from '../../redux/reducers/app'
-import { selectAuth } from '../../redux/reducers/auth'
+import { authSelectors } from '../../redux/reducers/auth'
 import { clearOmdb } from '../../redux/reducers/omdb'
 
 const DrawerSectionsList = () => {
-    const { user } = useAppSelector(selectAuth)
+    const user = useAppSelector(authSelectors.user)
 
     const dispatch = useAppDispatch()
 

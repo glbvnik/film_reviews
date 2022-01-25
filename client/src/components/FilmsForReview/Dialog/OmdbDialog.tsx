@@ -14,8 +14,11 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { selectApp, setIsDialog } from '../../../redux/reducers/app'
-import { clearOmdbCurrentFilm, selectOmdb } from '../../../redux/reducers/omdb'
+import { appSelectors, setIsDialog } from '../../../redux/reducers/app'
+import {
+    clearOmdbCurrentFilm,
+    omdbSelectors,
+} from '../../../redux/reducers/omdb'
 import { theme } from '../../../theme'
 import OmdbDialogContent from './OmdbDialogContent'
 
@@ -29,8 +32,9 @@ const Transition = React.forwardRef(
 )
 
 const OmdbDialog = () => {
-    const { isDialog } = useAppSelector(selectApp)
-    const { currentFilm, isOmdbLoading } = useAppSelector(selectOmdb)
+    const isDialog = useAppSelector(appSelectors.isDialog)
+    const currentFilm = useAppSelector(omdbSelectors.currentFilm)
+    const isOmdbLoading = useAppSelector(omdbSelectors.isOmdbLoading)
 
     const dispatch = useAppDispatch()
 
