@@ -19,7 +19,7 @@ import {
 import FormButtons from './FormButtons'
 import FormHeader from './FormHeader'
 import FormInputs from './FormInputs'
-import { styles } from './sx'
+import { styles } from '../sx'
 
 const Form: FC = () => {
     const user = useAppSelector(authSelectors.user)

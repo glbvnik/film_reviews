@@ -1,4 +1,6 @@
-export const styles = {
+import { createStyles } from '../../utils/createStyles'
+
+export const styles = createStyles({
     backgroundImage: {
         backgroundImage: 'url(/films-collage.jpg)',
         backgroundPosition: 'center',
@@ -23,4 +25,4 @@ export const styles = {
         width: '100%',
         mt: 2,
     },
-}
+})

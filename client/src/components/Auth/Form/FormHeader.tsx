@@ -6,7 +6,7 @@ import { Alert, Avatar, CircularProgress, Typography } from '@mui/material'
 import React, { FC } from 'react'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { authSelectors } from '../../../redux/reducers/auth'
-import { styles } from './sx'
+import { styles } from '../sx'
 
 interface FormHeaderProps {
     isRegisterUrl: boolean

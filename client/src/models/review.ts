@@ -15,6 +15,11 @@ export interface IReview {
     userUuId: string
     createdAt: Date
     updatedAt: Date
+    Film: { name: string }
+    User: {
+        firstName: string
+        lastName: string
+    }
 }
 
 export interface IReviewsResponse {

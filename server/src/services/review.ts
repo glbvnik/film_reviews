@@ -1,5 +1,6 @@
 import { Film } from '../db/models/classes/film'
 import { Review } from '../db/models/classes/review'
+import { User } from '../db/models/classes/user'
 import { IFilm } from '../types/film'
 import { IReviewInputs } from '../types/review'
 
@@ -31,8 +32,12 @@ export const ReviewService = {
     },
     async getReviews() {
         const res = await Review.findAndCountAll({
-            limit: 1,
-            offset: 1,
+            // limit: 1,
+            // offset: 1,
+            include: [
+                { model: Film, attributes: ['name'] },
+                { model: User, attributes: ['firstName', 'lastName'] },
+            ],
             order: [['createdAt', 'DESC']],
         })
 

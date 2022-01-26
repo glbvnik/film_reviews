@@ -20,8 +20,8 @@ import {
 import { IUser } from '../../../models/user'
 import { mapToError } from '../../../utils/mapToError'
 import {
+    authSelectors,
     AuthState,
-    selectAuth,
     setIsAuthLoading,
     setIsLogoutLoading,
     setIsPasswordReset,
@@ -43,7 +43,7 @@ import {
 } from '../../reducers/auth/action-creators'
 
 function* handleResetErrors(): Generator<StrictEffect, void, AuthState> {
-    const { validationErrors, loginError } = yield select(selectAuth)
+    const { validationErrors, loginError } = yield select(authSelectors.auth)
 
     if (validationErrors) {
         yield put(setValidationErrors(null))
