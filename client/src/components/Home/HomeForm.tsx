@@ -38,7 +38,7 @@ const HomeForm: FC = () => {
     const handleReset = () => {
         resetForm({ values: { movie: '', author: '' } })
 
-        router.push('/')
+        router.push('/1')
     }
 
     return (

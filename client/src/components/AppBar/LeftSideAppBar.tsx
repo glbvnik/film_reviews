@@ -32,7 +32,7 @@ const LeftSideAppBar: FC = () => {
             <Box
                 display="flex"
                 alignItems="center"
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/1')}
                 sx={{ cursor: 'pointer', mr: 'auto' }}
             >
                 <LocalMoviesIcon />
