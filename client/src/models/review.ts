@@ -26,3 +26,11 @@ export interface IReviewsResponse {
     reviews: IReview[]
     count: number
 }
+
+export interface IReviewQuery {
+    movie?: string
+    author?: string
+    limit?: number
+    offset?: number
+    isCount?: boolean
+}

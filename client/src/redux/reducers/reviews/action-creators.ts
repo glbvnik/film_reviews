@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 import { IOmdbFullFilm } from '../../../models/omdb'
-import { IReviewInputs } from '../../../models/review'
+import { IReviewInputs, IReviewQuery } from '../../../models/review'
 
 export enum REVIEW_ACTION {
     CREATE_REVIEW = 'CREATE_REVIEW',
@@ -12,4 +12,4 @@ export const createReview = createAction<{
     film: IOmdbFullFilm
 }>(REVIEW_ACTION.CREATE_REVIEW)
 
-export const getReviews = createAction(REVIEW_ACTION.FETCH_FILMS)
+export const getReviews = createAction<IReviewQuery>(REVIEW_ACTION.FETCH_FILMS)

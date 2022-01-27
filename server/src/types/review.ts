@@ -15,3 +15,11 @@ export interface IReviewInputs {
     text: string
     isPublished?: boolean
 }
+
+export interface IReviewQuery {
+    movie?: string
+    author?: string
+    limit: number
+    offset: number
+    isCount?: boolean
+}

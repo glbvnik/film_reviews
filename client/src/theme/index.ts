@@ -27,9 +27,9 @@ export const theme = createTheme({
             },
             styleOverrides: {
                 root: {
-                    maxWidth: '1200px',
+                    maxWidth: '1400px !important',
                     '@media (min-width: 2048px)': {
-                        maxWidth: '1400px',
+                        maxWidth: '1600px !important',
                     },
                 },
             },

@@ -79,8 +79,6 @@ const FilmsForReviewForm: FC = () => {
     return (
         <Box
             noValidate
-            alignSelf="center"
-            width="100%"
             component="form"
             onSubmit={handleSubmit}
             onReset={handleReset}

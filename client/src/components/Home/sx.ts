@@ -2,7 +2,7 @@ import { createStyles } from '../../utils/createStyles'
 
 export const styles = createStyles({
     reviewItem: {
-        height: { xs: 200, sm: 225 },
+        height: { xs: 200, sm: 225, xl: 250 },
         width: '100%',
     },
     reviewItemPaper: {

@@ -1,5 +1,5 @@
 import createEmotionServer from '@emotion/server/create-instance'
-import { ServerStyleSheets } from '@mui/styles'
+import { ServerStyleSheets } from '@material-ui/core/styles'
 import Document, {
     DocumentContext,
     Head,

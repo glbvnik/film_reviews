@@ -3,7 +3,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { all, call } from 'redux-saga/effects'
 import { ReviewApi } from '../../../http/review'
 import { IOmdbFullFilm } from '../../../models/omdb'
-import { IReviewInputs } from '../../../models/review'
+import { IReviewInputs, IReviewQuery } from '../../../models/review'
 import { setAsyncAction } from '../../reducers/app'
 import { setIsReviewsLoading, setReviews } from '../../reducers/reviews'
 import {
@@ -11,17 +11,20 @@ import {
     getReviews,
 } from '../../reducers/reviews/action-creators'
 
-function* handleGetReviews(): Generator<StrictEffect, void, any> {
+function* handleGetReviews({
+                               payload,
+                           }: PayloadAction<IReviewQuery>): Generator<StrictEffect, void, any> {
     try {
-        const res = yield call(ReviewApi.fetch)
+        const res = yield call(ReviewApi.fetch, payload)
 
         yield put(setReviews(res))
-    } catch (e) {}
+    } catch (e) {
+    }
 }
 
 function* handleCreateReview({
-    payload,
-}: PayloadAction<{
+                                 payload,
+                             }: PayloadAction<{
     review: IReviewInputs
     film: IOmdbFullFilm
 }>) {

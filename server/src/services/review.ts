@@ -1,8 +1,9 @@
+import { Op, Sequelize } from 'sequelize'
 import { Film } from '../db/models/classes/film'
 import { Review } from '../db/models/classes/review'
 import { User } from '../db/models/classes/user'
 import { IFilm } from '../types/film'
-import { IReviewInputs } from '../types/review'
+import { IReviewInputs, IReviewQuery } from '../types/review'
 
 export const ReviewService = {
     async create(
@@ -30,13 +31,37 @@ export const ReviewService = {
             userUuId,
         })
     },
-    async getReviews() {
+    async getReviews(query: IReviewQuery) {
+        const { movie, author, limit, offset, isCount } = query
+
+        if (isCount) {
+            return await Review.count()
+        }
+
         const res = await Review.findAndCountAll({
-            // limit: 1,
-            // offset: 1,
+            limit,
+            offset,
             include: [
-                { model: Film, attributes: ['name'] },
-                { model: User, attributes: ['firstName', 'lastName'] },
+                {
+                    model: Film,
+                    attributes: ['name'],
+                    where: { name: { [Op.iLike]: `%${movie || ''}%` } },
+                },
+                {
+                    model: User,
+                    attributes: ['firstName', 'lastName'],
+                    where: Sequelize.where(
+                        Sequelize.fn(
+                            'concat',
+                            Sequelize.col('firstName'),
+                            ' ',
+                            Sequelize.col('lastName')
+                        ),
+                        {
+                            [Op.iLike]: `%${author || ''}%`,
+                        }
+                    ),
+                },
             ],
             order: [['createdAt', 'DESC']],
         })
