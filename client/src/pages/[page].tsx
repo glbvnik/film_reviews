@@ -27,6 +27,12 @@ export const getStaticProps = wrapper.getStaticProps(
                 offset: (+params!.page! - 1) * 20,
             })
 
+            if (data.reviews.length === 0 && +params!.page! == 1) {
+                return {
+                    notFound: true,
+                }
+            }
+
             dispatch(setReviews(data))
 
             return { props: {}, revalidate: 15 }
@@ -36,11 +42,13 @@ export const getStaticProps = wrapper.getStaticProps(
 export const getStaticPaths: GetStaticPaths<{ page: string }> = async () => {
     const count = await ReviewApi.count()
 
-    const paths = Array(Math.ceil(count / 20)).map((_, index) => ({
-        params: {
-            page: (index + 1).toString(),
-        },
-    }))
+    const paths = Array(Math.ceil(count / 20))
+        .fill(undefined)
+        .map((_, index) => ({
+            params: {
+                page: (index + 1).toString(),
+            },
+        }))
 
     return {
         paths,
