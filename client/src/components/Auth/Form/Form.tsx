@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material'
 import { SxProps } from '@mui/system'
 import { useFormik } from 'formik'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ChangeEvent, FC, useEffect } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
@@ -16,10 +17,10 @@ import {
     resetPassword,
     setPasswordResetLink,
 } from '../../../redux/reducers/auth/action-creators'
+import { styles } from '../sx'
 import FormButtons from './FormButtons'
 import FormHeader from './FormHeader'
 import FormInputs from './FormInputs'
-import { styles } from '../sx'
 
 const Form: FC = () => {
     const user = useAppSelector(authSelectors.user)
@@ -164,7 +165,15 @@ const Form: FC = () => {
 
     return (
         <Grid container sx={{ height: '100%' }}>
-            <Grid item xs={false} sm={4} md={7} sx={styles.backgroundImage} />
+            <Grid item xs={false} sm={4} md={7} sx={{ position: 'relative' }}>
+                <Image
+                    priority
+                    src="/films-collage.jpg"
+                    alt="IReview"
+                    layout="fill"
+                    objectFit="cover"
+                />
+            </Grid>
             <Grid
                 item
                 square

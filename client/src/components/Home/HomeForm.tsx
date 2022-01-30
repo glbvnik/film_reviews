@@ -1,11 +1,9 @@
 import { Box, Button, ButtonGroup, TextField } from '@mui/material'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { getReviews } from '../../redux/reducers/reviews/action-creators'
-import { theme } from '../../theme'
 
 const HomeForm: FC = () => {
     const dispatch = useAppDispatch()
@@ -22,7 +20,7 @@ const HomeForm: FC = () => {
 
             router.push(
                 {
-                    pathname: '/',
+                    pathname: '/filter',
                     query: { ...values, page: 1 },
                 },
                 undefined,
@@ -33,12 +31,10 @@ const HomeForm: FC = () => {
         },
     })
 
-    const isSm = useMediaQuery(theme.breakpoints.up('sm'))
-
     const handleReset = () => {
         resetForm({ values: { movie: '', author: '' } })
 
-        router.push('/1')
+        router.push('/')
     }
 
     return (
@@ -49,7 +45,7 @@ const HomeForm: FC = () => {
             onReset={handleReset}
             mb={{ xs: 1, sm: 2, lg: 3, xl: 4 }}
         >
-            <Box display="flex" flexDirection={isSm ? 'row' : 'column'}>
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
                 <TextField
                     id="movie"
                     name="movie"
@@ -68,7 +64,11 @@ const HomeForm: FC = () => {
                     onChange={handleChange}
                     sx={{ flexGrow: 1 }}
                 />
-                <ButtonGroup variant="contained" size="large" fullWidth={!isSm}>
+                <ButtonGroup
+                    variant="contained"
+                    size="large"
+                    sx={{ button: { flex: 1 } }}
+                >
                     <Button type="submit">Search</Button>
                     <Button type="reset" color="secondary">
                         Reset

@@ -13,3 +13,4 @@ reviewRouter.post(
     ReviewController.createReview
 )
 reviewRouter.get('/reviews', ReviewController.getReviews)
+reviewRouter.get('/reviews/:id', ReviewController.getReview)

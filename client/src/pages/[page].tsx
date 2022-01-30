@@ -1,4 +1,4 @@
-import { GetStaticPaths } from 'next'
+import { GetStaticPaths, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 import Home from '../components/Home/Home'
@@ -7,7 +7,7 @@ import { ReviewApi } from '../http/review'
 import { setReviews } from '../redux/reducers/reviews'
 import wrapper from '../redux/store'
 
-const Page = () => {
+const Page: NextPage = () => {
     const router = useRouter()
 
     if (router.isFallback) {
@@ -22,20 +22,26 @@ export default Page
 export const getStaticProps = wrapper.getStaticProps(
     ({ dispatch }) =>
         async ({ params }) => {
-            const data = await ReviewApi.fetch({
-                limit: 20,
-                offset: (+params!.page! - 1) * 20,
-            })
+            try {
+                const data = await ReviewApi.fetch({
+                    limit: 20,
+                    offset: (+params!.page! - 1) * 20,
+                })
 
-            if (data.reviews.length === 0 && +params!.page! == 1) {
+                if (data.reviews.length === 0 && +params!.page! == 1) {
+                    return {
+                        notFound: true,
+                    }
+                }
+
+                dispatch(setReviews(data))
+
+                return { props: {}, revalidate: 15 }
+            } catch (e) {
                 return {
                     notFound: true,
                 }
             }
-
-            dispatch(setReviews(data))
-
-            return { props: {}, revalidate: 15 }
         }
 )
 

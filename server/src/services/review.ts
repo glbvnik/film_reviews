@@ -2,6 +2,7 @@ import { Op, Sequelize } from 'sequelize'
 import { Film } from '../db/models/classes/film'
 import { Review } from '../db/models/classes/review'
 import { User } from '../db/models/classes/user'
+import ApiError from '../errors/api'
 import { IFilm } from '../types/film'
 import { IReviewInputs, IReviewQuery } from '../types/review'
 
@@ -35,7 +36,7 @@ export const ReviewService = {
         const { movie, author, limit, offset, isCount } = query
 
         if (isCount) {
-            return await Review.count()
+            return await Review.count({ where: { isPublished: true } })
         }
 
         const res = await Review.findAndCountAll({
@@ -63,9 +64,21 @@ export const ReviewService = {
                     ),
                 },
             ],
+            where: { isPublished: true },
             order: [['createdAt', 'DESC']],
         })
 
         return { reviews: res.rows, count: res.count }
+    },
+    async getReview(id: string) {
+        const review = await Review.findOne({
+            where: { id: +id, isPublished: true },
+        })
+
+        if (!review) {
+            throw ApiError.notFound('Review not found')
+        }
+
+        return review
     },
 }

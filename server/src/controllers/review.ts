@@ -30,4 +30,13 @@ export const ReviewController = {
             next(e)
         }
     },
+    async getReview(req: Request, res: Response, next: NextFunction) {
+        try {
+            const review = await ReviewService.getReview(req.params.id)
+
+            res.json({ review })
+        } catch (e) {
+            next(e)
+        }
+    },
 }

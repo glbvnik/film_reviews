@@ -1,7 +1,7 @@
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies'
 import MenuIcon from '@mui/icons-material/Menu'
 import { Box, IconButton, Typography } from '@mui/material'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import React, { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
@@ -12,8 +12,6 @@ const LeftSideAppBar: FC = () => {
     const isMobileDrawerOpen = useAppSelector(appSelectors.isMobileDrawerOpen)
 
     const dispatch = useAppDispatch()
-
-    const router = useRouter()
 
     return (
         <>
@@ -29,22 +27,24 @@ const LeftSideAppBar: FC = () => {
                     <MenuIcon />
                 </IconButton>
             )}
-            <Box
-                display="flex"
-                alignItems="center"
-                onClick={() => router.push('/1')}
-                sx={{ cursor: 'pointer', mr: 'auto' }}
-            >
-                <LocalMoviesIcon />
-                <Typography
-                    variant="h6"
-                    component="h1"
-                    ml="2px"
-                    sx={{ userSelect: 'none' }}
+            <Link href="/">
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    component="a"
+                    sx={{ cursor: 'pointer', mr: 'auto' }}
                 >
-                    IReview
-                </Typography>
-            </Box>
+                    <LocalMoviesIcon />
+                    <Typography
+                        variant="h6"
+                        component="h1"
+                        ml="2px"
+                        sx={{ userSelect: 'none' }}
+                    >
+                        IReview
+                    </Typography>
+                </Box>
+            </Link>
         </>
     )
 }

@@ -1,12 +1,6 @@
 import { createStyles } from '../../utils/createStyles'
 
 export const styles = createStyles({
-    backgroundImage: {
-        backgroundImage: 'url(/films-collage.jpg)',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-    },
     formBox: {
         mx: 2,
         display: 'flex',

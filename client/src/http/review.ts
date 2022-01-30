@@ -1,4 +1,4 @@
-import { IReviewQuery, IReviewsResponse } from '../models/review'
+import { IReview, IReviewQuery, IReviewsResponse } from '../models/review'
 import $api from './index'
 
 export const ReviewApi = {
@@ -19,5 +19,12 @@ export const ReviewApi = {
         })
 
         return data
+    },
+    async fetchOne(id: number) {
+        const { data } = await $api.get<{ review: IReview }>(
+            `/review-management/reviews/${id}`
+        )
+
+        return data.review
     },
 }

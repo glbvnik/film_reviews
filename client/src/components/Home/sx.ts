@@ -15,6 +15,11 @@ export const styles = createStyles({
             borderRadius: 'inherit',
         },
     },
+    reviewItemSkeleton: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+    },
     reviewItemBox: {
         alignSelf: 'flex-end',
         borderRadius: 'inherit',

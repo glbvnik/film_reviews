@@ -12,41 +12,6 @@ import { theme } from '../theme'
 import { createEmotionCache } from '../utils/createEmotionCache'
 
 class MyDocument extends Document {
-    static async getInitialProps(ctx: DocumentContext) {
-        const originalRenderPage = ctx.renderPage
-
-        const cache = createEmotionCache()
-        const { extractCriticalToChunks } = createEmotionServer(cache)
-
-        const sheets = new ServerStyleSheets()
-
-        ctx.renderPage = () =>
-            originalRenderPage({
-                enhanceApp: (App: any) => (props) =>
-                    sheets.collect(<App emotionCache={cache} {...props} />),
-            })
-
-        const initialProps = await Document.getInitialProps(ctx)
-
-        const emotionStyles = extractCriticalToChunks(initialProps.html)
-        const emotionStyleTags = emotionStyles.styles.map((style) => (
-            <style
-                data-emotion={`${style.key} ${style.ids.join(' ')}`}
-                key={style.key}
-                dangerouslySetInnerHTML={{ __html: style.css }}
-            />
-        ))
-
-        return {
-            ...initialProps,
-            styles: [
-                ...emotionStyleTags,
-                ...React.Children.toArray(initialProps.styles),
-                sheets.getStyleElement(),
-            ],
-        }
-    }
-
     render() {
         return (
             <Html lang="en">
@@ -59,6 +24,7 @@ class MyDocument extends Document {
                         rel="stylesheet"
                         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
                     />
+                    {(this.props as any).emotionStyleTags}
                 </Head>
                 <body>
                     <Main />
@@ -66,6 +32,37 @@ class MyDocument extends Document {
                 </body>
             </Html>
         )
+    }
+}
+
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
+    const originalRenderPage = ctx.renderPage
+
+    const cache = createEmotionCache()
+    const { extractCriticalToChunks } = createEmotionServer(cache)
+
+    const sheets = new ServerStyleSheets()
+
+    ctx.renderPage = () =>
+        originalRenderPage({
+            enhanceApp: (App: any) => (props) =>
+                sheets.collect(<App emotionCache={cache} {...props} />),
+        })
+
+    const initialProps = await Document.getInitialProps(ctx)
+
+    const emotionStyles = extractCriticalToChunks(initialProps.html)
+    const emotionStyleTags = emotionStyles.styles.map((style) => (
+        <style
+            data-emotion={`${style.key} ${style.ids.join(' ')}`}
+            key={style.key}
+            dangerouslySetInnerHTML={{ __html: style.css }}
+        />
+    ))
+
+    return {
+        ...initialProps,
+        emotionStyleTags,
     }
 }
 

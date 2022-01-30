@@ -1,6 +1,6 @@
-import { Box, Grid, Paper, Rating, Typography } from '@mui/material'
+import { Box, Grid, Paper, Rating, Skeleton, Typography } from '@mui/material'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { styles } from '../sx'
 
 interface ReviewItemProps {
@@ -16,15 +16,26 @@ const ReviewItem: FC<ReviewItemProps> = ({
     rating,
     image,
 }) => {
+    const [isLoaded, setIsLoaded] = useState(false)
+
     return (
         <Grid item xs={1} sx={styles.reviewItem}>
             <Paper elevation={4} sx={styles.reviewItemPaper}>
                 <Image
                     priority
                     src={`${process.env.NEXT_PUBLIC_API_URL!}/images/${image}`}
+                    alt={filmName}
                     layout="fill"
                     objectFit="cover"
+                    onLoadingComplete={() => setIsLoaded(true)}
                 />
+                {!isLoaded && (
+                    <Skeleton
+                        animation="wave"
+                        variant="circular"
+                        sx={styles.reviewItemSkeleton}
+                    />
+                )}
                 <Box sx={styles.reviewItemBox}>
                     <Typography
                         component="h3"
