@@ -38,9 +38,7 @@ export const UserController = {
     },
     async logout(req: Request, res: Response, next: NextFunction) {
         try {
-            const { refreshToken } = req.cookies as { refreshToken: string }
-
-            await UserService.logout(refreshToken)
+            await UserService.logout(req.cookies.refreshToken)
 
             TokenService.deleteCookie(res)
 
@@ -51,10 +49,8 @@ export const UserController = {
     },
     async activate(req: Request, res: Response, next: NextFunction) {
         try {
-            const activationLink = req.params.activationLink
-
             const userData = await UserService.activate(
-                activationLink,
+                req.params.activationLink,
                 req.headers['user-agent']!
             )
 
@@ -67,9 +63,7 @@ export const UserController = {
     },
     async refresh(req: Request, res: Response, next: NextFunction) {
         try {
-            const { refreshToken } = req.cookies as { refreshToken: string }
-
-            const userData = await UserService.refresh(refreshToken)
+            const userData = await UserService.refresh(req.cookies.refreshToken)
 
             TokenService.setCookie(userData.tokens, res)
 
@@ -109,10 +103,8 @@ export const UserController = {
                 )
             }
 
-            const passwordResetLink = req.params.passwordResetLink
-
             await UserService.resetPassword(
-                passwordResetLink,
+                req.params.passwordResetLink,
                 req.body.password
             )
 

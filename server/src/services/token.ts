@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { sign, verify } from 'jsonwebtoken'
+import { decode, sign, verify } from 'jsonwebtoken'
 import { UserDto } from '../dtos/user'
 import { ITokens } from '../types/token'
 
@@ -36,17 +36,14 @@ export const TokenService = {
         res.clearCookie('refreshToken')
     },
     validateAccessToken(token: string) {
-        try {
-            const userData = verify(token, process.env.JWT_ACCESS_SECRET!)
-
-            return userData
-        } catch (e) {}
+        return verify(token, process.env.JWT_ACCESS_SECRET!)
     },
     validateRefreshToken(token: string) {
-        try {
-            const userData = verify(token, process.env.JWT_REFRESH_SECRET!)
+        return verify(token, process.env.JWT_REFRESH_SECRET!)
+    },
+    getUuId(refreshToken: string) {
+        const { uuId } = (decode(refreshToken) as { uuId: string }) || {}
 
-            return userData
-        } catch (e) {}
+        return uuId
     },
 }

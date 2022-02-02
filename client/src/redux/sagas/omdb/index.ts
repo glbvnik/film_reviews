@@ -1,6 +1,12 @@
-import { fork, put, StrictEffect, takeEvery } from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { all, call } from 'redux-saga/effects'
+import {
+    all,
+    call,
+    fork,
+    put,
+    StrictEffect,
+    takeEvery,
+} from 'redux-saga/effects'
 import { OmdbApi } from '../../../http/omdb'
 import {
     IOmdbFilm,
