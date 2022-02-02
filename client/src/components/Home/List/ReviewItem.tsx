@@ -1,26 +1,38 @@
-import { Box, Grid, Paper, Rating, Skeleton, Typography } from '@mui/material'
+import StarIcon from '@mui/icons-material/Star'
+import { Box, Grid, Paper, Skeleton, Typography } from '@mui/material'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
 import { styles } from '../sx'
 
 interface ReviewItemProps {
+    id: number
     filmName: string
     author: string
-    rating: number | null
+    avgRating: number | null
     image: string
 }
 
 const ReviewItem: FC<ReviewItemProps> = ({
+    id,
     filmName,
     author,
-    rating,
+    avgRating,
     image,
 }) => {
     const [isLoaded, setIsLoaded] = useState(false)
 
+    const router = useRouter()
+
     return (
         <Grid item xs={1} sx={styles.reviewItem}>
-            <Paper elevation={4} sx={styles.reviewItemPaper}>
+            <Paper
+                elevation={4}
+                sx={styles.reviewItemPaper}
+                onClick={() =>
+                    router.push(`${process.env.NEXT_PUBLIC_REVIEW}/${id}`)
+                }
+            >
                 <Image
                     priority
                     src={`${process.env.NEXT_PUBLIC_API_URL!}/images/${image}`}
@@ -52,7 +64,20 @@ const ReviewItem: FC<ReviewItemProps> = ({
                         >
                             {author}
                         </Typography>
-                        <Rating value={rating} sx={{ mb: 1 }} />
+                        {avgRating && (
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                color="white"
+                                fontSize="20px"
+                            >
+                                <StarIcon
+                                    color="primary"
+                                    sx={{ fontSize: '32px', mr: '4px' }}
+                                />
+                                <span>{avgRating}</span>
+                            </Box>
+                        )}
                     </Box>
                 </Box>
             </Paper>

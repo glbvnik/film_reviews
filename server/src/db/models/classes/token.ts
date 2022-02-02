@@ -17,6 +17,7 @@ export class Token
 
     static associate() {
         Token.belongsTo(User, {
+            as: 'user',
             foreignKey: { name: 'userUuId', allowNull: false },
         })
     }

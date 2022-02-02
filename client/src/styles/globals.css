@@ -22,3 +22,32 @@ body,
     display: flex;
     flex-direction: column;
 }
+
+.review-text-p {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+@media (min-width: 600px) {
+    .review-text-p {
+        font-size: 17px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 900px) {
+    .review-text-p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+}
+
+@media (min-width: 2100px) {
+    .review-text-p {
+        font-size: 20px;
+        margin-bottom: 26px;
+    }
+}

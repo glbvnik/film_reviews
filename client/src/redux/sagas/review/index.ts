@@ -1,26 +1,12 @@
-import { fork, put, StrictEffect, takeEvery } from '@redux-saga/core/effects'
+import { fork, put, takeEvery } from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { all, call } from 'redux-saga/effects'
 import { ReviewApi } from '../../../http/review'
 import { IOmdbFullFilm } from '../../../models/omdb'
-import { IReviewInputs, IReviewQuery } from '../../../models/review'
+import { IReviewInputs } from '../../../models/review'
 import { setAsyncAction } from '../../reducers/app'
-import { setIsReviewsLoading, setReviews } from '../../reducers/reviews'
-import {
-    createReview,
-    getReviews,
-} from '../../reducers/reviews/action-creators'
-
-function* handleGetReviews({
-                               payload,
-                           }: PayloadAction<IReviewQuery>): Generator<StrictEffect, void, any> {
-    try {
-        const res = yield call(ReviewApi.fetch, payload)
-
-        yield put(setReviews(res))
-    } catch (e) {
-    }
-}
+import { setIsReviewsLoading } from '../../reducers/reviews'
+import { createReview } from '../../reducers/reviews/action-creators'
 
 function* handleCreateReview({
                                  payload,
@@ -54,8 +40,8 @@ function* handleCreateReview({
         const textForServer = review.text
             .split('\n')
             .filter((p) => p !== '')
-            .map((p) => `<p>${p}</p>`)
-            .toString()
+            .map((p) => `<p class='review-text-p'>${p}</p>`)
+            .join('')
 
         const filmForServer = {
             imdbId: film.imdbID,
@@ -96,7 +82,6 @@ function* handleCreateReview({
 
 function* reviewWatcher() {
     yield takeEvery(createReview, handleCreateReview)
-    yield takeEvery(getReviews, handleGetReviews)
 }
 
 export default function* reviewSaga() {

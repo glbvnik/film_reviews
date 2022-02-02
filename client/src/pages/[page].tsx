@@ -28,7 +28,7 @@ export const getStaticProps = wrapper.getStaticProps(
                     offset: (+params!.page! - 1) * 20,
                 })
 
-                if (data.reviews.length === 0 && +params!.page! == 1) {
+                if (data.reviews.length === 0) {
                     return {
                         notFound: true,
                     }

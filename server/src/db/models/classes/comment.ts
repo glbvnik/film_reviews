@@ -18,9 +18,11 @@ export class Comment
 
     static associate() {
         Comment.belongsTo(Review, {
+            as: 'review',
             foreignKey: { name: 'reviewId', allowNull: false },
         })
         Comment.belongsTo(User, {
+            as: 'author',
             foreignKey: { name: 'userUuId', allowNull: false },
         })
     }

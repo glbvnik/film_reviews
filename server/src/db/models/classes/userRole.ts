@@ -7,6 +7,6 @@ export class UserRole
     extends Model<UserRoleAttributes>
     implements UserRoleAttributes
 {
-    UserUuId!: string
-    RoleId!: number
+    userUuId!: string
+    roleId!: number
 }

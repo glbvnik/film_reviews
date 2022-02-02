@@ -2,18 +2,14 @@ import { Grid, Pagination } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { reviewsSelectors } from '../../../redux/reducers/reviews'
-import { getReviews } from '../../../redux/reducers/reviews/action-creators'
 import { theme } from '../../../theme'
 import ReviewItem from './ReviewItem'
 
 const ReviewsList: FC = () => {
     const reviews = useAppSelector(reviewsSelectors.reviews)
     const count = useAppSelector(reviewsSelectors.count)
-
-    const dispatch = useAppDispatch()
 
     const router = useRouter()
 
@@ -23,20 +19,7 @@ const ReviewsList: FC = () => {
 
     const handleChange = (value: number) => {
         if (router.query.movie || router.query.author) {
-            dispatch(
-                getReviews({
-                    movie: router.query.movie as string,
-                    author: router.query.author as string,
-                    limit: 20,
-                    offset: (value - 1) * 20,
-                })
-            )
-
-            return router.push(
-                { query: { ...router.query, page: value } },
-                undefined,
-                { shallow: true }
-            )
+            return router.push({ query: { ...router.query, page: value } })
         }
 
         if (page !== value) {
@@ -55,23 +38,25 @@ const ReviewsList: FC = () => {
                 {reviews?.map((review) => (
                     <ReviewItem
                         key={review.id}
-                        filmName={review.Film.name}
-                        author={`${review.User.firstName} ${review.User.lastName}`}
-                        rating={review.rating}
+                        id={review.id}
+                        filmName={review.film.name}
+                        author={`${review.author.firstName} ${review.author.lastName}`}
+                        avgRating={review.avgRating!}
                         image={review.image}
                     />
                 ))}
             </Grid>
             {count > 20 && (
                 <Pagination
-                    size={isSm ? 'large' : 'small'}
+                    size={isSm ? 'large' : 'medium'}
                     count={Math.ceil(count / 20)}
                     page={page}
                     onChange={(_, value) => handleChange(value)}
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        mt: { xs: 2, lg: 3 },
+                        mt: { xs: 2, sm: '20px', lg: '28px' },
+                        mb: '4px',
                     }}
                 />
             )}

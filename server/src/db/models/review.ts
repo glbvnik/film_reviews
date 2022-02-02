@@ -20,10 +20,6 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 unique: true,
                 allowNull: false,
             },
-            rating: {
-                type: dataTypes.DECIMAL(1, 1),
-                defaultValue: null,
-            },
             isPublished: {
                 type: dataTypes.BOOLEAN,
                 defaultValue: true,

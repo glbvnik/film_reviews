@@ -13,8 +13,8 @@ export interface IUser {
 }
 
 export interface IUserRole {
-    UserUuId: string
-    RoleId: number
+    userUuId: string
+    roleId: number
     createdAt: Date
     updatedAt: Date
 }

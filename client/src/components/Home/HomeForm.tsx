@@ -2,12 +2,8 @@ import { Box, Button, ButtonGroup, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { getReviews } from '../../redux/reducers/reviews/action-creators'
 
 const HomeForm: FC = () => {
-    const dispatch = useAppDispatch()
-
     const router = useRouter()
 
     const { handleSubmit, handleChange, resetForm, values } = useFormik({
@@ -16,18 +12,10 @@ const HomeForm: FC = () => {
             author: (router.query.author as string) || '',
         },
         onSubmit: (values) => {
-            dispatch(getReviews({ ...values, limit: 20, offset: 0 }))
-
-            router.push(
-                {
-                    pathname: '/filter',
-                    query: { ...values, page: 1 },
-                },
-                undefined,
-                {
-                    shallow: true,
-                }
-            )
+            router.push({
+                pathname: process.env.NEXT_PUBLIC_FILTER,
+                query: { ...values, page: 1 },
+            })
         },
     })
 

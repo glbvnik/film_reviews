@@ -1,4 +1,4 @@
-import { GetStaticPaths, NextPage } from 'next'
+import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 import Loader from '../../components/Loaders/Loader'
@@ -19,36 +19,16 @@ const ReviewPage: NextPage = () => {
 
 export default ReviewPage
 
-export const getStaticProps = wrapper.getStaticProps(
+export const getServerSideProps = wrapper.getServerSideProps(
     ({ dispatch }) =>
-        async ({ params }) => {
-            try {
-                const data = await ReviewApi.fetchOne(+params!.id!)
+        async ({ params, req }) => {
+            const data = await ReviewApi.fetchOne(
+                +params!.id!,
+                req.cookies.refreshToken
+            )
 
-                dispatch(setCurrentReview(data))
+            dispatch(setCurrentReview(data))
 
-                return { props: {}, revalidate: 15 }
-            } catch (e) {
-                return {
-                    notFound: true,
-                }
-            }
+            return { props: {} }
         }
 )
-
-export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
-    const count = await ReviewApi.count()
-
-    const paths = Array(count)
-        .fill(undefined)
-        .map((_, index) => ({
-            params: {
-                id: (index + 1).toString(),
-            },
-        }))
-
-    return {
-        paths,
-        fallback: true,
-    }
-}

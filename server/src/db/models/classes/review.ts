@@ -2,6 +2,7 @@ import { Model, Optional } from 'sequelize'
 import { IReview } from '../../../types/review'
 import { Comment } from './comment'
 import { Film } from './film'
+import { Rating } from './rating'
 import { User } from './user'
 
 type ReviewAttributes = Omit<IReview, 'createdAt' | 'updatedAt'>
@@ -9,7 +10,7 @@ type ReviewAttributes = Omit<IReview, 'createdAt' | 'updatedAt'>
 interface ReviewCreationAttributes
     extends Optional<
         ReviewAttributes,
-        'id' | 'rating' | 'isPublished' | 'isUnpublishedByEditor'
+        'id' | 'isPublished' | 'isUnpublishedByEditor'
     > {}
 
 export class Review
@@ -19,7 +20,6 @@ export class Review
     id!: number
     text!: string
     image!: string
-    rating!: number | null
     isPublished!: boolean
     isUnpublishedByEditor!: boolean
     filmImdbId!: string
@@ -27,12 +27,19 @@ export class Review
 
     static associate() {
         Review.belongsTo(Film, {
+            as: 'film',
             foreignKey: { name: 'filmImdbId', allowNull: false },
         })
         Review.belongsTo(User, {
+            as: 'author',
             foreignKey: { name: 'userUuId', allowNull: false },
         })
         Review.hasMany(Comment, {
+            as: 'comments',
+            foreignKey: { name: 'reviewId' },
+        })
+        Review.hasMany(Rating, {
+            as: 'ratings',
             foreignKey: { name: 'reviewId' },
         })
     }

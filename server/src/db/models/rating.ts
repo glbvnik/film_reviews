@@ -1,9 +1,18 @@
 import { DataTypes, Sequelize } from 'sequelize'
-import { UserRole } from './classes/userRole'
+import { Rating } from './classes/rating'
 
 export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
-    UserRole.init(
+    Rating.init(
         {
+            reviewId: {
+                type: dataTypes.INTEGER,
+                primaryKey: true,
+                allowNull: false,
+                references: {
+                    model: 'Reviews',
+                    key: 'id',
+                },
+            },
             userUuId: {
                 type: dataTypes.UUID,
                 primaryKey: true,
@@ -13,21 +22,17 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                     key: 'uuId',
                 },
             },
-            roleId: {
-                type: dataTypes.INTEGER,
-                primaryKey: true,
+            rating: {
+                type: dataTypes.SMALLINT,
+                defaultValue: null,
                 allowNull: false,
-                references: {
-                    model: 'Roles',
-                    key: 'id',
-                },
             },
         },
         {
             sequelize,
-            modelName: 'UserRole',
+            modelName: 'Rating',
         }
     )
 
-    return UserRole
+    return Rating
 }

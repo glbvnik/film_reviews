@@ -130,8 +130,8 @@ export const UserService = {
             })
 
             await UserRole.create({
-                UserUuId: user.uuId,
-                RoleId: userRoleId!.id,
+                userUuId: user.uuId,
+                roleId: userRoleId!.id,
             })
         }
 

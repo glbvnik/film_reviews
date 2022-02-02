@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { unlink } from 'fs'
+import { decode } from 'jsonwebtoken'
 import { ReviewService } from '../services/review'
 import { IReviewQuery } from '../types/review'
 
@@ -32,7 +33,11 @@ export const ReviewController = {
     },
     async getReview(req: Request, res: Response, next: NextFunction) {
         try {
-            const review = await ReviewService.getReview(req.params.id)
+            const { refreshToken } = req.cookies as { refreshToken: string }
+
+            const { uuId } = (decode(refreshToken) as { uuId: string }) || {}
+
+            const review = await ReviewService.getReview(req.params.id, uuId)
 
             res.json({ review })
         } catch (e) {

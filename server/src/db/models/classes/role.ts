@@ -12,6 +12,8 @@ export class Role extends Model<RoleAttributes> implements RoleAttributes {
     static associate() {
         Role.belongsToMany(User, {
             through: UserRole,
+            as: 'users',
+            foreignKey: 'roleId',
         })
     }
 }

@@ -17,6 +17,7 @@ export class Film extends Model<FilmAttributes> implements FilmAttributes {
 
     static associate() {
         Film.hasMany(Review, {
+            as: 'reviews',
             foreignKey: { name: 'filmImdbId', allowNull: false },
         })
     }
