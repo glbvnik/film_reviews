@@ -44,10 +44,10 @@ const CommentItem: FC<CommentItemProps> = ({ comment }) => {
     }
 
     const handleCommentIconClick = async () => {
-        await UserApi.allowComments(
-            comment.author.uuId!,
-            !comment.author.isCommentsAllowed
-        )
+        await UserApi.allowComments({
+            uuId: comment.author.uuId!,
+            isCommentsAllowed: !comment.author.isCommentsAllowed,
+        })
 
         router.replace(router.asPath, undefined, { scroll: false })
     }
