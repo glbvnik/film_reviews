@@ -13,6 +13,7 @@ export interface AuthState {
     isAuthLoading: boolean
     isRefreshLoading: boolean
     isLogoutLoading: boolean
+    isLoggedOut: boolean
 }
 
 const initialState: AuthState = {
@@ -25,6 +26,7 @@ const initialState: AuthState = {
     isAuthLoading: false,
     isRefreshLoading: true,
     isLogoutLoading: false,
+    isLoggedOut: false,
 }
 
 const authSlice = createSlice({
@@ -79,6 +81,10 @@ const authSlice = createSlice({
             ...state,
             isRefreshLoading: payload,
         }),
+        setIsLoggedOut: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isLoggedOut: payload,
+        }),
     },
 })
 
@@ -93,6 +99,7 @@ export const {
     setIsAuthLoading,
     setIsRefreshLoading,
     setIsLogoutLoading,
+    setIsLoggedOut,
 } = authSlice.actions
 
 export const authSelectors = {
@@ -107,6 +114,7 @@ export const authSelectors = {
     isAuthLoading: ({ auth }: RootState) => auth.isAuthLoading,
     isRefreshLoading: ({ auth }: RootState) => auth.isRefreshLoading,
     isLogoutLoading: ({ auth }: RootState) => auth.isLogoutLoading,
+    isLoggedOut: ({ auth }: RootState) => auth.isLoggedOut,
 }
 
 export default authSlice.reducer

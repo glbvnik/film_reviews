@@ -23,6 +23,7 @@ import {
     authSelectors,
     AuthState,
     setIsAuthLoading,
+    setIsLoggedOut,
     setIsLogoutLoading,
     setIsPasswordReset,
     setIsPasswordResetLinkSet,
@@ -80,6 +81,7 @@ function* logoutHandler() {
         yield call(UserApi.logout)
 
         yield put(setUser(null))
+        yield put(setIsLoggedOut(true))
     } catch (e) {
     } finally {
         yield put(setIsLogoutLoading(false))
@@ -110,6 +112,7 @@ function* handleAuth(
             )) as IUser
 
             yield put(setUser(userData))
+            yield put(setIsLoggedOut(false))
 
             yield fork(logoutHandler)
         } else if (typeof payload === 'string') {

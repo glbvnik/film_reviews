@@ -1,3 +1,5 @@
+import { IComment } from './comment'
+
 export interface IReviewInputs {
     image: File | null
     text: string
@@ -21,6 +23,7 @@ export interface IReview {
         firstName: string
         lastName: string
     }
+    comments: IComment[]
 }
 
 export interface IReviewsResponse {

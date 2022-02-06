@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { User } from '../db/models/classes/user'
 import { UserDto } from '../dtos/user'
 import ApiError from '../errors/api'
 import { RoleService } from '../services/role'
@@ -14,7 +15,7 @@ declare global {
 }
 
 export const authMiddleware =
-    (roles: RolesEnum[]) =>
+    (roles: RolesEnum[], isCommentsAllowed?: boolean) =>
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { accessToken } = req.cookies as { accessToken: string }
@@ -32,10 +33,23 @@ export const authMiddleware =
             }
 
             if (roles) {
-                if (
-                    !(await RoleService.compareUserRoles(userData.uuId, roles))
-                ) {
-                    return next(ApiError.forbidden())
+                if (isCommentsAllowed) {
+                    const user = await User.findOne({
+                        where: { uuId: userData.uuId },
+                    })
+
+                    if (!user?.isCommentsAllowed) {
+                        return next(ApiError.forbidden())
+                    }
+                } else {
+                    if (
+                        !(await RoleService.compareUserRoles(
+                            userData.uuId,
+                            roles
+                        ))
+                    ) {
+                        return next(ApiError.forbidden())
+                    }
                 }
             }
 

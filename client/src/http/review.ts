@@ -7,7 +7,7 @@ export const ReviewApi = {
     },
     async fetch(params: IReviewQuery = { limit: 20, offset: 0 }) {
         const { data } = await $api.get<IReviewsResponse>(
-            '/review-management/reviews',
+            'review-management/reviews',
             {
                 params,
             }
@@ -16,7 +16,7 @@ export const ReviewApi = {
         return data
     },
     async count() {
-        const { data } = await $api.get<number>('/review-management/reviews', {
+        const { data } = await $api.get<number>('review-management/reviews', {
             params: { isCount: true },
         })
 
@@ -24,7 +24,7 @@ export const ReviewApi = {
     },
     async fetchOne(id: number, refreshToken?: string) {
         const { data } = await $api.get<{ review: IReview }>(
-            `/review-management/reviews/${id}`,
+            `review-management/reviews/${id}`,
             {
                 headers: refreshToken && {
                     Cookie: `refreshToken=${refreshToken}`,

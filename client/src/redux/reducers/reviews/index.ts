@@ -8,6 +8,7 @@ interface ReviewsState {
     count: number
     isReviewsLoading: boolean
     currentReview: IReview | null
+    isCommentLoading: boolean
 }
 
 const initialState: ReviewsState = {
@@ -15,6 +16,7 @@ const initialState: ReviewsState = {
     count: 0,
     isReviewsLoading: false,
     currentReview: null,
+    isCommentLoading: false,
 }
 
 const reviewsSlice = createSlice({
@@ -33,6 +35,10 @@ const reviewsSlice = createSlice({
             ...state,
             currentReview: payload,
         }),
+        setIsCommentLoading: (state, { payload }: PayloadAction<boolean>) => ({
+            ...state,
+            isCommentLoading: payload,
+        }),
     },
     extraReducers: {
         [HYDRATE]: (state, { payload }) => ({
@@ -42,8 +48,12 @@ const reviewsSlice = createSlice({
     },
 })
 
-export const { setReviews, setIsReviewsLoading, setCurrentReview } =
-    reviewsSlice.actions
+export const {
+    setReviews,
+    setIsReviewsLoading,
+    setCurrentReview,
+    setIsCommentLoading,
+} = reviewsSlice.actions
 
 export const reviewsSelectors = {
     allReviews: ({ reviews }: RootState) => reviews,
@@ -51,6 +61,7 @@ export const reviewsSelectors = {
     count: ({ reviews }: RootState) => reviews.count,
     isReviewsLoading: ({ reviews }: RootState) => reviews.isReviewsLoading,
     currentReview: ({ reviews }: RootState) => reviews.currentReview,
+    isCommentLoading: ({ reviews }: RootState) => reviews.isCommentLoading,
 }
 
 export default reviewsSlice.reducer

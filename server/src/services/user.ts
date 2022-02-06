@@ -10,7 +10,6 @@ import { RolesEnum } from '../types/role'
 import { IUserInput } from '../types/user'
 import { validateUUID } from '../utils/validateUUID'
 import { MailService } from './mail'
-import { RoleService } from './role'
 import { TokenService } from './token'
 
 export const UserService = {
@@ -60,6 +59,16 @@ export const UserService = {
                 'isActivated',
                 'isCommentsAllowed',
             ],
+            include: [
+                {
+                    model: Role,
+                    as: 'roles',
+                    attributes: ['name'],
+                    through: {
+                        attributes: [],
+                    },
+                },
+            ],
         })
 
         if (!user || !user.isActivated) {
@@ -72,10 +81,7 @@ export const UserService = {
             throw ApiError.badRequest('Incorrect email or password')
         }
 
-        const userDto = new UserDto(
-            user,
-            await RoleService.findUserRoles(user.uuId)
-        )
+        const userDto = new UserDto(user)
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
@@ -135,7 +141,7 @@ export const UserService = {
             })
         }
 
-        const userDto = new UserDto(user, [RolesEnum.USER])
+        const userDto = new UserDto(user)
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
@@ -176,12 +182,19 @@ export const UserService = {
                 'isActivated',
                 'isCommentsAllowed',
             ],
+            include: [
+                {
+                    model: Role,
+                    as: 'roles',
+                    attributes: ['name'],
+                    through: {
+                        attributes: [],
+                    },
+                },
+            ],
         })
 
-        const userDto = new UserDto(
-            user!,
-            await RoleService.findUserRoles(user!.uuId)
-        )
+        const userDto = new UserDto(user!)
 
         const tokens = TokenService.generateTokens({ ...userDto })
 
@@ -219,8 +232,28 @@ export const UserService = {
         }
     },
     async getUsers() {
-        const users = await User.findAll()
+        return await User.findAll({
+            attributes: ['uuId', 'email', 'isCommentsAllowed'],
+            include: [
+                {
+                    model: Role,
+                    as: 'roles',
+                    attributes: ['id', 'name'],
+                    through: {
+                        attributes: [],
+                    },
+                },
+            ],
+        })
+    },
+    async allowComments(uuId: string, isCommentsAllowed: boolean) {
+        const user = await User.update(
+            { isCommentsAllowed },
+            { where: { uuId } }
+        )
 
-        return users
+        if (!user[0]) {
+            throw ApiError.badRequest('Invalid user uuId')
+        }
     },
 }

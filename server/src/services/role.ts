@@ -9,10 +9,14 @@ export const RoleService = {
                 {
                     model: Role,
                     as: 'roles',
-                    through: { where: { userUuId: userUuId } },
                     attributes: ['name'],
+                    through: {
+                        attributes: [],
+                    },
                 },
             ],
+            attributes: ['uuId'],
+            where: { uuId: userUuId },
         })
 
         return user!.roles.map(({ name }) => name)

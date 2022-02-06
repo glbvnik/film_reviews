@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 import { DrawerSectionsEnum } from '../../constants/drawerSections'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { setIsDrawer } from '../../redux/reducers/app'
+import AllowComments from '../AllowComments/AllowComments'
 import CreateReviewForm from '../CreateReview/CreateReviewForm'
 import FilmsForReview from '../FilmsForReview/FilmsForReview'
 import DrawerMenu from './DrawerMenu'
@@ -19,6 +20,8 @@ const Drawer: FC = () => {
                 return <FilmsForReview />
             case DrawerSectionsEnum.CREATE_REVIEW:
                 return <CreateReviewForm />
+            case DrawerSectionsEnum.ALLOW_COMMENTS:
+                return <AllowComments />
             default:
                 return <></>
         }

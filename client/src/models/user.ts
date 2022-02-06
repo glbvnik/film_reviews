@@ -14,3 +14,20 @@ export interface IUser {
     roles: RolesEnum[]
     isCommentsAllowed: boolean
 }
+
+export interface IRole {
+    id: number
+    name: RolesEnum
+}
+
+export interface IUserAdministration {
+    uuId: string
+    email: string
+    isCommentsAllowed: boolean
+    roles: IRole[]
+}
+
+export interface IAllowCommentsData {
+    uuId: string
+    isCommentsAllowed: boolean
+}

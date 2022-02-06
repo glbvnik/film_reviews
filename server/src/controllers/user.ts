@@ -122,4 +122,16 @@ export const UserController = {
             next(e)
         }
     },
+    async allowComments(req: Request, res: Response, next: NextFunction) {
+        try {
+            await UserService.allowComments(
+                req.params.uuId,
+                req.body.isCommentsAllowed
+            )
+
+            res.json({ message: 'isCommentsAllowed was updated' })
+        } catch (e) {
+            next(e)
+        }
+    },
 }

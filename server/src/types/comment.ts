@@ -3,4 +3,6 @@ export interface IComment {
     text: string
     reviewId: string
     userUuId: string
+    createdAt: Date
+    updatedAt: Date
 }

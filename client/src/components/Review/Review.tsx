@@ -5,14 +5,12 @@ import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { RatingAPI } from '../../http/rating'
-import { authSelectors } from '../../redux/reducers/auth'
 import { reviewsSelectors } from '../../redux/reducers/reviews'
+import CommentsList from './Comments/CommentsList'
 import { styles } from './sx'
 
 const Review: FC = () => {
     const review = useAppSelector(reviewsSelectors.currentReview)!
-    const user = useAppSelector(authSelectors.user)
-    const isRefreshLoading = useAppSelector(authSelectors.isRefreshLoading)
 
     const router = useRouter()
 
@@ -25,7 +23,7 @@ const Review: FC = () => {
             await RatingAPI.create({ reviewId: review.id, rating: value })
         }
 
-        router.replace(router.asPath)
+        router.replace(router.asPath, undefined, { scroll: false })
     }
 
     return (
@@ -39,14 +37,14 @@ const Review: FC = () => {
                 <Typography component="h2" sx={styles.reviewFilmName}>
                     {review.film.name}
                 </Typography>
-                {!isRefreshLoading && (review.avgRating || user) && (
+                {review.avgRating && (
                     <Box
                         display="flex"
                         alignItems="center"
                         fontSize="21px"
                         my={1}
                     >
-                        {user && (
+                        {review.ratings ? (
                             <Rating
                                 size="large"
                                 value={
@@ -59,13 +57,13 @@ const Review: FC = () => {
                                 }
                                 sx={{ mr: 1 }}
                             />
-                        )}
-                        {!user && (
+                        ) : (
                             <StarIcon
                                 color="primary"
                                 sx={{ fontSize: '34px', mr: '4px' }}
                             />
                         )}
+
                         <span style={{ paddingTop: '4px' }}>
                             {review.avgRating}
                         </span>
@@ -98,12 +96,14 @@ const Review: FC = () => {
                     width={2}
                 />
             </Box>
-            <Typography
-                component="article"
-                dangerouslySetInnerHTML={{ __html: review.text }}
-                p={{ xs: 1 }}
-                px={{ sm: 12, md: 17, lg: 32, xl: 45 }}
-            />
+            <Box px={{ xs: 1, sm: 12, md: 17, lg: 32, xl: 45 }}>
+                <Typography
+                    component="article"
+                    dangerouslySetInnerHTML={{ __html: review.text }}
+                    pt={{ xs: 1 }}
+                />
+                <CommentsList />
+            </Box>
         </Container>
     )
 }

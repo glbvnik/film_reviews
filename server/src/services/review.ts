@@ -1,4 +1,5 @@
 import { Op, Sequelize } from 'sequelize'
+import { Comment } from '../db/models/classes/comment'
 import { Film } from '../db/models/classes/film'
 import { Rating } from '../db/models/classes/rating'
 import { Review } from '../db/models/classes/review'
@@ -102,27 +103,22 @@ export const ReviewService = {
                         where: Sequelize.and({ userUuId: uuId }),
                         required: false,
                     },
-                ],
-                attributes: {
-                    include: [
-                        [
-                            Sequelize.literal(
-                                `(SELECT CAST(AVG(rating) AS DOUBLE PRECISION) FROM "Ratings" WHERE "Ratings"."reviewId" = "Review"."id")`
-                            ),
-                            'avgRating',
-                        ],
-                    ],
-                },
-                where: { id: +id, isPublished: true },
-            })
-        } else {
-            review = await Review.findOne({
-                include: [
-                    { model: Film, as: 'film', attributes: ['name'] },
                     {
-                        model: User,
-                        as: 'author',
-                        attributes: ['firstName', 'lastName'],
+                        model: Comment,
+                        as: 'comments',
+                        attributes: ['id', 'text'],
+                        include: [
+                            {
+                                model: User,
+                                as: 'author',
+                                attributes: [
+                                    'uuId',
+                                    'email',
+                                    'firstName',
+                                    'isCommentsAllowed',
+                                ],
+                            },
+                        ],
                     },
                 ],
                 attributes: {
@@ -136,6 +132,42 @@ export const ReviewService = {
                     ],
                 },
                 where: { id: +id, isPublished: true },
+                order: [['comments', 'createdAt', 'DESC']],
+            })
+        } else {
+            review = await Review.findOne({
+                include: [
+                    { model: Film, as: 'film', attributes: ['name'] },
+                    {
+                        model: User,
+                        as: 'author',
+                        attributes: ['firstName', 'lastName'],
+                    },
+                    {
+                        model: Comment,
+                        as: 'comments',
+                        attributes: ['id', 'text'],
+                        include: [
+                            {
+                                model: User,
+                                as: 'author',
+                                attributes: ['firstName'],
+                            },
+                        ],
+                    },
+                ],
+                attributes: {
+                    include: [
+                        [
+                            Sequelize.literal(
+                                `(SELECT CAST(AVG(rating) AS DOUBLE PRECISION) FROM "Ratings" WHERE "Ratings"."reviewId" = "Review"."id")`
+                            ),
+                            'avgRating',
+                        ],
+                    ],
+                },
+                where: { id: +id, isPublished: true },
+                order: [['comments', 'createdAt', 'DESC']],
             })
         }
 
