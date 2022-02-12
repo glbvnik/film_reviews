@@ -34,9 +34,10 @@ const DrawerSectionsList = () => {
 
     return (
         <List>
-            {sectionsRoles.map((role) => {
-                if (user!.roles.includes(role)) {
-                    return currentPageSections[role]!.map(({ name, src }) => (
+            {sectionsRoles.map(
+                (role) =>
+                    user!.roles.includes(role) &&
+                    currentPageSections[role]!.map(({ name, src }) => (
                         <ListItemButton
                             key={name}
                             onClick={() => handleClick(src)}
@@ -44,8 +45,7 @@ const DrawerSectionsList = () => {
                             <ListItemText primary={name} />
                         </ListItemButton>
                     ))
-                }
-            })}
+            )}
         </List>
     )
 }

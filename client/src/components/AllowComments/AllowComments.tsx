@@ -8,8 +8,10 @@ import {
     Select,
 } from '@mui/material'
 import { FC, useEffect, useState } from 'react'
+import withRoles from '../../hoc/withRoles'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
+import { RolesEnum } from '../../models/user'
 import { administrationSelectors } from '../../redux/reducers/administration'
 import {
     allowComments,
@@ -146,4 +148,4 @@ const AllowComments: FC = () => {
     )
 }
 
-export default AllowComments
+export default withRoles(AllowComments, [RolesEnum.MODERATOR])

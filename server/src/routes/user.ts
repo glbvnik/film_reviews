@@ -67,7 +67,7 @@ userRouter.get(
 )
 userRouter.patch(
     '/:uuId/allow-comments',
-    authMiddleware([RolesEnum.ADMIN, RolesEnum.MODERATOR]),
+    authMiddleware([RolesEnum.MODERATOR]),
     UserController.allowComments
 )
 userRouter.post(
