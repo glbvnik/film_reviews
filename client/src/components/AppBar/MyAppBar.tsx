@@ -1,5 +1,5 @@
 import { AppBar, Toolbar } from '@mui/material'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import LeftSideAppBar from './LeftSideAppBar'
 import RightSideAppBar from './RightSideAppBar'
 

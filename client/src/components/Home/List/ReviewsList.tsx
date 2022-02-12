@@ -1,7 +1,7 @@
 import { Grid, Pagination } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { reviewsSelectors } from '../../../redux/reducers/reviews'
 import { theme } from '../../../theme'

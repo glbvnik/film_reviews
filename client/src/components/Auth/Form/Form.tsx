@@ -6,10 +6,7 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, FC, useEffect } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import {
-    authSelectors,
-    clearAuthStateBooleans,
-} from '../../../redux/reducers/auth'
+import { authSelectors, clearAuthStates } from '../../../redux/reducers/auth'
 import {
     login,
     register,
@@ -147,7 +144,7 @@ const Form: FC = () => {
 
         return () => {
             dispatch(resetErrors())
-            dispatch(clearAuthStateBooleans())
+            dispatch(clearAuthStates())
         }
     }, [])
 

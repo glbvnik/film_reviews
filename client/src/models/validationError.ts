@@ -10,4 +10,5 @@ export interface IValidationErrors {
     password?: string
     firstName?: string
     lastName?: string
+    oldPassword?: string
 }

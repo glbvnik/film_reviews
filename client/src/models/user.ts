@@ -24,10 +24,20 @@ export interface IUserAdministration {
     uuId: string
     email: string
     isCommentsAllowed: boolean
-    roles: IRole[]
+    roles?: IRole[]
 }
 
 export interface IAllowCommentsData {
     uuId: string
     isCommentsAllowed: boolean
+}
+
+export interface IUserRoleInputs {
+    uuId: string
+    roleId: number
+}
+
+export interface IChangePasswordInputs {
+    oldPassword: string
+    password: string
 }

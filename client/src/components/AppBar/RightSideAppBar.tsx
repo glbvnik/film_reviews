@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import { MenuOptionsEnum } from '../../constants/menuOptions'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'

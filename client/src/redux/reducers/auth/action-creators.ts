@@ -4,6 +4,7 @@ import {
     RegisterInputs,
     ResetPasswordPayload,
 } from '../../../http/user'
+import { IChangePasswordInputs } from '../../../models/user'
 
 export enum AUTH_ACTIONS {
     REGISTER = 'REGISTER',
@@ -13,6 +14,7 @@ export enum AUTH_ACTIONS {
     RESET_ERRORS = 'RESET_ERRORS',
     SET_PASSWORD_RESET_LINK = 'SET_PASSWORD_RESET_LINK',
     RESET_PASSWORD = 'RESET_PASSWORD',
+    CHANGE_PASSWORD = 'CHANGE_PASSWORD',
 }
 
 export const register = createAction<RegisterInputs>(AUTH_ACTIONS.REGISTER)
@@ -31,4 +33,8 @@ export const setPasswordResetLink = createAction<string>(
 
 export const resetPassword = createAction<ResetPasswordPayload>(
     AUTH_ACTIONS.RESET_PASSWORD
+)
+
+export const changePassword = createAction<IChangePasswordInputs>(
+    AUTH_ACTIONS.CHANGE_PASSWORD
 )

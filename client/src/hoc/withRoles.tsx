@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react'
+import { ComponentType } from 'react'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { RolesEnum } from '../models/user'
 import Custom404 from '../pages/404'

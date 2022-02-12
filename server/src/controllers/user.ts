@@ -113,11 +113,32 @@ export const UserController = {
             next(e)
         }
     },
+    async changePassword(req: Request, res: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(req)
+
+            if (!errors.isEmpty()) {
+                return next(
+                    ApiError.badRequest('Validation error', errors.array())
+                )
+            }
+
+            await UserService.changePassword(req.params.uuId, req.body.password)
+
+            return res.json({ message: 'Password successfully changed' })
+        } catch (e) {
+            next(e)
+        }
+    },
     async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            const users = await UserService.getUsers()
+            const isWithRoles = req.query.isWithRoles
+                ? +req.query.isWithRoles
+                : 0
 
-            return res.json(users)
+            const data = await UserService.getUsers(isWithRoles)
+
+            return res.json(data)
         } catch (e) {
             next(e)
         }

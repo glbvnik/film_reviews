@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { IOmdbFullFilm } from '../../../models/omdb'
 
 interface OmdbDefinitionListProps {

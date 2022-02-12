@@ -1,5 +1,5 @@
 import { Box, Drawer } from '@mui/material'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { appSelectors, setIsMobileDrawerOpen } from '../../redux/reducers/app'

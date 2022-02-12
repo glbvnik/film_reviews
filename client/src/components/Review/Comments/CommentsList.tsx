@@ -1,12 +1,13 @@
-import { Box, Button, CircularProgress, TextField } from '@mui/material'
+import { Box, Button, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { authSelectors } from '../../../redux/reducers/auth'
 import { reviewsSelectors } from '../../../redux/reducers/reviews'
 import { createComment } from '../../../redux/reducers/reviews/action-creators'
+import ButtonLoader from '../../UI/ButtonLoader'
 import CommentItem from './CommentItem'
 
 const CommentsList: FC = () => {
@@ -57,17 +58,7 @@ const CommentsList: FC = () => {
                     <Button
                         type="submit"
                         variant="contained"
-                        endIcon={
-                            isCommentLoading && (
-                                <CircularProgress
-                                    color="secondary"
-                                    style={{
-                                        height: '20px',
-                                        width: '20px',
-                                    }}
-                                />
-                            )
-                        }
+                        endIcon={isCommentLoading && <ButtonLoader />}
                         sx={{ mb: 2 }}
                     >
                         Create comment

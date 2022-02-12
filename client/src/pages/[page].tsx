@@ -1,6 +1,5 @@
 import { GetStaticPaths, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
 import Home from '../components/Home/Home'
 import Loader from '../components/Loaders/Loader'
 import { ReviewApi } from '../http/review'

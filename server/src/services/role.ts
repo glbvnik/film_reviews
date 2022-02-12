@@ -1,6 +1,8 @@
 import { Role } from '../db/models/classes/role'
 import { User } from '../db/models/classes/user'
+import { UserRole } from '../db/models/classes/userRole'
 import { RolesEnum } from '../types/role'
+import { IUserRole } from '../types/user'
 
 export const RoleService = {
     async findUserRoles(userUuId: string) {
@@ -25,5 +27,11 @@ export const RoleService = {
         const userRoles = await this.findUserRoles(userUuId)
 
         return roles.some((role) => userRoles.includes(role))
+    },
+    async addUserRole(data: Omit<IUserRole, 'createdAt' | 'updatedAt'>) {
+        await UserRole.create({ ...data })
+    },
+    async removeUserRole(data: Omit<IUserRole, 'createdAt' | 'updatedAt'>) {
+        await UserRole.destroy({ where: data })
     },
 }

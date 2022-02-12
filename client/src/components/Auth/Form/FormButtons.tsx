@@ -1,7 +1,7 @@
 import { Button, Grid, Link as MuiLink } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Link from 'next/link'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { theme } from '../../../theme'
 
 interface FormButtonsProps {

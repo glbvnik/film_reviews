@@ -1,7 +1,9 @@
 import { Container } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
+import withRoles from '../../hoc/withRoles'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { RolesEnum } from '../../models/user'
 import { setIsDialog } from '../../redux/reducers/app'
 import { useStyles } from '../../styles/classes'
 import OmdbDialog from './Dialog/OmdbDialog'
@@ -30,4 +32,4 @@ const FilmsForReview: FC = () => {
     )
 }
 
-export default FilmsForReview
+export default withRoles(FilmsForReview, [RolesEnum.WRITER])

@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Paper } from '@mui/material'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { IOmdbFullFilm } from '../../../models/omdb'
 import { checkHttpUrl } from '../../../utils/checkHttpUrl'
 import OmdbDefinitionList from './OmdbDefinitionList'

@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import HomeForm from './HomeForm'
 import ReviewsList from './List/ReviewsList'
 

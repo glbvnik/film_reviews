@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material'
-import React, { ChangeEvent, FC } from 'react'
+import { ChangeEvent, FC } from 'react'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { authSelectors } from '../../../redux/reducers/auth'
 

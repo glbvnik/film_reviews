@@ -1,6 +1,5 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
 import Loader from '../../components/Loaders/Loader'
 import Review from '../../components/Review/Review'
 import { ReviewApi } from '../../http/review'

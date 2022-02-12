@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import { body } from 'express-validator'
+import { RoleController } from '../controllers/role'
 import { UserController } from '../controllers/user'
 import { authMiddleware } from '../middlewares/auth'
 import { RolesEnum } from '../types/role'
 import { emailValidator } from '../validators/email'
+import { passwordValidator } from '../validators/password'
 
 export const userRouter = Router()
 
@@ -48,13 +50,33 @@ userRouter.patch(
         ),
     UserController.resetPassword
 )
+userRouter.patch(
+    '/:uuId/change-password',
+    body('oldPassword').custom(passwordValidator),
+    body('password')
+        .isLength({ min: 8, max: 50 })
+        .withMessage(
+            'Password should contain at least 8 and at most 32 characters'
+        ),
+    UserController.changePassword
+)
 userRouter.get(
     '/users',
     authMiddleware([RolesEnum.ADMIN, RolesEnum.MODERATOR]),
     UserController.getUsers
 )
 userRouter.patch(
-    '/allow-comments/:uuId',
+    '/:uuId/allow-comments',
     authMiddleware([RolesEnum.ADMIN, RolesEnum.MODERATOR]),
     UserController.allowComments
+)
+userRouter.post(
+    '/:uuId/role',
+    authMiddleware([RolesEnum.ADMIN]),
+    RoleController.addUserRole
+)
+userRouter.delete(
+    '/:uuId/role/:roleId',
+    authMiddleware([RolesEnum.ADMIN]),
+    RoleController.removeUserRole
 )

@@ -11,7 +11,7 @@ import {
 import { TransitionProps } from '@mui/material/transitions'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useRouter } from 'next/router'
-import React from 'react'
+import { FC, forwardRef, ReactElement, Ref } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { appSelectors, setIsDialog } from '../../../redux/reducers/app'
@@ -22,16 +22,16 @@ import {
 import { theme } from '../../../theme'
 import OmdbDialogContent from './OmdbDialogContent'
 
-const Transition = React.forwardRef(
+const Transition = forwardRef(
     (
         props: TransitionProps & {
-            children: React.ReactElement
+            children: ReactElement
         },
-        ref: React.Ref<unknown>
+        ref: Ref<unknown>
     ) => <Slide direction="up" ref={ref} {...props} />
 )
 
-const OmdbDialog = () => {
+const OmdbDialog: FC = () => {
     const isDialog = useAppSelector(appSelectors.isDialog)
     const currentFilm = useAppSelector(omdbSelectors.currentFilm)
     const isOmdbLoading = useAppSelector(omdbSelectors.isOmdbLoading)

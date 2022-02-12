@@ -1,6 +1,6 @@
 import { ListItem, ListItemText, Paper, Skeleton } from '@mui/material'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { IOmdbFilm } from '../../../models/omdb'
 import { setIsDialog } from '../../../redux/reducers/app'

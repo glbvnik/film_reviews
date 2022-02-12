@@ -2,7 +2,7 @@ import StarIcon from '@mui/icons-material/Star'
 import { Box, Grid, Paper, Skeleton, Typography } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import { styles } from '../sx'
 
 interface ReviewItemProps {

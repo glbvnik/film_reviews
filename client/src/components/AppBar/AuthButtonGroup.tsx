@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { useRouter } from 'next/router'
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 const AuthButtonGroup: FC = () => {
     const router = useRouter()

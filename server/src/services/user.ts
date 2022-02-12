@@ -231,20 +231,42 @@ export const UserService = {
             throw ApiError.badRequest('Invalid password reset link')
         }
     },
-    async getUsers() {
-        return await User.findAll({
-            attributes: ['uuId', 'email', 'isCommentsAllowed'],
-            include: [
-                {
-                    model: Role,
-                    as: 'roles',
-                    attributes: ['id', 'name'],
-                    through: {
-                        attributes: [],
+    async changePassword(uuId: string, password: string) {
+        const user = await User.update(
+            { password: await hash(password, 12) },
+            {
+                where: { uuId },
+            }
+        )
+
+        if (!user[0]) {
+            throw ApiError.badRequest('Invalid user')
+        }
+    },
+    async getUsers(isWithRoles: number) {
+        if (isWithRoles) {
+            const users = await User.findAll({
+                attributes: ['uuId', 'email', 'isCommentsAllowed'],
+                include: [
+                    {
+                        model: Role,
+                        as: 'roles',
+                        attributes: ['id', 'name'],
+                        through: {
+                            attributes: [],
+                        },
                     },
-                },
-            ],
-        })
+                ],
+            })
+
+            const roles = await Role.findAll({ attributes: ['id', 'name'] })
+
+            return { users, roles }
+        } else {
+            return await User.findAll({
+                attributes: ['uuId', 'email', 'isCommentsAllowed'],
+            })
+        }
     },
     async allowComments(uuId: string, isCommentsAllowed: boolean) {
         const user = await User.update(

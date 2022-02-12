@@ -3,20 +3,23 @@ import {
     Alert,
     Box,
     Button,
-    CircularProgress,
     Container,
     TextField,
     Typography,
 } from '@mui/material'
 import { useFormik } from 'formik'
-import React, { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
+import withRoles from '../../hoc/withRoles'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
+import { RolesEnum } from '../../models/user'
 import { appSelectors, setAsyncAction } from '../../redux/reducers/app'
 import { omdbSelectors } from '../../redux/reducers/omdb'
 import { reviewsSelectors } from '../../redux/reducers/reviews'
 import { createReview } from '../../redux/reducers/reviews/action-creators'
 import { useStyles } from '../../styles/classes'
+import ActionMessage from '../UI/ActionMessage'
+import ButtonLoader from '../UI/ButtonLoader'
 
 const CreateReviewForm: FC = () => {
     const currentFilm = useAppSelector(omdbSelectors.currentFilm)
@@ -66,7 +69,9 @@ const CreateReviewForm: FC = () => {
     }
 
     if (asyncAction.isSuccess) {
-        return <Box>Your review has been successfully published!</Box>
+        return (
+            <ActionMessage message="Your review has been successfully published!" />
+        )
     }
 
     return (
@@ -128,17 +133,7 @@ const CreateReviewForm: FC = () => {
                             color="secondary"
                             type="submit"
                             variant="contained"
-                            endIcon={
-                                isReviewsLoading && (
-                                    <CircularProgress
-                                        color="secondary"
-                                        style={{
-                                            height: '20px',
-                                            width: '20px',
-                                        }}
-                                    />
-                                )
-                            }
+                            endIcon={isReviewsLoading && <ButtonLoader />}
                             onClick={() => handleClick(true)}
                             sx={{ mb: 2 }}
                         >
@@ -147,17 +142,7 @@ const CreateReviewForm: FC = () => {
                         <Button
                             type="submit"
                             variant="contained"
-                            endIcon={
-                                isReviewsLoading && (
-                                    <CircularProgress
-                                        color="secondary"
-                                        style={{
-                                            height: '20px',
-                                            width: '20px',
-                                        }}
-                                    />
-                                )
-                            }
+                            endIcon={isReviewsLoading && <ButtonLoader />}
                             onClick={() => handleClick()}
                             sx={{ mb: 2 }}
                         >
@@ -170,4 +155,4 @@ const CreateReviewForm: FC = () => {
     )
 }
 
-export default CreateReviewForm
+export default withRoles(CreateReviewForm, [RolesEnum.WRITER])

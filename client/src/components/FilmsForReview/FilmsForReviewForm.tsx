@@ -9,7 +9,7 @@ import {
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { clearOmdb, omdbSelectors } from '../../redux/reducers/omdb'

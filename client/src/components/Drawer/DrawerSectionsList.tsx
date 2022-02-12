@@ -1,6 +1,5 @@
 import { List, ListItemButton, ListItemText } from '@mui/material'
 import { useRouter } from 'next/router'
-import React from 'react'
 import { drawerSections } from '../../constants/drawerSections'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'

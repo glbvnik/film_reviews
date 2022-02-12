@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from '@mui/material'
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 interface UserDialogProps {
     uuId: string

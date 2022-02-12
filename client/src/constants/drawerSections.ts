@@ -5,9 +5,10 @@ export enum DrawerSectionsEnum {
     FILMS_FOR_REVIEW = 'films-for-review',
     CREATE_REVIEW = 'create-review',
     UNPUBLISHED_REVIEWS = 'unpublished-reviews',
-    MANAGE_USERS = 'manage-users',
     PUBLISH_REVIEW = 'publish-review',
+    MANAGE_USERS = 'manage-users',
     ALLOW_COMMENTS = 'allow-comments',
+    CHANGE_PASSWORD = 'change-password',
 }
 
 export const drawerSections = {

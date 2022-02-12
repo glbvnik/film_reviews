@@ -1,5 +1,4 @@
 import { NextPage } from 'next'
-import React from 'react'
 import Home from '../components/Home/Home'
 import { ReviewApi } from '../http/review'
 import { setReviews } from '../redux/reducers/reviews'
