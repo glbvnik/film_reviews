@@ -10,7 +10,7 @@ const ReviewRating: FC = () => {
     const review = useAppSelector(reviewsSelectors.currentReview)!
 
     const [rating, setRating] = useState(
-        review.ratings![0] ? review.ratings![0].rating : null
+        review.ratings && review.ratings[0] ? review.ratings[0].rating : null
     )
 
     const router = useRouter()

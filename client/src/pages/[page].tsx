@@ -1,7 +1,7 @@
 import { GetStaticPaths, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Home from '../components/Home/Home'
-import Loader from '../components/Loaders/Loader'
+import Loader from '../components/UI/Loader'
 import { ReviewApi } from '../http/review'
 import { setReviews } from '../redux/reducers/reviews'
 import wrapper from '../redux/store'

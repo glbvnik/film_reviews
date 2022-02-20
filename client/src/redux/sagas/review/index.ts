@@ -1,16 +1,128 @@
-import { fork, put, takeEvery } from '@redux-saga/core/effects'
+import { fork, put, StrictEffect, takeEvery } from '@redux-saga/core/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { all, call } from 'redux-saga/effects'
+import { all, call, select } from 'redux-saga/effects'
 import { ReviewApi } from '../../../http/review'
 import { IOmdbFullFilm } from '../../../models/omdb'
-import { IReviewInputs } from '../../../models/review'
+import {
+    IReview,
+    IReviewInputs,
+    IReviewQuery,
+    IReviewsResponse,
+} from '../../../models/review'
+import { IUser } from '../../../models/user'
 import { setAsyncAction } from '../../reducers/app'
-import { setIsReviewsLoading } from '../../reducers/reviews'
-import { createReview } from '../../reducers/reviews/action-creators'
+import { authSelectors } from '../../reducers/auth'
+import { setOmdbCurrentFilm } from '../../reducers/omdb'
+import {
+    reviewsSelectors,
+    setCurrentReview,
+    setIsReviewsLoading,
+    setReviews,
+} from '../../reducers/reviews'
+import {
+    createReview,
+    getReview,
+    getReviews,
+    updateReview,
+} from '../../reducers/reviews/action-creators'
+
+function* handleGetReview({
+    payload,
+}: PayloadAction<number>): Generator<StrictEffect, void, IReview> {
+    try {
+        const review = yield call(ReviewApi.fetchOne, payload, undefined, true)
+
+        yield put(setCurrentReview(review))
+        yield put(
+            setOmdbCurrentFilm({ Title: review.film.name } as IOmdbFullFilm)
+        )
+    } catch (e) {}
+}
+
+function* handleGetReviews({
+    payload,
+}: PayloadAction<IReviewQuery>): Generator<
+    StrictEffect,
+    void,
+    IReviewsResponse
+> {
+    try {
+        const res = yield call(ReviewApi.fetch, payload)
+
+        yield put(setReviews(res))
+    } catch (e) {}
+}
+
+function* handleUpdateReview({
+    payload: review,
+}: PayloadAction<IReviewInputs>): Generator<
+    StrictEffect,
+    void,
+    IReview | IUser
+> {
+    try {
+        if (!review.text) {
+            yield put(
+                setAsyncAction({
+                    errorMessage: 'Please, provide a review text',
+                })
+            )
+            throw 'No text'
+        }
+
+        yield put(setIsReviewsLoading(true))
+
+        const textForServer = review.text
+            .split('\n')
+            .filter((p) => p !== '')
+            .map((p) => `<p class='review-text-p'>${p}</p>`)
+            .join('')
+
+        const formData = new FormData()
+
+        if (review.image) {
+            formData.append('image', review.image)
+        }
+
+        const { id, author } = (yield select(
+            reviewsSelectors.currentReview
+        )) as IReview
+        const { uuId } = (yield select(authSelectors.user)) as IUser
+
+        if (author.uuId !== uuId) {
+            formData.append(
+                'review',
+                JSON.stringify({
+                    text: textForServer,
+                    isUnpublishedByEditor: !review.isPublished,
+                })
+            )
+        } else {
+            formData.append(
+                'review',
+                JSON.stringify({
+                    text: textForServer,
+                    isPublished: review.isPublished,
+                })
+            )
+        }
+
+        yield call(ReviewApi.update, formData, id)
+
+        yield put(
+            setAsyncAction({
+                isSuccess: true,
+                errorMessage: '',
+            })
+        )
+    } finally {
+        yield put(setIsReviewsLoading(false))
+    }
+}
 
 function* handleCreateReview({
-                                 payload,
-                             }: PayloadAction<{
+    payload,
+}: PayloadAction<{
     review: IReviewInputs
     film: IOmdbFullFilm
 }>) {
@@ -82,6 +194,9 @@ function* handleCreateReview({
 
 function* reviewWatcher() {
     yield takeEvery(createReview, handleCreateReview)
+    yield takeEvery(updateReview, handleUpdateReview)
+    yield takeEvery(getReviews, handleGetReviews)
+    yield takeEvery(getReview, handleGetReview)
 }
 
 export default function* reviewSaga() {

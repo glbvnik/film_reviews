@@ -29,29 +29,25 @@ function* handleFetch({
 }: PayloadAction<IOmdbInputs | IOmdbFullFilmInputs>): Generator<
     StrictEffect,
     void,
-    [IOmdbFilm[], string] | IOmdbFullFilm
+    [IOmdbFilm[], number] | IOmdbFullFilm
 > {
     yield put(setIsOmdbLoading(true))
 
     try {
         if ('imdbId' in payload) {
-            const result = yield call(
+            const film = yield call(
                 OmdbApi.fetchFullFilm,
                 ...(Object.values(payload) as [string, string])
             )
 
-            yield put(setOmdbCurrentFilm(result as IOmdbFullFilm))
+            yield put(setOmdbCurrentFilm(film as IOmdbFullFilm))
         } else {
-            const film = yield call(
-                OmdbApi.fetchFilmsByTitle,
-                ...(Object.values(payload) as [
-                    string,
-                    number,
-                    'movie' | 'series'
-                ])
-            )
+            const res = (yield call(OmdbApi.fetchFilmsByTitle, payload)) as [
+                IOmdbFilm[],
+                number
+            ]
 
-            yield put(setOmdb(film as [IOmdbFilm[], string]))
+            yield put(setOmdb(res))
         }
     } finally {
         yield put(setIsOmdbLoading(false))

@@ -2,8 +2,9 @@ import StarIcon from '@mui/icons-material/Star'
 import { Box, Grid, Paper, Skeleton, Typography } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { FC, useState } from 'react'
-import { styles } from '../sx'
+import { FC, useEffect, useRef, useState } from 'react'
+import { DrawerSectionsEnum } from '../../constants/drawerSections'
+import { styles } from './sx'
 
 interface ReviewItemProps {
     id: number
@@ -22,16 +23,35 @@ const ReviewItem: FC<ReviewItemProps> = ({
 }) => {
     const [isLoaded, setIsLoaded] = useState(false)
 
+    const isMounted = useRef(true)
+
     const router = useRouter()
+
+    const handleClick = () => {
+        if (
+            router.query.section === DrawerSectionsEnum.MY_REVIEWS ||
+            router.query.section === DrawerSectionsEnum.UNPUBLISHED_REVIEWS
+        ) {
+            return router.push(
+                `${process.env.NEXT_PUBLIC_REVIEWS_UPDATE_REVIEW_ROUTE!}/${id}`
+            )
+        }
+
+        router.push(`${process.env.NEXT_PUBLIC_REVIEW}/${id}`)
+    }
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = false
+        }
+    }, [])
 
     return (
         <Grid item xs={1} sx={styles.reviewItem}>
             <Paper
                 elevation={4}
                 sx={styles.reviewItemPaper}
-                onClick={() =>
-                    router.push(`${process.env.NEXT_PUBLIC_REVIEW}/${id}`)
-                }
+                onClick={handleClick}
             >
                 <Image
                     priority
@@ -39,7 +59,9 @@ const ReviewItem: FC<ReviewItemProps> = ({
                     alt={filmName}
                     layout="fill"
                     objectFit="cover"
-                    onLoadingComplete={() => setIsLoaded(true)}
+                    onLoadingComplete={() =>
+                        isMounted.current && setIsLoaded(true)
+                    }
                 />
                 {!isLoaded && (
                     <Skeleton

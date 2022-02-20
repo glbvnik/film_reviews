@@ -4,8 +4,8 @@ export enum DrawerSectionsEnum {
     MY_REVIEWS = 'my-reviews',
     FILMS_FOR_REVIEW = 'films-for-review',
     CREATE_REVIEW = 'create-review',
+    UPDATE_REVIEW = 'update-review',
     UNPUBLISHED_REVIEWS = 'unpublished-reviews',
-    PUBLISH_REVIEW = 'publish-review',
     MANAGE_USERS = 'manage-users',
     ALLOW_COMMENTS = 'allow-comments',
     CHANGE_PASSWORD = 'change-password',
@@ -44,10 +44,6 @@ export const drawerSections = {
             {
                 name: 'Create review',
                 src: process.env.NEXT_PUBLIC_REVIEWS_FILMS_FOR_REVIEW_ROUTE!,
-            },
-            {
-                name: 'Publish reviews',
-                src: process.env.NEXT_PUBLIC_REVIEWS_PUBLISH_REVIEWS_ROUTE!,
             },
         ],
         [RolesEnum.EDITOR]: [

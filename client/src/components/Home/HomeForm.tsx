@@ -2,6 +2,7 @@ import { Box, Button, ButtonGroup, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { styles } from './sx'
 
 const HomeForm: FC = () => {
     const router = useRouter()
@@ -31,7 +32,7 @@ const HomeForm: FC = () => {
             component="form"
             onSubmit={handleSubmit}
             onReset={handleReset}
-            mb={{ xs: 1, sm: 2, lg: 3, xl: 4 }}
+            sx={styles.form}
         >
             <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
                 <TextField
@@ -41,6 +42,7 @@ const HomeForm: FC = () => {
                     placeholder="Movie..."
                     value={values.movie}
                     onChange={handleChange}
+                    InputProps={{ sx: styles.formFirstInput }}
                     sx={{ flex: '1 0 40%' }}
                 />
                 <TextField
@@ -50,6 +52,7 @@ const HomeForm: FC = () => {
                     placeholder="Author..."
                     value={values.author}
                     onChange={handleChange}
+                    InputProps={{ sx: styles.formSecondInput }}
                     sx={{ flexGrow: 1 }}
                 />
                 <ButtonGroup

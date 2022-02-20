@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import Loader from '../../components/Loaders/Loader'
+import Loader from '../../components/UI/Loader'
 import Review from '../../components/Review/Review'
 import { ReviewApi } from '../../http/review'
 import { setCurrentReview } from '../../redux/reducers/reviews'

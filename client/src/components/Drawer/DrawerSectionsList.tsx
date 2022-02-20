@@ -14,7 +14,7 @@ const DrawerSectionsList = () => {
 
     const router = useRouter()
 
-    const mainRoute = router.pathname.replace('/[section]', '')
+    const mainRoute = `/${router.pathname.split('/')[1]}`
 
     const currentPageSections = drawerSections[mainRoute]
 

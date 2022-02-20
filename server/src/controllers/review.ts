@@ -8,7 +8,8 @@ export const ReviewController = {
     async createReview(req: Request, res: Response, next: NextFunction) {
         try {
             await ReviewService.create(
-                req.body,
+                JSON.parse(req.body.review),
+                JSON.parse(req.body.film),
                 req.file!.filename,
                 req.userUuId!
             )
@@ -22,9 +23,14 @@ export const ReviewController = {
     },
     async getReviews(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await ReviewService.getReviews(
-                req.query as unknown as IReviewQuery
-            )
+            const response = await ReviewService.getReviews({
+                ...req.query,
+                isUnpublishedByEditor:
+                    req.query.isUnpublishedByEditor === 'true' ||
+                    req.query.isUnpublishedByEditor === 'false'
+                        ? JSON.parse(req.query.isUnpublishedByEditor)
+                        : undefined,
+            } as unknown as IReviewQuery)
 
             res.json(response)
         } catch (e) {
@@ -35,9 +41,27 @@ export const ReviewController = {
         try {
             const uuId = TokenService.getUuId(req.cookies.refreshToken)
 
-            const review = await ReviewService.getReview(req.params.id, uuId)
+            const review = await ReviewService.getReview(
+                +req.params.id,
+                uuId,
+                !!req.params.isPublished
+            )
 
             res.json({ review })
+        } catch (e) {
+            next(e)
+        }
+    },
+    async updateReview(req: Request, res: Response, next: NextFunction) {
+        try {
+            await ReviewService.updateReview(
+                +req.params.id,
+                JSON.parse(req.body.review),
+                req.file?.filename,
+                req.userUuId
+            )
+
+            res.json({ message: 'Review was updated' })
         } catch (e) {
             next(e)
         }

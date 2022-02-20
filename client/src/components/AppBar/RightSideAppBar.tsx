@@ -1,4 +1,5 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import EditIcon from '@mui/icons-material/Edit'
 import {
     CircularProgress,
     IconButton,
@@ -15,6 +16,7 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { RolesEnum } from '../../models/user'
 import { authSelectors } from '../../redux/reducers/auth'
 import { logout } from '../../redux/reducers/auth/action-creators'
+import { reviewsSelectors } from '../../redux/reducers/reviews'
 import { theme } from '../../theme'
 import AuthButtonGroup from './AuthButtonGroup'
 
@@ -22,6 +24,7 @@ const RightSideAppBar: FC = () => {
     const user = useAppSelector(authSelectors.user)
     const isRefreshLoading = useAppSelector(authSelectors.isRefreshLoading)
     const isLogoutLoading = useAppSelector(authSelectors.isLogoutLoading)
+    const review = useAppSelector(reviewsSelectors.currentReview)
 
     const dispatch = useAppDispatch()
 
@@ -32,6 +35,11 @@ const RightSideAppBar: FC = () => {
     const isSm = useMediaQuery(theme.breakpoints.up('sm'))
 
     const isLoading = isRefreshLoading || isLogoutLoading
+
+    const isReviewEdit =
+        router.pathname === `${process.env.NEXT_PUBLIC_REVIEW}/[id]` &&
+        (user?.roles.includes(RolesEnum.EDITOR) ||
+            user?.uuId === review?.author.uuId)
 
     const handleMenuItemClick = (option: string) => {
         setAnchorEl(null)
@@ -59,7 +67,10 @@ const RightSideAppBar: FC = () => {
         ) {
             options.unshift(MenuOptionsEnum.ADMINISTRATION)
         }
-        if (user!.roles.includes(RolesEnum.WRITER)) {
+        if (
+            user!.roles.includes(RolesEnum.EDITOR) ||
+            user!.roles.includes(RolesEnum.WRITER)
+        ) {
             options.unshift(MenuOptionsEnum.REVIEWS)
         }
 
@@ -72,10 +83,41 @@ const RightSideAppBar: FC = () => {
 
     return (
         <>
+            {isReviewEdit && (
+                <IconButton
+                    onClick={() =>
+                        router.push(
+                            `${
+                                process.env
+                                    .NEXT_PUBLIC_REVIEWS_UPDATE_REVIEW_ROUTE
+                            }/${review!.id}`
+                        )
+                    }
+                    sx={{
+                        borderRadius: 0,
+                        color: 'white',
+                        fontSize: '18px',
+                        height: '100%',
+                    }}
+                >
+                    {isSm && 'Edit'}
+                    <EditIcon
+                        sx={{
+                            fontSize: '32px',
+                            ml: '4px',
+                        }}
+                    />
+                </IconButton>
+            )}
             <IconButton
                 disabled={isLoading}
                 onClick={(e) => setAnchorEl(e.currentTarget)}
-                sx={{ borderRadius: 0, color: 'white', fontSize: '21px' }}
+                sx={{
+                    borderRadius: 0,
+                    color: 'white',
+                    fontSize: '21px',
+                    height: '100%',
+                }}
             >
                 {isSm && !isLoading && user!.firstName}
                 {isLoading ? (
@@ -83,7 +125,6 @@ const RightSideAppBar: FC = () => {
                 ) : (
                     <AccountCircleIcon
                         sx={{
-                            color: 'white',
                             fontSize: '42px',
                             ml: '4px',
                         }}

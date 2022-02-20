@@ -14,3 +14,9 @@ reviewRouter.post(
 )
 reviewRouter.get('/reviews', ReviewController.getReviews)
 reviewRouter.get('/reviews/:id', ReviewController.getReview)
+reviewRouter.patch(
+    '/update/:id',
+    authMiddleware([RolesEnum.EDITOR, RolesEnum.WRITER]),
+    upload.single('image'),
+    ReviewController.updateReview
+)

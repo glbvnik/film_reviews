@@ -1,43 +1,15 @@
 import { createStyles } from '../../utils/createStyles'
 
 export const styles = createStyles({
-    reviewItem: {
-        height: { xs: 200, sm: 225, xl: 250 },
-        width: '100%',
+    form: {
+        mb: { xs: 1, sm: 2, lg: 3, xl: 4 },
     },
-    reviewItemPaper: {
-        display: 'flex',
-        cursor: 'pointer',
-        height: '100%',
-        width: '100%',
-        position: 'relative',
-        span: {
-            borderRadius: 'inherit',
-        },
+    formFirstInput: {
+        borderTopRightRadius: { sm: 0 },
+        borderBottomRightRadius: { sm: 0 },
     },
-    reviewItemSkeleton: {
-        height: '100%',
-        width: '100%',
-        position: 'absolute',
-    },
-    reviewItemBox: {
-        alignSelf: 'flex-end',
-        borderRadius: 'inherit',
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        bgcolor: 'rgba(0, 0, 0, 0.5)',
-        overflow: 'auto',
-        maxHeight: '100%',
-        width: '100%',
-        px: 1,
-        zIndex: 0,
-    },
-    reviewItemText: {
-        color: 'white',
-    },
-    reviewItemBottomBox: {
-        display: 'flex',
-        alignItems: 'end',
-        justifyContent: 'space-between',
+    formSecondInput: {
+        borderTopLeftRadius: { sm: 0 },
+        borderBottomLeftRadius: { sm: 0 },
     },
 })

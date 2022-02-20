@@ -24,11 +24,11 @@ const omdbSlice = createSlice({
     reducers: {
         setOmdb: (
             state,
-            { payload }: PayloadAction<[IOmdbFilm[], string]>
+            { payload }: PayloadAction<[IOmdbFilm[], number]>
         ) => ({
             ...state,
             films: payload[0],
-            totalResults: +payload[1],
+            totalResults: payload[1],
         }),
         clearOmdb: (state) => ({
             ...state,

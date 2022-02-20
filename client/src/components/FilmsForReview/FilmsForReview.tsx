@@ -1,18 +1,14 @@
-import { Container } from '@mui/material'
-import { Box } from '@mui/system'
 import { FC, useEffect } from 'react'
 import withRoles from '../../hoc/withRoles'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { RolesEnum } from '../../models/user'
 import { setIsDialog } from '../../redux/reducers/app'
-import { useStyles } from '../../styles/classes'
+import Wrapper from '../UI/Wrapper'
 import OmdbDialog from './Dialog/OmdbDialog'
 import FilmsForReviewForm from './FilmsForReviewForm'
 import OmdbFilmsList from './List/OmdbFilmsList'
 
 const FilmsForReview: FC = () => {
-    const classes = useStyles()
-
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -22,13 +18,11 @@ const FilmsForReview: FC = () => {
     }, [])
 
     return (
-        <Box className={classes.scrollBox}>
-            <Container>
-                <OmdbDialog />
-                <FilmsForReviewForm />
-                <OmdbFilmsList />
-            </Container>
-        </Box>
+        <Wrapper isRelative>
+            <OmdbDialog />
+            <FilmsForReviewForm />
+            <OmdbFilmsList />
+        </Wrapper>
     )
 }
 

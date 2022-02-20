@@ -1,3 +1,5 @@
+import { unlinkSync } from 'fs'
+import { resolve } from 'path'
 import { Op, Sequelize } from 'sequelize'
 import { Comment } from '../db/models/classes/comment'
 import { Film } from '../db/models/classes/film'
@@ -6,44 +8,67 @@ import { Review } from '../db/models/classes/review'
 import { User } from '../db/models/classes/user'
 import ApiError from '../errors/api'
 import { IFilm } from '../types/film'
-import { IReviewInputs, IReviewQuery } from '../types/review'
+import { IReview, IReviewCreateInputs, IReviewQuery } from '../types/review'
 
 export const ReviewService = {
     async create(
-        inputs: { review: string; film: string },
+        review: IReviewCreateInputs,
+        film: IFilm,
         imageFileName: string,
         userUuId: string
     ) {
-        const { review, film } = inputs
-
-        const parsedFilm: IFilm = JSON.parse(film)
-
         const filmCandidate = await Film.findOne({
-            where: { imdbId: parsedFilm.imdbId },
             attributes: ['imdbId'],
+            where: { imdbId: film.imdbId },
         })
 
         if (!filmCandidate) {
-            await Film.create(parsedFilm)
+            await Film.create(film)
         }
 
         await Review.create({
-            ...(JSON.parse(review) as IReviewInputs),
+            ...review,
             image: imageFileName,
-            filmImdbId: parsedFilm.imdbId,
+            filmImdbId: film.imdbId,
             userUuId,
         })
     },
     async getReviews(query: IReviewQuery) {
-        const { movie, author, limit, offset, isCount } = query
+        const {
+            movie,
+            author,
+            limit,
+            offset,
+            isCount,
+            userUuId,
+            isUnpublishedByEditor,
+        } = query
 
         if (isCount) {
             return await Review.count({ where: { isPublished: true } })
         }
 
+        let where
+
+        if (isUnpublishedByEditor) {
+            where = { isUnpublishedByEditor }
+        } else if (userUuId) {
+            where = { userUuId }
+        } else {
+            where = { isPublished: true }
+        }
+
         const res = await Review.findAndCountAll({
-            limit,
-            offset,
+            attributes: {
+                include: [
+                    [
+                        Sequelize.literal(
+                            `(SELECT CAST(AVG(rating) AS DOUBLE PRECISION) FROM "Ratings" WHERE "Ratings"."reviewId" = "Review"."id")`
+                        ),
+                        'avgRating',
+                    ],
+                ],
+            },
             include: [
                 {
                     model: Film,
@@ -68,33 +93,41 @@ export const ReviewService = {
                     ),
                 },
             ],
-            attributes: {
-                include: [
-                    [
-                        Sequelize.literal(
-                            `(SELECT CAST(AVG(rating) AS DOUBLE PRECISION) FROM "Ratings" WHERE "Ratings"."reviewId" = "Review"."id")`
-                        ),
-                        'avgRating',
-                    ],
-                ],
-            },
-            where: { isPublished: true },
+            where,
             order: [['createdAt', 'DESC']],
+            limit,
+            offset,
         })
 
         return { reviews: res.rows, count: res.count }
     },
-    async getReview(id: string, uuId?: string) {
+    async getReview(
+        id: number,
+        uuId?: string,
+        isPublishedOnly: boolean = true
+    ) {
         let review
+
+        const where = isPublishedOnly ? { id, isPublished: true } : { id }
 
         if (uuId) {
             review = await Review.findOne({
+                attributes: {
+                    include: [
+                        [
+                            Sequelize.literal(
+                                `(SELECT CAST(AVG(rating) AS DOUBLE PRECISION) FROM "Ratings" WHERE "Ratings"."reviewId" = "Review"."id")`
+                            ),
+                            'avgRating',
+                        ],
+                    ],
+                },
                 include: [
                     { model: Film, as: 'film', attributes: ['name'] },
                     {
                         model: User,
                         as: 'author',
-                        attributes: ['firstName', 'lastName'],
+                        attributes: ['uuId', 'firstName', 'lastName'],
                     },
                     {
                         model: Rating,
@@ -121,6 +154,11 @@ export const ReviewService = {
                         ],
                     },
                 ],
+                where,
+                order: [['comments', 'createdAt', 'DESC']],
+            })
+        } else {
+            review = await Review.findOne({
                 attributes: {
                     include: [
                         [
@@ -131,17 +169,12 @@ export const ReviewService = {
                         ],
                     ],
                 },
-                where: { id: +id, isPublished: true },
-                order: [['comments', 'createdAt', 'DESC']],
-            })
-        } else {
-            review = await Review.findOne({
                 include: [
                     { model: Film, as: 'film', attributes: ['name'] },
                     {
                         model: User,
                         as: 'author',
-                        attributes: ['firstName', 'lastName'],
+                        attributes: ['uuId', 'firstName', 'lastName'],
                     },
                     {
                         model: Comment,
@@ -156,17 +189,7 @@ export const ReviewService = {
                         ],
                     },
                 ],
-                attributes: {
-                    include: [
-                        [
-                            Sequelize.literal(
-                                `(SELECT CAST(AVG(rating) AS DOUBLE PRECISION) FROM "Ratings" WHERE "Ratings"."reviewId" = "Review"."id")`
-                            ),
-                            'avgRating',
-                        ],
-                    ],
-                },
-                where: { id: +id, isPublished: true },
+                where,
                 order: [['comments', 'createdAt', 'DESC']],
             })
         }
@@ -176,5 +199,51 @@ export const ReviewService = {
         }
 
         return review
+    },
+    async updateReview(
+        id: number,
+        review: Partial<IReview>,
+        imageFileName?: string,
+        userUuId?: string
+    ) {
+        const where =
+            review.isUnpublishedByEditor === undefined
+                ? { id, userUuId }
+                : { id }
+
+        const foundReview = await Review.findOne({
+            attributes: ['image'],
+            where,
+        })
+
+        if (!foundReview) {
+            throw ApiError.notFound('Review not found')
+        }
+
+        if (review.isUnpublishedByEditor !== undefined) {
+            await Review.update(
+                {
+                    ...review,
+                    image: imageFileName,
+                    isPublished: !review.isUnpublishedByEditor,
+                },
+                { where }
+            )
+        } else {
+            await Review.update(
+                {
+                    ...review,
+                    image: imageFileName,
+                    isUnpublishedByEditor: false,
+                },
+                { where }
+            )
+        }
+
+        if (imageFileName) {
+            unlinkSync(
+                resolve(__dirname, '../../static/images', foundReview.image)
+            )
+        }
     },
 }

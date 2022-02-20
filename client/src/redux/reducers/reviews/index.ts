@@ -27,6 +27,11 @@ const reviewsSlice = createSlice({
             ...state,
             ...payload,
         }),
+        clearReviews: (state) => ({
+            ...state,
+            reviews: null,
+            count: 0,
+        }),
         setIsReviewsLoading: (state, { payload }: PayloadAction<boolean>) => ({
             ...state,
             isReviewsLoading: payload,
@@ -34,6 +39,10 @@ const reviewsSlice = createSlice({
         setCurrentReview: (state, { payload }: PayloadAction<IReview>) => ({
             ...state,
             currentReview: payload,
+        }),
+        clearCurrentReview: (state) => ({
+            ...state,
+            currentReview: null,
         }),
         setIsCommentLoading: (state, { payload }: PayloadAction<boolean>) => ({
             ...state,
@@ -50,8 +59,10 @@ const reviewsSlice = createSlice({
 
 export const {
     setReviews,
+    clearReviews,
     setIsReviewsLoading,
     setCurrentReview,
+    clearCurrentReview,
     setIsCommentLoading,
 } = reviewsSlice.actions
 

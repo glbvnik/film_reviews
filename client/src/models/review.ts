@@ -3,7 +3,7 @@ import { IComment } from './comment'
 export interface IReviewInputs {
     image: File | null
     text: string
-    isPublished?: boolean
+    isPublished: boolean
 }
 
 export interface IReview {
@@ -20,6 +20,7 @@ export interface IReview {
     ratings?: [{ rating: number }] | []
     film: { name: string }
     author: {
+        uuId: string
         firstName: string
         lastName: string
     }
@@ -37,4 +38,6 @@ export interface IReviewQuery {
     limit?: number
     offset?: number
     isCount?: boolean
+    userUuId?: string
+    isUnpublishedByEditor?: boolean
 }

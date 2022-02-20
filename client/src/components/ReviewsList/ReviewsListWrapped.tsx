@@ -1,17 +1,15 @@
 import { FC, useRef } from 'react'
-import ReviewsList from '../ReviewsList/ReviewsList'
 import Wrapper from '../UI/Wrapper'
-import HomeForm from './HomeForm'
+import ReviewsList from './ReviewsList'
 
-const Home: FC = () => {
+const ReviewsListWrapped: FC = () => {
     const ref = useRef<HTMLDivElement>(null)
 
     return (
-        <Wrapper innerRef={ref}>
-            <HomeForm />
+        <Wrapper isRelative innerRef={ref}>
             <ReviewsList parentRef={ref} />
         </Wrapper>
     )
 }
 
-export default Home
+export default ReviewsListWrapped

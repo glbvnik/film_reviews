@@ -10,9 +10,9 @@ export interface IReview {
     updatedAt: Date
 }
 
-export interface IReviewInputs {
+export interface IReviewCreateInputs {
     text: string
-    isPublished?: boolean
+    isPublished: boolean
 }
 
 export interface IReviewQuery {
@@ -21,4 +21,6 @@ export interface IReviewQuery {
     limit: number
     offset: number
     isCount?: boolean
+    userUuId?: string
+    isUnpublishedByEditor?: boolean
 }

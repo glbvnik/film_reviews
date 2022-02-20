@@ -27,6 +27,7 @@ export const theme = createTheme({
             },
             styleOverrides: {
                 root: {
+                    overflow: 'auto',
                     maxWidth: '1400px !important',
                     '@media (min-width: 2048px)': {
                         maxWidth: '1600px !important',

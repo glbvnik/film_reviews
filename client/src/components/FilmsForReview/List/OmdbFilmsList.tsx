@@ -6,12 +6,15 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { omdbSelectors, setOmdbPage } from '../../../redux/reducers/omdb'
 import { theme } from '../../../theme'
+import Loader from '../../UI/Loader'
+import StateMessage from '../../UI/StateMessage'
 import OmdbFilmItem from './OmdbFilmItem'
 
 const OmdbFilmsList = () => {
     const films = useAppSelector(omdbSelectors.films)
     const totalResults = useAppSelector(omdbSelectors.totalResults)
     const page = useAppSelector(omdbSelectors.page)
+    const isLoading = useAppSelector(omdbSelectors.isOmdbLoading)
 
     const dispatch = useAppDispatch()
 
@@ -35,6 +38,18 @@ const OmdbFilmsList = () => {
             }
         }
     }, [])
+
+    if (!films) {
+        return <StateMessage state="search-movie" />
+    }
+
+    if (isLoading) {
+        return <Loader />
+    }
+
+    if (films.length === 0) {
+        return <StateMessage state="movie-not-found" />
+    }
 
     return (
         <>

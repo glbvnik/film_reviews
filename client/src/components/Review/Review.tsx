@@ -1,8 +1,9 @@
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 import { FC } from 'react'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { reviewsSelectors } from '../../redux/reducers/reviews'
+import Wrapper from '../UI/Wrapper'
 import CommentsList from './Comments/CommentsList'
 import ReviewRating from './ReviewRating'
 import { styles } from './sx'
@@ -10,8 +11,17 @@ import { styles } from './sx'
 const Review: FC = () => {
     const review = useAppSelector(reviewsSelectors.currentReview)!
 
+    const createdAtDate = new Date(review.createdAt).toLocaleDateString(
+        'en-US',
+        {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+        }
+    )
+
     return (
-        <Container>
+        <Wrapper disablePadding>
             <Box
                 p={{ xs: 1 }}
                 py={{ sm: 2 }}
@@ -26,11 +36,7 @@ const Review: FC = () => {
                     {review.author.firstName} {review.author.lastName}
                 </Typography>
                 <Typography component="span" sx={styles.reviewDate}>
-                    {new Date(review.createdAt).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                    })}
+                    {createdAtDate}
                 </Typography>
             </Box>
             <Box
@@ -57,7 +63,7 @@ const Review: FC = () => {
                 />
                 <CommentsList />
             </Box>
-        </Container>
+        </Wrapper>
     )
 }
 
