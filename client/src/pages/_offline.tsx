@@ -1,19 +1,18 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
-import Drawer from '../../components/Drawer/Drawer'
-import withRoles from '../../hoc/withRoles'
+import StateMessage from '../components/UI/StateMessage'
 
-const AccountSection: NextPage = () => {
+const Offline: NextPage = () => {
     return (
         <>
             <Head>
-                <title>Account</title>
+                <title>Offline</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Head>
-            <Drawer />
+            <StateMessage state="offline" />
         </>
     )
 }
 
-export default withRoles(AccountSection)
+export default Offline

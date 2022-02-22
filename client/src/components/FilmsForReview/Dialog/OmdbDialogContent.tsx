@@ -33,6 +33,7 @@ const OmdbDialogContent: FC<OmdbDialogContentProps> = ({
             {currentFilm && checkHttpUrl(currentFilm.Poster) && (
                 <Box bgcolor="primary.main" textAlign="center" height={420}>
                     <Image
+                        priority
                         src={currentFilm.Poster}
                         height={420}
                         width={280}

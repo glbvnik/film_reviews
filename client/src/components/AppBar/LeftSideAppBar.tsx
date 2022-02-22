@@ -1,6 +1,6 @@
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, IconButton, Typography } from '@mui/material'
+import { IconButton, Link as MuiLink, Typography } from '@mui/material'
 import Link from 'next/link'
 import { FC } from 'react'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
@@ -28,11 +28,15 @@ const LeftSideAppBar: FC = () => {
                 </IconButton>
             )}
             <Link href="/">
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    component="a"
-                    sx={{ cursor: 'pointer', mr: 'auto' }}
+                <MuiLink
+                    href="/"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: 'white',
+                        cursor: 'pointer',
+                        mr: 'auto',
+                    }}
                 >
                     <LocalMoviesIcon />
                     <Typography
@@ -43,7 +47,7 @@ const LeftSideAppBar: FC = () => {
                     >
                         IReview
                     </Typography>
-                </Box>
+                </MuiLink>
             </Link>
         </>
     )

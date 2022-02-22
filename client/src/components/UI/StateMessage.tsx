@@ -2,12 +2,18 @@ import MovieIcon from '@mui/icons-material/Movie'
 import SearchIcon from '@mui/icons-material/Search'
 import SearchOffIcon from '@mui/icons-material/SearchOff'
 import SegmentIcon from '@mui/icons-material/Segment'
+import SignalWifiConnectedNoInternet4Icon from '@mui/icons-material/SignalWifiConnectedNoInternet4'
 import { Box, Typography } from '@mui/material'
 import { FC } from 'react'
 import { createStyles } from '../../utils/createStyles'
 
 interface ReviewsListStateProps {
-    state: 'search-movie' | 'movie-not-found' | 'choose-section' | '404'
+    state:
+        | 'search-movie'
+        | 'movie-not-found'
+        | 'choose-section'
+        | '404'
+        | 'offline'
 }
 
 const wrapperSx = createStyles({
@@ -51,6 +57,15 @@ const StateMessage: FC<ReviewsListStateProps> = ({ state }) => {
                 <Box sx={wrapperSx}>
                     <SearchOffIcon sx={{ fontSize: '100px' }} />
                     <Typography variant="h5">404 - Page Not Found</Typography>
+                </Box>
+            )
+        case 'offline':
+            return (
+                <Box sx={wrapperSx}>
+                    <SignalWifiConnectedNoInternet4Icon
+                        sx={{ fontSize: '100px' }}
+                    />
+                    <Typography variant="h5">You are offline</Typography>
                 </Box>
             )
         default:

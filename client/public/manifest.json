@@ -1,0 +1,32 @@
+{
+    "theme_color": "#ff5722",
+    "background_color": "#ff5722",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "IReview",
+    "short_name": "IReview",
+    "description": "Film reviews Next.js App",
+    "icons": [
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

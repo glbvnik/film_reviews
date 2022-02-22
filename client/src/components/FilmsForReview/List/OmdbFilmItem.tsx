@@ -31,6 +31,7 @@ const OmdbFilmItem: FC<OmdbFilmItemProps> = ({ film }) => {
         >
             {checkHttpUrl(film.Poster) ? (
                 <Image
+                    priority
                     src={film.Poster}
                     objectFit="cover"
                     height={200}
