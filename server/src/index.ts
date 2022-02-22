@@ -15,6 +15,8 @@ app.use('/api', express.static('static'))
 app.use('/api', router)
 app.use(errorMiddleware)
 
+app.set('trust proxy', 1)
+
 const start = async () => {
     try {
         await sequelize.sync()
