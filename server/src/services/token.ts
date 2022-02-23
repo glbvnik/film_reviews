@@ -24,19 +24,13 @@ export const TokenService = {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             maxAge: 1000 * 60 * 15,
-            domain:
-                process.env.NODE_ENV === 'development'
-                    ? '.localhost'
-                    : '.film-reviews.vercel.app',
+            domain: process.env.CLIENT_DOMAIN,
         })
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 1000 * 60 * 60 * 24 * 90,
-            domain:
-                process.env.NODE_ENV === 'development'
-                    ? '.localhost'
-                    : '.film-reviews.vercel.app',
+            domain: process.env.CLIENT_DOMAIN,
         })
     },
     deleteCookie(res: Response) {
