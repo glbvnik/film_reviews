@@ -1,5 +1,6 @@
 import { Express, Request } from 'express'
 import multer from 'multer'
+import { join } from 'path'
 import { v4 } from 'uuid'
 
 const fileStorageEngine = multer.diskStorage({
@@ -8,7 +9,7 @@ const fileStorageEngine = multer.diskStorage({
         file: Express.Multer.File,
         callback: (error: Error | null, destination: string) => void
     ) => {
-        callback(null, './static/images')
+        callback(null, join(__dirname, '../../static/images'))
     },
     filename: function (
         req: Request,
