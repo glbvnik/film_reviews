@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ReviewActionsEnum } from '../../../models/review'
 import { RootState } from '../../store'
 
 interface IAsyncAction {
+    type?: ReviewActionsEnum | ''
     isSuccess?: boolean
     errorMessage?: string
 }
@@ -18,6 +20,7 @@ const initialState: AppState = {
     isDrawer: false,
     isMobileDrawerOpen: false,
     asyncAction: {
+        type: '',
         isSuccess: false,
         errorMessage: '',
     },
@@ -46,6 +49,10 @@ export const appSlice = createSlice({
             ...state,
             asyncAction: { ...state.asyncAction, ...payload },
         }),
+        clearAsyncAction: (state) => ({
+            ...state,
+            asyncAction: initialState.asyncAction,
+        }),
     },
 })
 
@@ -54,6 +61,7 @@ export const {
     setIsDrawer,
     setIsMobileDrawerOpen,
     setAsyncAction,
+    clearAsyncAction,
 } = appSlice.actions
 
 export const appSelectors = {

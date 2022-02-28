@@ -1,4 +1,5 @@
 import { Comment } from '../db/models/classes/comment'
+import ApiError from '../errors/api'
 import { IComment } from '../types/comment'
 import { RolesEnum } from '../types/role'
 import { RoleService } from './role'
@@ -16,8 +17,12 @@ export const CommentService = {
             })
         }
 
-        await Comment.destroy({
+        const count = await Comment.destroy({
             where: { id: data.id, userUuId: data.userUuId },
         })
+
+        if (!count) {
+            throw ApiError.notFound('Comment not found')
+        }
     },
 }

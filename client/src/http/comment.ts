@@ -2,10 +2,12 @@ import { ICommentInputs } from '../models/comment'
 import $api from './index'
 
 export const CommentAPI = {
-    async create(inputs: ICommentInputs) {
-        await $api.post('comment-management/create', inputs)
+    async create({ text, reviewId }: ICommentInputs, userUuId: string) {
+        await $api.post(`reviews/${reviewId}/user/${userUuId}/comments`, {
+            text,
+        })
     },
-    async delete(id: number) {
-        await $api.delete(`comment-management/delete/${id}`)
+    async delete(id: number, userUuId: string) {
+        await $api.delete(`reviews/user/${userUuId}/comments/${id}`)
     },
 }

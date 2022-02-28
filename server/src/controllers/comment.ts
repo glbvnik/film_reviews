@@ -1,24 +1,26 @@
 import { NextFunction, Request, Response } from 'express'
 import { CommentService } from '../services/comment'
-import { TokenService } from '../services/token'
 
 export const CommentController = {
-    async createComment(req: Request, res: Response, next: NextFunction) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const userUuId = TokenService.getUuId(req.cookies.refreshToken)
-
-            await CommentService.create({ ...req.body, userUuId })
+            await CommentService.create({
+                ...req.body,
+                reviewId: +req.params.reviewId,
+                userUuId: req.params.userUuId,
+            })
 
             res.json({ message: 'Comment was created' })
         } catch (e) {
             next(e)
         }
     },
-    async deleteComment(req: Request, res: Response, next: NextFunction) {
+    async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const userUuId = TokenService.getUuId(req.cookies.refreshToken)
-
-            await CommentService.delete({ id: +req.params.commentId, userUuId })
+            await CommentService.delete({
+                id: +req.params.commentId,
+                userUuId: req.params.userUuId,
+            })
 
             res.json({ message: 'Comment was deleted' })
         } catch (e) {

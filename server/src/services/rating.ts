@@ -1,4 +1,5 @@
 import { Rating } from '../db/models/classes/rating'
+import ApiError from '../errors/api'
 import { IRating } from '../types/rating'
 
 export const RatingService = {
@@ -11,8 +12,12 @@ export const RatingService = {
         })
     },
     async delete(data: Omit<IRating, 'rating' | 'createdAt' | 'updatedAt'>) {
-        await Rating.destroy({
+        const count = await Rating.destroy({
             where: data,
         })
+
+        if (!count) {
+            throw ApiError.notFound('Rating not found')
+        }
     },
 }

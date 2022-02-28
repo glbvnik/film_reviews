@@ -61,6 +61,26 @@ function MyApp({
                     sizes="16x16"
                     href="/favicon-16x16.png"
                 />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="192x192"
+                    href="/icon-192x192.png"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="256x256"
+                    href="/icon-256x256.png"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="384x384"
+                    href="/icon-384x384.png"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="512x512"
+                    href="/icon-512x512.png"
+                />
             </Head>
             <ThemeProvider theme={theme}>
                 <Layout>

@@ -33,7 +33,7 @@ export const ReviewService = {
             userUuId,
         })
     },
-    async getReviews(query: IReviewQuery) {
+    async get(query: IReviewQuery) {
         const {
             movie,
             author,
@@ -101,11 +101,7 @@ export const ReviewService = {
 
         return { reviews: res.rows, count: res.count }
     },
-    async getReview(
-        id: number,
-        uuId?: string,
-        isPublishedOnly: boolean = true
-    ) {
+    async getOne(id: number, uuId?: string, isPublishedOnly: boolean = true) {
         let review
 
         const where = isPublishedOnly ? { id, isPublished: true } : { id }
@@ -200,7 +196,7 @@ export const ReviewService = {
 
         return review
     },
-    async updateReview(
+    async update(
         id: number,
         review: Partial<IReview>,
         imageFileName?: string,
@@ -245,5 +241,24 @@ export const ReviewService = {
                 resolve(__dirname, '../../static/images', foundReview.image)
             )
         }
+    },
+    async delete(id: number, userUuId: string) {
+        const review = await Review.findOne({
+            where: { id, userUuId },
+            attributes: ['image'],
+        })
+
+        if (!review) {
+            throw ApiError.notFound('Review not found')
+        }
+
+        if (review.image) {
+            unlinkSync(resolve(__dirname, '../../static/images', review.image))
+        }
+
+        await Review.destroy({
+            where: { id, userUuId },
+            individualHooks: true,
+        })
     },
 }

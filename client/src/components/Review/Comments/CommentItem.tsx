@@ -33,9 +33,7 @@ const CommentItem: FC<CommentItemProps> = ({ comment }) => {
         comment.author?.uuId &&
         user?.uuId === comment.author?.uuId
     )
-    const isBanAllowed =
-        user?.roles.includes(RolesEnum.MODERATOR) ||
-        user?.roles.includes(RolesEnum.ADMIN)
+    const isBanAllowed = user?.roles.includes(RolesEnum.MODERATOR)
 
     const handleFirstNameClick = () => {
         if (isBanAllowed) {

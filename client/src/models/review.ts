@@ -41,3 +41,9 @@ export interface IReviewQuery {
     userUuId?: string
     isUnpublishedByEditor?: boolean
 }
+
+export enum ReviewActionsEnum {
+    CREATE_REVIEW = 'CREATE_REVIEW',
+    UPDATE_REVIEW = 'UPDATE_REVIEW',
+    DELETE_REVIEW = 'DELETE_REVIEW',
+}

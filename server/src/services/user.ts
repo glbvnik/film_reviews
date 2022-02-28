@@ -39,7 +39,7 @@ export const UserService = {
 
         await MailService.sendActivationMail(
             email,
-            `${process.env.API_URL}/api/user-management/activate/${activationLink}`
+            `${process.env.API_URL}/api/users/activate/${activationLink}`
         )
     },
     async login(

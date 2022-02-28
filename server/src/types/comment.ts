@@ -1,7 +1,7 @@
 export interface IComment {
     id: number
     text: string
-    reviewId: string
+    reviewId: number
     userUuId: string
     createdAt: Date
     updatedAt: Date

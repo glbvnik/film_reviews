@@ -13,7 +13,7 @@ export class Comment
 {
     id!: number
     text!: string
-    reviewId!: string
+    reviewId!: number
     userUuId!: string
 
     static associate() {

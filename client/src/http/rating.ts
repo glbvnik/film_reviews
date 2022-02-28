@@ -1,14 +1,17 @@
-import { IRatingInputs } from '../models/rating'
 import $api from './index'
 
 export const RatingAPI = {
-    async create(inputs: IRatingInputs) {
-        await $api.post('rating-management/create', inputs)
+    async create(rating: number, reviewId: number, userUuId: string) {
+        await $api.post(`reviews/${reviewId}/user/${userUuId}/ratings`, {
+            rating,
+        })
     },
-    async update(inputs: IRatingInputs) {
-        await $api.put('rating-management/update', inputs)
+    async update(rating: number, reviewId: number, userUuId: string) {
+        await $api.put(`reviews/${reviewId}/user/${userUuId}/ratings`, {
+            rating,
+        })
     },
-    async delete(reviewId: number) {
-        await $api.delete(`rating-management/delete/${reviewId}`)
+    async delete(reviewId: number, userUuId: string) {
+        await $api.delete(`reviews/${reviewId}/user/${userUuId}/ratings`)
     },
 }

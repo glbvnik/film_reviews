@@ -4,10 +4,12 @@ import { useRouter } from 'next/router'
 import { FC, useState } from 'react'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { RatingAPI } from '../../http/rating'
+import { authSelectors } from '../../redux/reducers/auth'
 import { reviewsSelectors } from '../../redux/reducers/reviews'
 
 const ReviewRating: FC = () => {
     const review = useAppSelector(reviewsSelectors.currentReview)!
+    const user = useAppSelector(authSelectors.user)
 
     const [rating, setRating] = useState(
         review.ratings && review.ratings[0] ? review.ratings[0].rating : null
@@ -19,11 +21,11 @@ const ReviewRating: FC = () => {
         setRating(value)
 
         if (!value && review.ratings![0]) {
-            await RatingAPI.delete(review.id)
+            await RatingAPI.delete(review.id, user!.uuId)
         } else if (value && review.ratings![0]) {
-            await RatingAPI.update({ reviewId: review.id, rating: value })
-        } else {
-            await RatingAPI.create({ reviewId: review.id, rating: value })
+            await RatingAPI.update(value, review.id, user!.uuId)
+        } else if (value) {
+            await RatingAPI.create(value, review.id, user!.uuId)
         }
 
         router.replace(router.asPath, undefined, { scroll: false })

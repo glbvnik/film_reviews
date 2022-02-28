@@ -5,7 +5,7 @@ import { TokenService } from '../services/token'
 import { IReviewQuery } from '../types/review'
 
 export const ReviewController = {
-    async createReview(req: Request, res: Response, next: NextFunction) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             await ReviewService.create(
                 JSON.parse(req.body.review),
@@ -21,9 +21,9 @@ export const ReviewController = {
             next(e)
         }
     },
-    async getReviews(req: Request, res: Response, next: NextFunction) {
+    async get(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await ReviewService.getReviews({
+            const response = await ReviewService.get({
                 ...req.query,
                 isUnpublishedByEditor:
                     req.query.isUnpublishedByEditor === 'true' ||
@@ -37,11 +37,11 @@ export const ReviewController = {
             next(e)
         }
     },
-    async getReview(req: Request, res: Response, next: NextFunction) {
+    async getOne(req: Request, res: Response, next: NextFunction) {
         try {
             const uuId = TokenService.getUuId(req.cookies.refreshToken)
 
-            const review = await ReviewService.getReview(
+            const review = await ReviewService.getOne(
                 +req.params.id,
                 uuId,
                 !!req.params.isPublished
@@ -52,9 +52,9 @@ export const ReviewController = {
             next(e)
         }
     },
-    async updateReview(req: Request, res: Response, next: NextFunction) {
+    async update(req: Request, res: Response, next: NextFunction) {
         try {
-            await ReviewService.updateReview(
+            await ReviewService.update(
                 +req.params.id,
                 JSON.parse(req.body.review),
                 req.file?.filename,
@@ -62,6 +62,15 @@ export const ReviewController = {
             )
 
             res.json({ message: 'Review was updated' })
+        } catch (e) {
+            next(e)
+        }
+    },
+    async delete(req: Request, res: Response, next: NextFunction) {
+        try {
+            await ReviewService.delete(+req.params.id, req.params.userUuId)
+
+            res.json({ message: 'Review was deleted' })
         } catch (e) {
             next(e)
         }

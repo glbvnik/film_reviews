@@ -7,9 +7,10 @@ import { DrawerSectionsEnum } from '../../constants/drawerSections'
 import withRoles from '../../hoc/withRoles'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
+import { ReviewActionsEnum } from '../../models/review'
 import { RolesEnum } from '../../models/user'
 import Custom404 from '../../pages/404'
-import { appSelectors, setAsyncAction } from '../../redux/reducers/app'
+import { appSelectors, clearAsyncAction } from '../../redux/reducers/app'
 import { authSelectors } from '../../redux/reducers/auth'
 import { clearOmdbCurrentFilm, omdbSelectors } from '../../redux/reducers/omdb'
 import {
@@ -18,6 +19,7 @@ import {
 } from '../../redux/reducers/reviews'
 import {
     createReview,
+    deleteReview,
     getReview,
     updateReview,
 } from '../../redux/reducers/reviews/action-creators'
@@ -62,14 +64,27 @@ const ReviewForm: FC = () => {
             setFieldValue('isPublished', false)
         }
 
-        dispatch(setAsyncAction({ isSuccess: false, errorMessage: '' }))
+        dispatch(clearAsyncAction())
+    }
+
+    const getActionMessage = () => {
+        switch (asyncAction.type) {
+            case ReviewActionsEnum.CREATE_REVIEW:
+                return 'Your review has been created!'
+            case ReviewActionsEnum.UPDATE_REVIEW:
+                return 'Your review has been updated!'
+            case ReviewActionsEnum.DELETE_REVIEW:
+                return 'Your review has been deleted!'
+            default:
+                return ''
+        }
     }
 
     useEffect(() => {
         dispatch(clearCurrentReview())
 
         return () => {
-            dispatch(setAsyncAction({ isSuccess: false, errorMessage: '' }))
+            dispatch(clearAsyncAction())
             dispatch(clearOmdbCurrentFilm())
         }
     }, [])
@@ -101,15 +116,7 @@ const ReviewForm: FC = () => {
     }, [asyncAction.errorMessage])
 
     if (asyncAction.isSuccess) {
-        return (
-            <ActionMessage
-                message={
-                    isUpdateReview
-                        ? 'Your review has been updated!'
-                        : 'Your review has been created!'
-                }
-            />
-        )
+        return <ActionMessage message={getActionMessage()} />
     }
 
     if (!currentFilm && !isUpdateReview) {
@@ -174,6 +181,19 @@ const ReviewForm: FC = () => {
                     sx={{ width: '100%', mb: 2 }}
                 />
                 <Box display="flex" justifyContent="space-between">
+                    {isUpdateReview &&
+                        user!.uuId === currentReview!.author.uuId && (
+                            <Button
+                                color="error"
+                                type="submit"
+                                variant="contained"
+                                endIcon={isReviewsLoading && <ButtonLoader />}
+                                onClick={() => dispatch(deleteReview())}
+                                sx={{ mb: 2 }}
+                            >
+                                Delete
+                            </Button>
+                        )}
                     <Button
                         color="secondary"
                         type="submit"

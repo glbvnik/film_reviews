@@ -61,7 +61,7 @@ userRouter.patch(
     UserController.changePassword
 )
 userRouter.get(
-    '/users',
+    '',
     authMiddleware([RolesEnum.ADMIN, RolesEnum.MODERATOR]),
     UserController.getUsers
 )

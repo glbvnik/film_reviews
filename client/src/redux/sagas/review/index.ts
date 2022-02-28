@@ -8,12 +8,14 @@ import {
     IReviewInputs,
     IReviewQuery,
     IReviewsResponse,
+    ReviewActionsEnum,
 } from '../../../models/review'
 import { IUser } from '../../../models/user'
 import { setAsyncAction } from '../../reducers/app'
 import { authSelectors } from '../../reducers/auth'
 import { setOmdbCurrentFilm } from '../../reducers/omdb'
 import {
+    clearCurrentReview,
     reviewsSelectors,
     setCurrentReview,
     setIsReviewsLoading,
@@ -21,36 +23,32 @@ import {
 } from '../../reducers/reviews'
 import {
     createReview,
+    deleteReview,
     getReview,
     getReviews,
     updateReview,
 } from '../../reducers/reviews/action-creators'
 
-function* handleGetReview({
-    payload,
-}: PayloadAction<number>): Generator<StrictEffect, void, IReview> {
+function* handleDeleteReview() {
     try {
-        const review = yield call(ReviewApi.fetchOne, payload, undefined, true)
+        yield put(setIsReviewsLoading(true))
 
-        yield put(setCurrentReview(review))
+        const { id } = (yield select(reviewsSelectors.currentReview)) as IReview
+        const { uuId } = (yield select(authSelectors.user)) as IUser
+
+        yield call(ReviewApi.delete, id, uuId)
+
         yield put(
-            setOmdbCurrentFilm({ Title: review.film.name } as IOmdbFullFilm)
+            setAsyncAction({
+                type: ReviewActionsEnum.DELETE_REVIEW,
+                isSuccess: true,
+                errorMessage: '',
+            })
         )
-    } catch (e) {}
-}
-
-function* handleGetReviews({
-    payload,
-}: PayloadAction<IReviewQuery>): Generator<
-    StrictEffect,
-    void,
-    IReviewsResponse
-> {
-    try {
-        const res = yield call(ReviewApi.fetch, payload)
-
-        yield put(setReviews(res))
-    } catch (e) {}
+        yield put(clearCurrentReview())
+    } finally {
+        yield put(setIsReviewsLoading(false))
+    }
 }
 
 function* handleUpdateReview({
@@ -111,6 +109,7 @@ function* handleUpdateReview({
 
         yield put(
             setAsyncAction({
+                type: ReviewActionsEnum.UPDATE_REVIEW,
                 isSuccess: true,
                 errorMessage: '',
             })
@@ -118,6 +117,33 @@ function* handleUpdateReview({
     } finally {
         yield put(setIsReviewsLoading(false))
     }
+}
+
+function* handleGetReview({
+    payload,
+}: PayloadAction<number>): Generator<StrictEffect, void, IReview> {
+    try {
+        const review = yield call(ReviewApi.fetchOne, payload, undefined, true)
+
+        yield put(setCurrentReview(review))
+        yield put(
+            setOmdbCurrentFilm({ Title: review.film.name } as IOmdbFullFilm)
+        )
+    } catch (e) {}
+}
+
+function* handleGetReviews({
+    payload,
+}: PayloadAction<IReviewQuery>): Generator<
+    StrictEffect,
+    void,
+    IReviewsResponse
+> {
+    try {
+        const res = yield call(ReviewApi.fetch, payload)
+
+        yield put(setReviews(res))
+    } catch (e) {}
 }
 
 function* handleCreateReview({
@@ -183,6 +209,7 @@ function* handleCreateReview({
 
         yield put(
             setAsyncAction({
+                type: ReviewActionsEnum.CREATE_REVIEW,
                 isSuccess: true,
                 errorMessage: '',
             })
@@ -194,9 +221,10 @@ function* handleCreateReview({
 
 function* reviewWatcher() {
     yield takeEvery(createReview, handleCreateReview)
-    yield takeEvery(updateReview, handleUpdateReview)
     yield takeEvery(getReviews, handleGetReviews)
     yield takeEvery(getReview, handleGetReview)
+    yield takeEvery(updateReview, handleUpdateReview)
+    yield takeEvery(deleteReview, handleDeleteReview)
 }
 
 export default function* reviewSaga() {

@@ -24,39 +24,36 @@ export interface ResetPasswordPayload {
 
 export const UserApi = {
     async register(inputs: RegisterInputs) {
-        await $api.post('user-management/register', inputs)
+        await $api.post('users/register', inputs)
     },
     async login(inputs: LoginInputs) {
-        const { data } = await $api.post<IUser>('user-management/login', inputs)
+        const { data } = await $api.post<IUser>('users/login', inputs)
 
         return data
     },
     async logout() {
-        await $api.post('user-management/logout')
+        await $api.post('users/logout')
     },
     async refresh() {
-        const { data } = await $api.get<IUser>('user-management/refresh')
+        const { data } = await $api.get<IUser>('users/refresh')
 
         return data
     },
     async setPasswordResetLink(email: string) {
-        await $api.patch('user-management/reset-password', {
+        await $api.patch('users/reset-password', {
             email,
         })
     },
     async resetPassword({ passwordResetLink, password }: ResetPasswordPayload) {
-        await $api.patch(
-            `user-management/reset-password/${passwordResetLink}`,
-            { password }
-        )
+        await $api.patch(`users/reset-password/${passwordResetLink}`, {
+            password,
+        })
     },
     async changePassword(uuId: string, inputs: IChangePasswordInputs) {
-        await $api.patch(`user-management/${uuId}/change-password`, inputs)
+        await $api.patch(`users/${uuId}/change-password`, inputs)
     },
     async fetchUsers() {
-        const { data } = await $api.get<IUserAdministration[]>(
-            'user-management/users'
-        )
+        const { data } = await $api.get<IUserAdministration[]>('users')
 
         return data
     },
@@ -64,23 +61,21 @@ export const UserApi = {
         const { data } = await $api.get<{
             users: IUserAdministration[]
             roles: IRole[]
-        }>('user-management/users?isWithRoles=1')
+        }>('users', { params: { isWithRoles: 1 } })
 
         return data
     },
     async allowComments(data: IAllowCommentsData) {
-        await $api.patch(`user-management/${data.uuId}/allow-comments`, {
+        await $api.patch(`users/${data.uuId}/allow-comments`, {
             isCommentsAllowed: data.isCommentsAllowed,
         })
     },
     async addUserRole(inputs: IUserRoleInputs) {
-        await $api.post(`user-management/${inputs.uuId}/role`, {
+        await $api.post(`users/${inputs.uuId}/role`, {
             roleId: inputs.roleId,
         })
     },
     async removeUserRole(inputs: IUserRoleInputs) {
-        await $api.delete(
-            `user-management/${inputs.uuId}/role/${inputs.roleId}`
-        )
+        await $api.delete(`users/${inputs.uuId}/role/${inputs.roleId}`)
     },
 }

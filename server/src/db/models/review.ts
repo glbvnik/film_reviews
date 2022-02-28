@@ -1,4 +1,6 @@
 import { DataTypes, Sequelize } from 'sequelize'
+import { Comment } from './classes/comment'
+import { Rating } from './classes/rating'
 import { Review } from './classes/review'
 
 export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
@@ -44,6 +46,11 @@ export = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
             modelName: 'Review',
         }
     )
+
+    Review.beforeDestroy(async ({ id }) => {
+        await Comment.destroy({ where: { reviewId: id } })
+        await Rating.destroy({ where: { reviewId: id } })
+    })
 
     return Review
 }
