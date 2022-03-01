@@ -8,7 +8,11 @@ import CommentsList from './Comments/CommentsList'
 import ReviewRating from './ReviewRating'
 import { styles } from './sx'
 
-const Review: FC = () => {
+interface ReviewProps {
+    isUser?: boolean
+}
+
+const Review: FC<ReviewProps> = ({ isUser }) => {
     const review = useAppSelector(reviewsSelectors.currentReview)!
 
     const createdAtDate = new Date(review.createdAt).toLocaleDateString(
@@ -31,7 +35,9 @@ const Review: FC = () => {
                 <Typography component="h2" sx={styles.reviewFilmName}>
                     {review.film.name}
                 </Typography>
-                {(review.avgRating || review.ratings) && <ReviewRating />}
+                {(review.avgRating || isUser) && (
+                    <ReviewRating isUser={!!isUser} />
+                )}
                 <Typography component="h3" sx={styles.reviewAuthor}>
                     {review.author.firstName} {review.author.lastName}
                 </Typography>

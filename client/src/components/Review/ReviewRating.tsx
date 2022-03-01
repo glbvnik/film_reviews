@@ -7,7 +7,11 @@ import { RatingAPI } from '../../http/rating'
 import { authSelectors } from '../../redux/reducers/auth'
 import { reviewsSelectors } from '../../redux/reducers/reviews'
 
-const ReviewRating: FC = () => {
+interface ReviewRating {
+    isUser: boolean
+}
+
+const ReviewRating: FC<ReviewRating> = ({ isUser }) => {
     const review = useAppSelector(reviewsSelectors.currentReview)!
     const user = useAppSelector(authSelectors.user)
 
@@ -33,7 +37,7 @@ const ReviewRating: FC = () => {
 
     return (
         <Box display="flex" alignItems="center" fontSize="21px" my={1}>
-            {review.ratings ? (
+            {isUser ? (
                 <Rating
                     size="large"
                     value={rating}

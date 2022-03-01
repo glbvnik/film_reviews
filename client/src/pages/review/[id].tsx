@@ -12,7 +12,11 @@ import {
 } from '../../redux/reducers/reviews'
 import wrapper from '../../redux/store'
 
-const ReviewPage: NextPage = () => {
+interface ReviewPageProps {
+    isUser: boolean
+}
+
+const ReviewPage: NextPage<ReviewPageProps> = ({ isUser }) => {
     const { film, author } = useAppSelector(reviewsSelectors.currentReview)!
 
     const router = useRouter()
@@ -31,7 +35,7 @@ const ReviewPage: NextPage = () => {
                 />
                 <link rel="manifest" href="/manifest.json" />
             </Head>
-            <Review />
+            <Review isUser={isUser} />
         </>
     )
 }
@@ -42,14 +46,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
     ({ dispatch }) =>
         async ({ params, req }) => {
             try {
+                const refreshToken = req.cookies.refreshToken
+
                 const data = await ReviewApi.fetchOne(
                     +params!.id!,
-                    req.cookies.refreshToken
+                    refreshToken
                 )
 
                 dispatch(setCurrentReview(data))
 
-                return { props: {} }
+                return { props: { isUser: !!refreshToken } }
             } catch (e) {
                 return { notFound: true }
             }
