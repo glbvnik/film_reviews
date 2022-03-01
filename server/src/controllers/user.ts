@@ -15,7 +15,7 @@ export const UserController = {
                 )
             }
 
-            await UserService.register(req.body)
+            await UserService.register(req.body, req.user)
 
             return res.json({ message: 'Successfully registered' })
         } catch (e) {

@@ -16,7 +16,7 @@ export const ReviewController = {
 
             res.json({ message: 'Review was created' })
         } catch (e) {
-            unlink(req.file!.path, (err) => console.log(err))
+            unlink(req.file!.path, (err) => console.error(err))
 
             next(e)
         }

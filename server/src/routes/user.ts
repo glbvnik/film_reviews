@@ -11,7 +11,10 @@ export const userRouter = Router()
 
 userRouter.post(
     '/register',
-    body('email').custom(emailValidator).isEmail().withMessage('Invalid email'),
+    body('email')
+        .custom(emailValidator())
+        .isEmail()
+        .withMessage('Invalid email'),
     body('password')
         .isLength({ min: 8, max: 50 })
         .withMessage(

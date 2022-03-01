@@ -13,7 +13,7 @@ import { MailService } from './mail'
 import { TokenService } from './token'
 
 export const UserService = {
-    async register(inputs: IUserInput) {
+    async register(inputs: IUserInput, candidate: User | undefined) {
         const { email, password, firstName, lastName } = inputs
 
         const activationLink = v4()
@@ -25,11 +25,6 @@ export const UserService = {
             lastName,
             activationLink,
         }
-
-        const candidate = await User.findOne({
-            where: { email },
-            attributes: ['uuId'],
-        })
 
         if (candidate) {
             await candidate.update(user)

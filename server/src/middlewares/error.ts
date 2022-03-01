@@ -2,7 +2,7 @@ import { ErrorRequestHandler } from 'express'
 import ApiError from '../errors/api'
 
 export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
-    console.log(err)
+    console.error(err)
 
     if (err instanceof ApiError) {
         return res
