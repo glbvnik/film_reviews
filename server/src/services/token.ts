@@ -25,16 +25,16 @@ export const TokenService = {
             httpOnly: true,
             maxAge: 1000 * 60 * 15,
             domain: process.env.DOMAIN,
-            sameSite: 'none',
-            secure: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
         })
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 1000 * 60 * 60 * 24 * 90,
             domain: process.env.DOMAIN,
-            sameSite: 'none',
-            secure: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
         })
     },
     deleteCookie(res: Response) {
